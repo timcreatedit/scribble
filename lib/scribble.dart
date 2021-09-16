@@ -1,7 +1,6 @@
 library scribble;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export 'package:scribble/src/scribble.dart';
+export 'package:scribble/src/scribble.notifier.dart';
+export 'package:scribble/src/state/scribble.state.dart';
+export 'package:scribble/src/model/sketch/sketch.dart';
