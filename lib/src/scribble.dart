@@ -10,6 +10,10 @@ import 'package:vector_math/vector_math.dart';
 
 import 'model/sketch/sketch.dart';
 
+/// This Widget represents a canvas on which users can draw with any pointer.
+///
+/// You can control its behavior from code using the [notifier] instance you
+/// pass in.
 class Scribble extends StatelessWidget {
   const Scribble({
     required this.notifier,
@@ -18,8 +22,13 @@ class Scribble extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  /// The notifier that controls this canvas.
   final ScribbleNotifier notifier;
+
+  /// Whether to draw the pointer when in drawing mode
   final bool drawPointer;
+
+  /// Whether to draw the pointer when in erasing mode
   final bool drawEraser;
 
   @override

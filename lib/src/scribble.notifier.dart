@@ -8,27 +8,31 @@ import 'package:kimchi/kimchi.dart';
 import 'package:scribble/src/model/sketch/sketch.dart';
 import 'package:scribble/src/state/scribble.state.dart';
 
+/// This class controls the state and behavior for a [Scribble] widget.
 class ScribbleNotifier extends HistoryStateNotifier<ScribbleState> {
   ScribbleNotifier({
     int maxHistoryLength = 30,
     this.widths = const [5, 10, 15],
   }) : super(
-          const ScribbleState.drawing(
-            sketch: Sketch(lines: []),
-            selectedWidth: 5,
+          ScribbleState.drawing(
+            sketch: const Sketch(lines: []),
+            selectedWidth: widths[0],
           ),
           maxHistoryLength: maxHistoryLength,
         );
 
+  /// The supported widths, mainly useful for rendering UI, you can still set
+  /// the width to any arbitrary value from code.
   final List<double> widths;
 
-  SketchLine get currentLine =>
+  SketchLine get _currentLine =>
       state.sketch.lines.lastOrNull ??
       SketchLine(points: [], color: Colors.black.value, width: 0);
 
   /// Don't apply the pointer position from state that come from the undo
   /// history.
   @override
+  @protected
   ScribbleState transformHistoryState(ScribbleState historyState) {
     return historyState.copyWith(
       pointerPosition: state.pointerPosition,
@@ -38,16 +42,18 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState> {
   /// Clear the entire drawing.
   void clear() {
     state = const ScribbleState.drawing(
-      sketch: const Sketch(lines: []),
+      sketch: Sketch(lines: []),
     );
   }
 
+  /// Sets the width of the next line
   void setStrokeWidth(double strokeWidth) {
     state = state.copyWith(
       selectedWidth: strokeWidth,
     );
   }
 
+  /// Switches to eraser mode
   void setEraser() {
     state = ScribbleState.erasing(
       sketch: state.sketch,
@@ -55,6 +61,7 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState> {
     );
   }
 
+  /// Sets the color of the pen to the given color.
   void setColor(Color color) {
     state = state.map(
       drawing: (s) => ScribbleState.drawing(
@@ -70,6 +77,7 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState> {
     );
   }
 
+  /// Used by the Listener callback to display the pen if desired
   void onPointerHover(PointerHoverEvent event) {
     temporaryState = state.copyWith(
       pointerPosition: event.distance > 1
@@ -78,6 +86,7 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState> {
     );
   }
 
+  /// Used by the Listener callback to start drawing
   void onPointerDown(PointerDownEvent event) {
     if (state is Drawing) {
       temporaryState = state.copyWith.sketch(
@@ -93,6 +102,7 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState> {
     }
   }
 
+  /// Used by the Listener callback to update the drawing
   void onPointerUpdate(PointerMoveEvent event) {
     if (state is Drawing) {
       temporaryState = _addPoint(event).copyWith(
@@ -106,6 +116,7 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState> {
     }
   }
 
+  /// Used by the Listener callback to finish a line
   void onPointerUp(PointerUpEvent event) {
     if (state is Drawing) {
       state = _addPoint(event);
@@ -114,6 +125,7 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState> {
     }
   }
 
+  /// Used by the Listener callback to stop displaying the cursor
   void onPointerCancel(PointerCancelEvent event) {
     if (state is Drawing) {
       state = _addPoint(event).copyWith(pointerPosition: null);
@@ -133,9 +145,9 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState> {
   }
 
   ScribbleState _addPoint(PointerEvent event) {
-    final distanceToLast = currentLine.points.isEmpty
+    final distanceToLast = _currentLine.points.isEmpty
         ? double.infinity
-        : (currentLine.points.last.asOffset - event.localPosition).distance;
+        : (_currentLine.points.last.asOffset - event.localPosition).distance;
     if (distanceToLast <= computePanSlop(event.kind)) return state;
     _checkStraightLineMode(event.localPosition);
     final prevLines = state.sketch.lines.isEmpty
@@ -144,9 +156,9 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState> {
     return state.copyWith.sketch(
       lines: [
         ...prevLines,
-        currentLine.copyWith(
+        _currentLine.copyWith(
           points: [
-            ...currentLine.points,
+            ..._currentLine.points,
             _getPointFromEvent(event),
           ],
         ),
@@ -155,9 +167,9 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState> {
   }
 
   void _checkStraightLineMode(Offset currentPoint, {int windowSize = 30}) {
-    if (currentLine.points.length < windowSize) return;
+    if (_currentLine.points.length < windowSize) return;
     var values =
-        currentLine.points.skip(currentLine.points.length - windowSize);
+        _currentLine.points.skip(_currentLine.points.length - windowSize);
     var averageDist = values
         .map((o) =>
             sqrt(pow(currentPoint.dy - o.y, 2) + pow(o.x - currentPoint.dx, 2)))
