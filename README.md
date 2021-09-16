@@ -1,39 +1,78 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# Scribble
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
+Scribble is a lightweight library for freehand drawing in Flutter supporting pressure, variable line width and more!
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+> Note: Scribble is still in development and will receive more features down the line!
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+* Variable line width
+* Pen and touch pressure support
+* Lines get slimmer when the pen is moved more quickly
+* Full undo/redo support using [state_notifier](https://pub.dev/packages/state_notifier)
+  and [kimchi](https://pub.dev/packages/kimchi)
+* Sketches are fully serializable
 
-## Getting started
+## Pipeline
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+* [ ] Load sketches
+* [ ] PNG export
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+> You can find a full working example in the [example](./example) directory
+
+You can create a drawing surface by adding the ``Scribble`` widget to your widget tree and passing in
+a ``ScribbleNotifier``.
+
+Where you manage this notifier is up to you, but since it is a ``StateNotifier``, it works amazingly
+with [riverpod](https://pub.dev/packages/flutter_riverpod) for example.
 
 ```dart
-const like = 'sample';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final scribbleStateProvider =
+StateNotifierProvider.autoDispose<ScribbleNotifier, ScribbleState>(
+      (ref) => ScribbleNotifier(),
+);
+```
+
+You can then pass the notifier to the scribble widget.
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class App extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, ScopedReader watch) {
+    return Scaffold(
+      body: Scribble(
+        notifier: watch(scribbleStateProvider.notifier),
+      ),
+    );
+  }
+}
+```
+
+Use the public methods on ``ScribbleNotifier`` to control the behavior (for example from a button in the UI:
+
+```dart
+// Set color
+notifier.setColor(Colors.black);
+
+// Clear
+notifier.clear();
+
+// Undo
+notifier.undo();
+
+//... 
 ```
 
 ## Additional information
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+As mentioned above, the package is still under development, but we already use it in the app we are currently
+developing.
+
+Feel free to contribute, or open issues in our [GitHub repo](https://github.com/timcreatedit/scribble).
