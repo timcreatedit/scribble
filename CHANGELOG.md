@@ -1,3 +1,11 @@
+## 0.0.4
+
+* Upped minimum flutter version to 2.3
+
+## 0.0.3
+
+* meta dependency to hopefully work with analysis
+
 ## 0.0.2
 
 * Added documentation
