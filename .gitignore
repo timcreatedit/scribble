@@ -1,3 +1,9 @@
+# Don't include platform stuff
+/example/ios
+/example/android
+/example/macos
+/example/web
+
 # Miscellaneous
 *.class
 *.log
