@@ -4,7 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:kimchi/kimchi.dart';
+import 'package:history_state_notifier/history_state_notifier.dart';
 import 'package:scribble/src/model/sketch/sketch.dart';
 import 'package:scribble/src/state/scribble.state.dart';
 import 'package:state_notifier/state_notifier.dart';
@@ -24,7 +24,8 @@ abstract class ScribbleNotifierBase extends StateNotifier<ScribbleState> {
 }
 
 /// This class controls the state and behavior for a [Scribble] widget.
-class ScribbleNotifier extends HistoryStateNotifier<ScribbleState>
+class ScribbleNotifier extends StateNotifier<ScribbleState>
+    with HistoryStateNotifierMixin<ScribbleState>
     implements ScribbleNotifierBase {
   ScribbleNotifier({
     /// If you pass a sketch here, the notifier will use that sketch as a
@@ -47,8 +48,13 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState>
             sketch: sketch ?? const Sketch(lines: []),
             selectedWidth: widths[0],
           ),
-          maxHistoryLength: maxHistoryLength,
-        );
+        ) {
+    state = ScribbleState.drawing(
+      sketch: sketch ?? const Sketch(lines: []),
+      selectedWidth: widths[0],
+    );
+    this.maxHistoryLength = maxHistoryLength;
+  }
 
   /// The supported widths, mainly useful for rendering UI, you can still set
   /// the width to any arbitrary value from code.
@@ -72,9 +78,10 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState>
   /// history.
   @override
   @protected
-  ScribbleState transformHistoryState(ScribbleState historyState) {
+  ScribbleState transformHistoryState(
+      ScribbleState historyState, ScribbleState currentState) {
     return historyState.copyWith(
-      pointerPosition: state.pointerPosition,
+      pointerPosition: currentState.pointerPosition,
     );
   }
 
