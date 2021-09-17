@@ -1,3 +1,7 @@
+## 0.0.4
+
+* Upped minimum flutter version to 2.5
+
 ## 0.0.5
 
 * Back to flutter 2.2.3
