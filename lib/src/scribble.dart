@@ -140,7 +140,10 @@ class _ScribblePainter extends CustomPainter {
         positions.add(p2);
       }
     }
-    return Vertices(VertexMode.triangleStrip, positions);
+    return Vertices(
+      VertexMode.triangleStrip,
+      positions,
+    );
   }
 
   double _getWidth(double baseWidth, double pressure, double distance) {
