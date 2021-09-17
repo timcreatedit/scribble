@@ -18,7 +18,7 @@ Scribble is a lightweight library for freehand drawing in Flutter supporting pre
 
 ## Pipeline
 
-* [ ] Load sketches
+* [X] Load sketches
 * [ ] PNG export
 
 ## Usage
