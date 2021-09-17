@@ -16,20 +16,61 @@ import 'model/sketch/sketch.dart';
 /// pass in.
 class Scribble extends StatelessWidget {
   const Scribble({
+    /// The notifier that controls this canvas.
     required this.notifier,
-    this.drawPointer = true,
+
+    /// Whether to draw the pointer when in drawing mode
+    this.drawPen = true,
+
+    /// Whether to draw the pointer when in erasing mode
     this.drawEraser = true,
+
+    /// How much influence the pen pressure has on the line width.
+    ///
+    /// The default value of 0.5 for example means, that a pressure of 0 reduces
+    /// the line width by half, and a pressure of 1 adds half the line width.
+    this.pressureFactor = 0.5,
+
+    /// How much the distance between two points reduces the line width.
+    ///
+    /// Defaults to 0.4, higher values quickly lead to the line becoming super
+    /// thin.
+    this.speedFactor = 0.4,
+
+    /// The  relative minimum width of the line.
+    ///
+    /// The default value of 0.3 results in a line of thickness 10 becoming no
+    /// thinner than 3.
+    this.minWidthFactor = 0.3,
     Key? key,
   }) : super(key: key);
 
   /// The notifier that controls this canvas.
-  final ScribbleNotifier notifier;
+  final ScribbleNotifierBase notifier;
 
   /// Whether to draw the pointer when in drawing mode
-  final bool drawPointer;
+  final bool drawPen;
 
   /// Whether to draw the pointer when in erasing mode
   final bool drawEraser;
+
+  /// How much influence the pen pressure has on the line width.
+  ///
+  /// The default value of 0.5 for example means, that a pressure of 0 reduces
+  /// the line width by half, and a pressure of 1 adds half the line width.
+  final double pressureFactor;
+
+  /// How much the distance between two points reduces the line width.
+  ///
+  /// Defaults to 0.02, higher values quickly lead to the line becoming super
+  /// thin.
+  final double speedFactor;
+
+  /// The  relative minimum width of the line.
+  ///
+  /// The default value of 0.3 results in a line of thickness 10 becoming no
+  /// thinner than 3.
+  final double minWidthFactor;
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +88,11 @@ class Scribble extends StatelessWidget {
                 child: CustomPaint(
                   painter: _ScribblePainter(
                     state: state,
-                    drawPointer: drawPointer,
+                    drawPointer: drawPen,
                     drawEraser: drawEraser,
+                    pressureFactor: pressureFactor,
+                    minWidthFactor: minWidthFactor,
+                    speedFactor: speedFactor,
                   ),
                 ),
               ),
@@ -63,11 +107,14 @@ class _ScribblePainter extends CustomPainter {
     required this.state,
     required this.drawPointer,
     required this.drawEraser,
+    required this.pressureFactor,
+    required this.speedFactor,
+    required this.minWidthFactor,
   });
 
-  static const double pressureFactor = 0.5;
-  static const double speedFactor = 0.02;
-  static const double minWidthFactor = 0.3;
+  final double pressureFactor;
+  final double speedFactor;
+  final double minWidthFactor;
 
   final ScribbleState state;
   final bool drawPointer;
@@ -106,8 +153,9 @@ class _ScribblePainter extends CustomPainter {
       );
       paint.color = state.map(
         drawing: (s) => s.selectedColor,
-        erasing: (s) => Color(0xFF000000),
+        erasing: (s) => const Color(0xFF000000),
       );
+      paint.strokeWidth = 1;
       canvas.drawCircle(
           state.pointerPosition!.asOffset, state.selectedWidth, paint);
     }
@@ -147,7 +195,9 @@ class _ScribblePainter extends CustomPainter {
   }
 
   double _getWidth(double baseWidth, double pressure, double distance) {
-    final pointWidth = pressure * pressureFactor - distance * speedFactor;
+    final pointWidth = pressure * baseWidth * 2 * pressureFactor -
+        baseWidth * pressureFactor -
+        baseWidth * (distance / 100) * speedFactor;
     return max(baseWidth + pointWidth, baseWidth * minWidthFactor);
   }
 

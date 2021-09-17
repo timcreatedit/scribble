@@ -7,15 +7,44 @@ import 'package:flutter/widgets.dart';
 import 'package:kimchi/kimchi.dart';
 import 'package:scribble/src/model/sketch/sketch.dart';
 import 'package:scribble/src/state/scribble.state.dart';
+import 'package:state_notifier/state_notifier.dart';
+
+abstract class ScribbleNotifierBase extends StateNotifier<ScribbleState> {
+  ScribbleNotifierBase(ScribbleState state) : super(state);
+
+  void onPointerHover(PointerHoverEvent event);
+
+  void onPointerDown(PointerDownEvent event);
+
+  void onPointerUpdate(PointerMoveEvent event);
+
+  void onPointerUp(PointerUpEvent event);
+
+  void onPointerCancel(PointerCancelEvent event);
+}
 
 /// This class controls the state and behavior for a [Scribble] widget.
-class ScribbleNotifier extends HistoryStateNotifier<ScribbleState> {
+class ScribbleNotifier extends HistoryStateNotifier<ScribbleState>
+    implements ScribbleNotifierBase {
   ScribbleNotifier({
+    /// If you pass a sketch here, the notifier will use that sketch as a
+    /// starting point.
+    Sketch? sketch,
+
+    /// How many states you want stored in the undo history, 30 by default.
     int maxHistoryLength = 30,
+
+    /// The supported widths, mainly useful for rendering UI, you can still set
+    /// the width to any arbitrary value from code. The first entry in this list
+    /// will be the starting width.
     this.widths = const [5, 10, 15],
+
+    /// The curve that's used to map pen pressure to the pressure value when
+    /// recording, by default it's linear.
+    this.pressureCurve = Curves.linear,
   }) : super(
           ScribbleState.drawing(
-            sketch: const Sketch(lines: []),
+            sketch: sketch ?? const Sketch(lines: []),
             selectedWidth: widths[0],
           ),
           maxHistoryLength: maxHistoryLength,
@@ -24,6 +53,16 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState> {
   /// The supported widths, mainly useful for rendering UI, you can still set
   /// the width to any arbitrary value from code.
   final List<double> widths;
+
+  /// The curve that's used to map pen pressure to the pressure value when
+  /// recording.
+  final Curve pressureCurve;
+
+  /// The state of the sketch at this moment.
+  ///
+  /// If you want to store it somewhere you can call ``.toJson()`` on it to
+  /// receive a map.
+  Sketch get currentSketch => state.sketch;
 
   SketchLine get _currentLine =>
       state.sketch.lines.lastOrNull ??
@@ -48,14 +87,14 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState> {
 
   /// Sets the width of the next line
   void setStrokeWidth(double strokeWidth) {
-    state = state.copyWith(
+    temporaryState = state.copyWith(
       selectedWidth: strokeWidth,
     );
   }
 
   /// Switches to eraser mode
   void setEraser() {
-    state = ScribbleState.erasing(
+    temporaryState = ScribbleState.erasing(
       sketch: state.sketch,
       selectedWidth: widths.last,
     );
@@ -63,7 +102,7 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState> {
 
   /// Sets the color of the pen to the given color.
   void setColor(Color color) {
-    state = state.map(
+    temporaryState = state.map(
       drawing: (s) => ScribbleState.drawing(
         sketch: s.sketch,
         selectedColor: color,
@@ -78,6 +117,7 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState> {
   }
 
   /// Used by the Listener callback to display the pen if desired
+  @override
   void onPointerHover(PointerHoverEvent event) {
     temporaryState = state.copyWith(
       pointerPosition: event.distance > 1
@@ -87,6 +127,7 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState> {
   }
 
   /// Used by the Listener callback to start drawing
+  @override
   void onPointerDown(PointerDownEvent event) {
     if (state is Drawing) {
       temporaryState = state.copyWith.sketch(
@@ -103,6 +144,7 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState> {
   }
 
   /// Used by the Listener callback to update the drawing
+  @override
   void onPointerUpdate(PointerMoveEvent event) {
     if (state is Drawing) {
       temporaryState = _addPoint(event).copyWith(
@@ -112,11 +154,11 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState> {
       temporaryState = _erasePoint(event).copyWith(
         pointerPosition: _getPointFromEvent(event),
       );
-      ;
     }
   }
 
   /// Used by the Listener callback to finish a line
+  @override
   void onPointerUp(PointerUpEvent event) {
     if (state is Drawing) {
       state = _addPoint(event);
@@ -132,16 +174,6 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState> {
     } else if (state is Erasing) {
       state = _erasePoint(event).copyWith(pointerPosition: null);
     }
-  }
-
-  ScribbleState _erasePoint(PointerEvent event) {
-    return state.copyWith.sketch(
-      lines: state.sketch.lines
-          .where((l) => l.points.none((p) =>
-              (event.localPosition - p.asOffset).distance <=
-              state.selectedWidth))
-          .toList(),
-    );
   }
 
   ScribbleState _addPoint(PointerEvent event) {
@@ -166,6 +198,16 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState> {
     );
   }
 
+  ScribbleState _erasePoint(PointerEvent event) {
+    return state.copyWith.sketch(
+      lines: state.sketch.lines
+          .where((l) => l.points.none((p) =>
+              (event.localPosition - p.asOffset).distance <=
+              state.selectedWidth))
+          .toList(),
+    );
+  }
+
   void _checkStraightLineMode(Offset currentPoint, {int windowSize = 30}) {
     if (_currentLine.points.length < windowSize) return;
     var values =
@@ -177,11 +219,13 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState> {
     //print(averageDist);
   }
 
+  /// Converts a pointer event to the [Point] on the canvas.
   Point _getPointFromEvent(PointerEvent event) {
+    final p = event.kind == PointerDeviceKind.mouse ? 0.5 : event.pressure;
     return Point(
       event.localPosition.dx,
       event.localPosition.dy,
-      pressure: event.pressure,
+      pressure: pressureCurve.transform(p),
     );
   }
 }

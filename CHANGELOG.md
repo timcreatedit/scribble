@@ -1,4 +1,16 @@
-## 0.0.4
+## 0.0.7
+
+* **BREAKING:** The ``drawPointer`` parameter is now called ``drawPen``
+* You can now obtain the current sketch from the notifier.
+  If you want to store it somewhere for example you can call ```toJson()``` on it.
+* You can now pass a sketch to a ``ScribbleNotifier`` constructor to initialize it with an existing
+  drawing.
+* Added ``ScribbleNotifierBase`` interface so you can write your own notifier that works with the ``Scribble``widget
+* Added pressure curve support to the notifier
+* Allows more customization in the scribble widget for how the lines are rendered
+
+
+## 0.0.6
 
 * Upped minimum flutter version to 2.5
 
