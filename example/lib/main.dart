@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           Scribble(
             notifier: notifier,
-            drawPointer: true,
+            drawPen: true,
           ),
           _buildColorToolbar(context),
           _buildStrokeToolbar(context),

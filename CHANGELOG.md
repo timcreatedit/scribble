@@ -1,4 +1,11 @@
-## 0.0.4
+## 0.0.7
+
+* **BREAKING:** The ``drawPointer`` parameter is now called ``drawPen``
+* Added pressure curve support to the notifier
+* Allows more customization in the scribble widget for how the lines are rendered
+
+
+## 0.0.6
 
 * Upped minimum flutter version to 2.5
 
