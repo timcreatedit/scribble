@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -70,9 +69,9 @@ class ScribbleNotifier extends StateNotifier<ScribbleState>
   /// receive a map.
   Sketch get currentSketch => state.sketch;
 
-  SketchLine get _currentLine =>
-      state.sketch.lines.lastOrNull ??
-      SketchLine(points: [], color: Colors.black.value, width: 0);
+  SketchLine get _currentLine => state.sketch.lines.isNotEmpty
+      ? state.sketch.lines.last
+      : SketchLine(points: [], color: Colors.black.value, width: 0);
 
   /// Don't apply the pointer position from state that come from the undo
   /// history.
@@ -208,8 +207,8 @@ class ScribbleNotifier extends StateNotifier<ScribbleState>
   ScribbleState _erasePoint(PointerEvent event) {
     return state.copyWith.sketch(
       lines: state.sketch.lines
-          .where((l) => l.points.none((p) =>
-              (event.localPosition - p.asOffset).distance <=
+          .where((l) => l.points.every((p) =>
+              (event.localPosition - p.asOffset).distance >
               state.selectedWidth))
           .toList(),
     );
