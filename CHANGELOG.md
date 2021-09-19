@@ -1,3 +1,9 @@
+## 0.0.8
+
+* Reduced Dependencies
+* Replaced kimchi package with the better suited [history_state_notifier](https://pub.dev/packages/history_state_notifier)
+* Fixed a bug with redo queue clearing
+
 ## 0.0.7
 
 * **BREAKING:** The ``drawPointer`` parameter is now called ``drawPen``

@@ -1,10 +1,9 @@
 import 'dart:math';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:kimchi/kimchi.dart';
+import 'package:history_state_notifier/history_state_notifier.dart';
 import 'package:scribble/src/model/sketch/sketch.dart';
 import 'package:scribble/src/state/scribble.state.dart';
 import 'package:state_notifier/state_notifier.dart';
@@ -24,7 +23,8 @@ abstract class ScribbleNotifierBase extends StateNotifier<ScribbleState> {
 }
 
 /// This class controls the state and behavior for a [Scribble] widget.
-class ScribbleNotifier extends HistoryStateNotifier<ScribbleState>
+class ScribbleNotifier extends StateNotifier<ScribbleState>
+    with HistoryStateNotifierMixin<ScribbleState>
     implements ScribbleNotifierBase {
   ScribbleNotifier({
     /// If you pass a sketch here, the notifier will use that sketch as a
@@ -47,8 +47,13 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState>
             sketch: sketch ?? const Sketch(lines: []),
             selectedWidth: widths[0],
           ),
-          maxHistoryLength: maxHistoryLength,
-        );
+        ) {
+    state = ScribbleState.drawing(
+      sketch: sketch ?? const Sketch(lines: []),
+      selectedWidth: widths[0],
+    );
+    this.maxHistoryLength = maxHistoryLength;
+  }
 
   /// The supported widths, mainly useful for rendering UI, you can still set
   /// the width to any arbitrary value from code.
@@ -64,17 +69,18 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState>
   /// receive a map.
   Sketch get currentSketch => state.sketch;
 
-  SketchLine get _currentLine =>
-      state.sketch.lines.lastOrNull ??
-      SketchLine(points: [], color: Colors.black.value, width: 0);
+  SketchLine get _currentLine => state.sketch.lines.isNotEmpty
+      ? state.sketch.lines.last
+      : SketchLine(points: [], color: Colors.black.value, width: 0);
 
   /// Don't apply the pointer position from state that come from the undo
   /// history.
   @override
   @protected
-  ScribbleState transformHistoryState(ScribbleState historyState) {
+  ScribbleState transformHistoryState(
+      ScribbleState historyState, ScribbleState currentState) {
     return historyState.copyWith(
-      pointerPosition: state.pointerPosition,
+      pointerPosition: currentState.pointerPosition,
     );
   }
 
@@ -201,8 +207,8 @@ class ScribbleNotifier extends HistoryStateNotifier<ScribbleState>
   ScribbleState _erasePoint(PointerEvent event) {
     return state.copyWith.sketch(
       lines: state.sketch.lines
-          .where((l) => l.points.none((p) =>
-              (event.localPosition - p.asOffset).distance <=
+          .where((l) => l.points.every((p) =>
+              (event.localPosition - p.asOffset).distance >
               state.selectedWidth))
           .toList(),
     );
