@@ -83,7 +83,7 @@ class _ScribbleState extends State<Scribble> {
         return SizedBox.expand(
           child: MouseRegion(
             cursor: drawCurrent ? SystemMouseCursors.none : MouseCursor.defer,
-            onExit: (event) => widget.notifier.onPointerCancel(event),
+            onExit: widget.notifier.onPointerExit,
             child: Listener(
               onPointerDown: widget.notifier.onPointerDown,
               onPointerMove: widget.notifier.onPointerUpdate,
