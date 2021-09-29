@@ -19,7 +19,7 @@ abstract class ScribbleNotifierBase extends StateNotifier<ScribbleState> {
 
   void onPointerUp(PointerUpEvent event);
 
-  void onPointerCancel(PointerCancelEvent event);
+  void onPointerCancel(PointerEvent event);
 }
 
 /// This class controls the state and behavior for a [Scribble] widget.
@@ -174,7 +174,8 @@ class ScribbleNotifier extends StateNotifier<ScribbleState>
   }
 
   /// Used by the Listener callback to stop displaying the cursor
-  void onPointerCancel(PointerCancelEvent event) {
+  @override
+  void onPointerCancel(PointerEvent event) {
     if (state is Drawing) {
       state = _addPoint(event).copyWith(pointerPosition: null);
     } else if (state is Erasing) {
