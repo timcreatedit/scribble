@@ -1,3 +1,7 @@
+## 0.0.9
+
+* Better behavior on pointer exit
+
 ## 0.0.8
 
 * Reduced Dependencies
