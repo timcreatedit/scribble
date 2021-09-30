@@ -1,3 +1,7 @@
+## 0.0.12
+
+* Eraser keeps pen width and the other way around
+
 ## 0.0.11
 
 * Eraser doesn't autoselect anymore
