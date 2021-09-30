@@ -1,3 +1,8 @@
+## 0.0.11
+
+* Eraser doesn't autoselect anymore
+* Undo doesn't undo color and stroke selection
+
 ## 0.0.10
 
 * Fixed stupid bug with pointer exit
