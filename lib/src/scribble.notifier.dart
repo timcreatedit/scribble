@@ -80,7 +80,6 @@ class ScribbleNotifier extends StateNotifier<ScribbleState>
   @protected
   ScribbleState transformHistoryState(
       ScribbleState historyState, ScribbleState currentState) {
-
     return currentState.copyWith(
       sketch: historyState.sketch,
     );
@@ -104,6 +103,7 @@ class ScribbleNotifier extends StateNotifier<ScribbleState>
   void setEraser() {
     temporaryState = ScribbleState.erasing(
       sketch: state.sketch,
+      selectedWidth: state.selectedWidth,
     );
   }
 
