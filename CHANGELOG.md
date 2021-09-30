@@ -1,3 +1,8 @@
+## 0.0.13
+
+* Draw better line ends
+* Removed marker-like blend mode for now due to performance and buggy rendering in some cases
+
 ## 0.0.12
 
 * Eraser keeps pen width and the other way around

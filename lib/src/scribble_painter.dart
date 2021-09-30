@@ -5,6 +5,8 @@ import 'package:flutter/rendering.dart';
 import 'package:scribble/scribble.dart';
 import 'package:vector_math/vector_math.dart';
 
+const double _maxDistanceToDrawPoint = 5;
+
 class ScribblePainter extends CustomPainter {
   ScribblePainter({
     required this.state,
@@ -32,20 +34,27 @@ class ScribblePainter extends CustomPainter {
     for (int i = 0; i < lines.length; ++i) {
       final line = lines[i];
       paint.color = Color(lines[i].color);
-      paint.blendMode = BlendMode.darken;
-      if (line.points.length == 1) {
-        final p = line.points[0];
-        canvas.drawCircle(
-            p.asOffset, _getWidth(line.width, p.pressure, 0), paint);
-        paint.color = Color(line.color).withOpacity(.5);
-        paint.blendMode = BlendMode.srcATop;
-        canvas.drawCircle(
-            p.asOffset, _getWidth(line.width, p.pressure, 0), paint);
+      if (line.points.isNotEmpty) {
+        final p = line.points.first;
+        final distance = (line.points.length == 1)
+            ? 0
+            : (line.points[1].asOffset - p.asOffset).distance;
+        if (distance <= _maxDistanceToDrawPoint) {
+          canvas.drawCircle(
+              p.asOffset, _getWidth(line.width, p.pressure, 0), paint);
+        }
+
+        if (line.points.length > 1) {
+          final p2 = line.points.last;
+          final p1 = line.points[line.points.length - 2];
+          final distance = (p2.asOffset - p1.asOffset).distance;
+          if (distance <= _maxDistanceToDrawPoint) {
+            canvas.drawCircle(p2.asOffset,
+                _getWidth(line.width, p2.pressure, distance), paint);
+          }
+        }
       }
       Vertices path = _getVerticesForLine(line);
-      canvas.drawVertices(path, BlendMode.dst, paint);
-      paint.color = Color(line.color).withOpacity(.5);
-      paint.blendMode = BlendMode.srcATop;
       canvas.drawVertices(path, BlendMode.dst, paint);
     }
     if (state.pointerPosition != null &&
