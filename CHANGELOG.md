@@ -1,3 +1,7 @@
+## 0.0.10
+
+* Fixed stupid bug with pointer exit
+
 ## 0.0.9
 
 * Better behavior on pointer exit
