@@ -75,14 +75,14 @@ class ScribbleNotifier extends StateNotifier<ScribbleState>
       ? state.sketch.lines.last
       : SketchLine(points: [], color: Colors.black.value, width: 0);
 
-  /// Don't apply the pointer position from state that come from the undo
-  /// history.
+  /// Only apply the sketch from the undo history, otherwise keep current state
   @override
   @protected
   ScribbleState transformHistoryState(
       ScribbleState historyState, ScribbleState currentState) {
-    return historyState.copyWith(
-      pointerPosition: currentState.pointerPosition,
+
+    return currentState.copyWith(
+      sketch: historyState.sketch,
     );
   }
 
@@ -104,7 +104,6 @@ class ScribbleNotifier extends StateNotifier<ScribbleState>
   void setEraser() {
     temporaryState = ScribbleState.erasing(
       sketch: state.sketch,
-      selectedWidth: widths.last,
     );
   }
 
