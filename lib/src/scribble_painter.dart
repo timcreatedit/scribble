@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:scribble/scribble.dart';
 import 'package:vector_math/vector_math.dart';
 
-const double _maxDistanceToDrawPoint = kPrecisePointerPanSlop * 2;
+const double _maxDistanceToDrawPoint = kPrecisePointerPanSlop * 4;
 
 class ScribblePainter extends CustomPainter {
   ScribblePainter({

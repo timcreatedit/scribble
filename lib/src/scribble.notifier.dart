@@ -123,13 +123,8 @@ class ScribbleNotifier extends StateNotifier<ScribbleState>
   @override
   void onPointerHover(PointerHoverEvent event) {
     temporaryState = state.copyWith(
-      pointerPosition: event.distance > 10000
-          ? null
-          : Point(
-              event.localPosition.dx,
-              event.localPosition.dy,
-              time: event.timeStamp.inMilliseconds,
-            ),
+      pointerPosition:
+          event.distance > 10000 ? null : _getPointFromEvent(event),
     );
   }
 
@@ -151,6 +146,7 @@ class ScribbleNotifier extends StateNotifier<ScribbleState>
           erasing: (s) => s);
     } else if (state is Drawing) {
       s = (state as Drawing).copyWith(
+        pointerPosition: _getPointFromEvent(event),
         activeLine: SketchLine(
           points: [_getPointFromEvent(event)],
           color: (state as Drawing).selectedColor.value,
