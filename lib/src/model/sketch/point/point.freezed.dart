@@ -21,10 +21,11 @@ Point _$PointFromJson(Map<String, dynamic> json) {
 class _$PointTearOff {
   const _$PointTearOff();
 
-  _Point call(double x, double y, {double pressure = 1}) {
+  _Point call(double x, double y, {required int time, double pressure = 1}) {
     return _Point(
       x,
       y,
+      time: time,
       pressure: pressure,
     );
   }
@@ -41,6 +42,7 @@ const $Point = _$PointTearOff();
 mixin _$Point {
   double get x => throw _privateConstructorUsedError;
   double get y => throw _privateConstructorUsedError;
+  int get time => throw _privateConstructorUsedError;
   double get pressure => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -52,7 +54,7 @@ mixin _$Point {
 abstract class $PointCopyWith<$Res> {
   factory $PointCopyWith(Point value, $Res Function(Point) then) =
       _$PointCopyWithImpl<$Res>;
-  $Res call({double x, double y, double pressure});
+  $Res call({double x, double y, int time, double pressure});
 }
 
 /// @nodoc
@@ -67,6 +69,7 @@ class _$PointCopyWithImpl<$Res> implements $PointCopyWith<$Res> {
   $Res call({
     Object? x = freezed,
     Object? y = freezed,
+    Object? time = freezed,
     Object? pressure = freezed,
   }) {
     return _then(_value.copyWith(
@@ -78,6 +81,10 @@ class _$PointCopyWithImpl<$Res> implements $PointCopyWith<$Res> {
           ? _value.y
           : y // ignore: cast_nullable_to_non_nullable
               as double,
+      time: time == freezed
+          ? _value.time
+          : time // ignore: cast_nullable_to_non_nullable
+              as int,
       pressure: pressure == freezed
           ? _value.pressure
           : pressure // ignore: cast_nullable_to_non_nullable
@@ -91,7 +98,7 @@ abstract class _$PointCopyWith<$Res> implements $PointCopyWith<$Res> {
   factory _$PointCopyWith(_Point value, $Res Function(_Point) then) =
       __$PointCopyWithImpl<$Res>;
   @override
-  $Res call({double x, double y, double pressure});
+  $Res call({double x, double y, int time, double pressure});
 }
 
 /// @nodoc
@@ -107,6 +114,7 @@ class __$PointCopyWithImpl<$Res> extends _$PointCopyWithImpl<$Res>
   $Res call({
     Object? x = freezed,
     Object? y = freezed,
+    Object? time = freezed,
     Object? pressure = freezed,
   }) {
     return _then(_Point(
@@ -118,6 +126,10 @@ class __$PointCopyWithImpl<$Res> extends _$PointCopyWithImpl<$Res>
           ? _value.y
           : y // ignore: cast_nullable_to_non_nullable
               as double,
+      time: time == freezed
+          ? _value.time
+          : time // ignore: cast_nullable_to_non_nullable
+              as int,
       pressure: pressure == freezed
           ? _value.pressure
           : pressure // ignore: cast_nullable_to_non_nullable
@@ -129,7 +141,8 @@ class __$PointCopyWithImpl<$Res> extends _$PointCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_Point extends _Point {
-  const _$_Point(this.x, this.y, {this.pressure = 1}) : super._();
+  const _$_Point(this.x, this.y, {required this.time, this.pressure = 1})
+      : super._();
 
   factory _$_Point.fromJson(Map<String, dynamic> json) =>
       _$$_PointFromJson(json);
@@ -138,13 +151,15 @@ class _$_Point extends _Point {
   final double x;
   @override
   final double y;
+  @override
+  final int time;
   @JsonKey(defaultValue: 1)
   @override
   final double pressure;
 
   @override
   String toString() {
-    return 'Point(x: $x, y: $y, pressure: $pressure)';
+    return 'Point(x: $x, y: $y, time: $time, pressure: $pressure)';
   }
 
   @override
@@ -155,6 +170,8 @@ class _$_Point extends _Point {
                 const DeepCollectionEquality().equals(other.x, x)) &&
             (identical(other.y, y) ||
                 const DeepCollectionEquality().equals(other.y, y)) &&
+            (identical(other.time, time) ||
+                const DeepCollectionEquality().equals(other.time, time)) &&
             (identical(other.pressure, pressure) ||
                 const DeepCollectionEquality()
                     .equals(other.pressure, pressure)));
@@ -165,6 +182,7 @@ class _$_Point extends _Point {
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(x) ^
       const DeepCollectionEquality().hash(y) ^
+      const DeepCollectionEquality().hash(time) ^
       const DeepCollectionEquality().hash(pressure);
 
   @JsonKey(ignore: true)
@@ -179,7 +197,8 @@ class _$_Point extends _Point {
 }
 
 abstract class _Point extends Point {
-  const factory _Point(double x, double y, {double pressure}) = _$_Point;
+  const factory _Point(double x, double y,
+      {required int time, double pressure}) = _$_Point;
   const _Point._() : super._();
 
   factory _Point.fromJson(Map<String, dynamic> json) = _$_Point.fromJson;
@@ -188,6 +207,8 @@ abstract class _Point extends Point {
   double get x => throw _privateConstructorUsedError;
   @override
   double get y => throw _privateConstructorUsedError;
+  @override
+  int get time => throw _privateConstructorUsedError;
   @override
   double get pressure => throw _privateConstructorUsedError;
   @override

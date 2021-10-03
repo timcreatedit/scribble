@@ -1,11 +1,12 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:scribble/scribble.dart';
 import 'package:vector_math/vector_math.dart';
 
-const double _maxDistanceToDrawPoint = 5;
+const double _maxDistanceToDrawPoint = kPrecisePointerPanSlop * 2;
 
 class ScribblePainter extends CustomPainter {
   ScribblePainter({
@@ -25,7 +26,7 @@ class ScribblePainter extends CustomPainter {
   final bool drawPointer;
   final bool drawEraser;
 
-  List<SketchLine> get lines => state.sketch.lines;
+  List<SketchLine> get lines => state.lines;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -41,16 +42,17 @@ class ScribblePainter extends CustomPainter {
             : (line.points[1].asOffset - p.asOffset).distance;
         if (distance <= _maxDistanceToDrawPoint) {
           canvas.drawCircle(
-              p.asOffset, _getWidth(line.width, p.pressure, 0), paint);
+              p.asOffset, _getWidth(line.width, p.pressure, 0, 1,), paint);
         }
 
         if (line.points.length > 1) {
           final p2 = line.points.last;
           final p1 = line.points[line.points.length - 2];
           final distance = (p2.asOffset - p1.asOffset).distance;
+          final deltaTime = (p2.time - p1.time);
           if (distance <= _maxDistanceToDrawPoint) {
             canvas.drawCircle(p2.asOffset,
-                _getWidth(line.width, p2.pressure, distance), paint);
+                _getWidth(line.width, p2.pressure, distance, deltaTime), paint);
           }
         }
       }
@@ -69,7 +71,14 @@ class ScribblePainter extends CustomPainter {
       );
       paint.strokeWidth = 1;
       canvas.drawCircle(
-          state.pointerPosition!.asOffset, state.selectedWidth, paint);
+          state.pointerPosition!.asOffset,
+          _getWidth(
+            state.selectedWidth,
+            state.pointerPosition!.pressure,
+            0,
+            1,
+          ),
+          paint);
     }
   }
 
@@ -83,6 +92,7 @@ class ScribblePainter extends CustomPainter {
       final offset = _getOffset(prev.asOffset, current.asOffset, next.asOffset);
       final distance = (current.asOffset - prev.asOffset).distance +
           (next.asOffset - current.asOffset).distance;
+      final deltaTime = current.time - prev.time;
 
       if (i == 0) {
         positions.add(current.asOffset);
@@ -91,7 +101,7 @@ class ScribblePainter extends CustomPainter {
         positions.add(current.asOffset);
         positions.add(current.asOffset);
       } else {
-        final width = _getWidth(line.width, current.pressure, distance);
+        final width = _getWidth(line.width, current.pressure, distance, deltaTime);
         final p1 = current.asOffset + offset * width;
         final p2 = current.asOffset - offset * width;
         positions.insert(positions.length - 1, p1);
@@ -106,11 +116,13 @@ class ScribblePainter extends CustomPainter {
     );
   }
 
-  double _getWidth(double baseWidth, double pressure, double distance) {
-    final pointWidth = pressure * baseWidth * 2 * pressureFactor -
-        baseWidth * pressureFactor -
-        baseWidth * (distance / 100) * speedFactor;
-    return max(baseWidth + pointWidth, baseWidth * minWidthFactor);
+  double _getWidth(double baseWidth, double pressure, double distance, int deltaTime) {
+    final speed = distance / deltaTime;
+    final pressureInfluence = pressure * baseWidth * 2 * pressureFactor -
+        baseWidth * pressureFactor;
+
+    final speedInfluence = -baseWidth * speed * speedFactor;
+    return max(baseWidth + pressureInfluence + speedInfluence, baseWidth * minWidthFactor);
   }
 
   Offset _getOffset(Offset prev, Offset current, Offset next) {

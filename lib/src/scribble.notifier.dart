@@ -71,10 +71,6 @@ class ScribbleNotifier extends StateNotifier<ScribbleState>
   /// receive a map.
   Sketch get currentSketch => state.sketch;
 
-  SketchLine get _currentLine => state.sketch.lines.isNotEmpty
-      ? state.sketch.lines.last
-      : SketchLine(points: [], color: Colors.black.value, width: 0);
-
   /// Only apply the sketch from the undo history, otherwise keep current state
   @override
   @protected
@@ -127,34 +123,57 @@ class ScribbleNotifier extends StateNotifier<ScribbleState>
   @override
   void onPointerHover(PointerHoverEvent event) {
     temporaryState = state.copyWith(
-      pointerPosition: event.distance > 1
+      pointerPosition: event.distance > 10000
           ? null
-          : Point(event.localPosition.dx, event.localPosition.dy),
+          : Point(
+              event.localPosition.dx,
+              event.localPosition.dy,
+              time: event.timeStamp.inMilliseconds,
+            ),
     );
   }
 
   /// Used by the Listener callback to start drawing
   @override
   void onPointerDown(PointerDownEvent event) {
-    if (state is Drawing) {
-      temporaryState = state.copyWith.sketch(
-        lines: [
-          ...state.sketch.lines,
-          SketchLine(
-            points: [_getPointFromEvent(event)],
-            color: (state as Drawing).selectedColor.value,
-            width: state.selectedWidth,
-          )
-        ],
+    ScribbleState s = state;
+
+    // Are there already pointers on the screen?
+    if (state.activePointerIds.isNotEmpty) {
+      s = state.map(
+          drawing: (s) =>
+              // If the current line already contains something
+              (s.activeLine != null && s.activeLine!.points.length > 2)
+                  ? _finishLineForState(s)
+                  : s.copyWith(
+                      activeLine: null,
+                    ),
+          erasing: (s) => s);
+    } else if (state is Drawing) {
+      s = (state as Drawing).copyWith(
+        activeLine: SketchLine(
+          points: [_getPointFromEvent(event)],
+          color: (state as Drawing).selectedColor.value,
+          width: state.selectedWidth,
+        ),
       );
     }
+    temporaryState = s.copyWith(
+      activePointerIds: [...state.activePointerIds, event.pointer],
+    );
   }
 
   /// Used by the Listener callback to update the drawing
   @override
   void onPointerUpdate(PointerMoveEvent event) {
+    if (!state.active) {
+      temporaryState = state.copyWith(
+        pointerPosition: null,
+      );
+      return;
+    }
     if (state is Drawing) {
-      temporaryState = _addPoint(event).copyWith(
+      temporaryState = _addPoint(event, state).copyWith(
         pointerPosition: _getPointFromEvent(event),
       );
     } else if (state is Erasing) {
@@ -167,10 +186,20 @@ class ScribbleNotifier extends StateNotifier<ScribbleState>
   /// Used by the Listener callback to finish a line
   @override
   void onPointerUp(PointerUpEvent event) {
+    final pos =
+        event.kind == PointerDeviceKind.mouse ? state.pointerPosition : null;
     if (state is Drawing) {
-      state = _addPoint(event);
+      state = _finishLineForState(_addPoint(event, state)).copyWith(
+        pointerPosition: pos,
+        activePointerIds:
+            state.activePointerIds.where((id) => id != event.pointer).toList(),
+      );
     } else if (state is Erasing) {
-      state = _erasePoint(event);
+      state = _erasePoint(event).copyWith(
+        pointerPosition: pos,
+        activePointerIds:
+            state.activePointerIds.where((id) => id != event.pointer).toList(),
+      );
     }
   }
 
@@ -178,38 +207,44 @@ class ScribbleNotifier extends StateNotifier<ScribbleState>
   @override
   void onPointerCancel(PointerCancelEvent event) {
     if (state is Drawing) {
-      state = _addPoint(event).copyWith(pointerPosition: null);
+      state = _finishLineForState(_addPoint(event, state)).copyWith(
+        pointerPosition: null,
+        activePointerIds:
+            state.activePointerIds.where((id) => id != event.pointer).toList(),
+      );
     } else if (state is Erasing) {
-      state = _erasePoint(event).copyWith(pointerPosition: null);
+      state = _erasePoint(event).copyWith(
+        pointerPosition: null,
+        activePointerIds:
+            state.activePointerIds.where((id) => id != event.pointer).toList(),
+      );
     }
   }
 
   @override
   void onPointerExit(PointerExitEvent event) {
-    temporaryState = state.copyWith(
+    temporaryState = _finishLineForState(state).copyWith(
       pointerPosition: null,
+      activePointerIds:
+          state.activePointerIds.where((id) => id != event.pointer).toList(),
     );
   }
 
-  ScribbleState _addPoint(PointerEvent event) {
-    final distanceToLast = _currentLine.points.isEmpty
+  ScribbleState _addPoint(PointerEvent event, ScribbleState s) {
+    if (s is Erasing || !s.active) return s;
+    if (s is Drawing && s.activeLine == null) return s;
+    final currentLine = (s as Drawing).activeLine!;
+    final distanceToLast = currentLine.points.isEmpty
         ? double.infinity
-        : (_currentLine.points.last.asOffset - event.localPosition).distance;
-    if (distanceToLast <= computePanSlop(event.kind)) return state;
-    _checkStraightLineMode(event.localPosition);
-    final prevLines = state.sketch.lines.isEmpty
-        ? <SketchLine>[]
-        : state.sketch.lines.sublist(0, state.sketch.lines.length - 1);
-    return state.copyWith.sketch(
-      lines: [
-        ...prevLines,
-        _currentLine.copyWith(
-          points: [
-            ..._currentLine.points,
-            _getPointFromEvent(event),
-          ],
-        ),
-      ],
+        : (currentLine.points.last.asOffset - event.localPosition).distance;
+    if (distanceToLast <= kPrecisePointerPanSlop) return s;
+    return s.copyWith(
+      activeLine: currentLine.copyWith(
+        points: [
+          ...currentLine.points,
+          _getPointFromEvent(event),
+        ],
+      ),
     );
   }
 
@@ -223,24 +258,29 @@ class ScribbleNotifier extends StateNotifier<ScribbleState>
     );
   }
 
-  void _checkStraightLineMode(Offset currentPoint, {int windowSize = 30}) {
-    if (_currentLine.points.length < windowSize) return;
-    var values =
-        _currentLine.points.skip(_currentLine.points.length - windowSize);
-    var averageDist = values
-        .map((o) =>
-            sqrt(pow(currentPoint.dy - o.y, 2) + pow(o.x - currentPoint.dx, 2)))
-        .reduce((a, b) => a + b / values.length);
-    //print(averageDist);
-  }
-
   /// Converts a pointer event to the [Point] on the canvas.
   Point _getPointFromEvent(PointerEvent event) {
-    final p = event.kind == PointerDeviceKind.mouse ? 0.5 : event.pressure;
+    final p = event.pressureMin == event.pressureMax
+        ? 0.5
+        : (event.pressure - event.pressureMin) /
+            (event.pressureMax - event.pressureMin);
     return Point(
       event.localPosition.dx,
       event.localPosition.dy,
       pressure: pressureCurve.transform(p),
+      time: event.timeStamp.inMilliseconds,
+    );
+  }
+
+  ScribbleState _finishLineForState(ScribbleState s) {
+    if (s is Erasing || (s as Drawing).activeLine == null) {
+      return s;
+    }
+    return s.copyWith(
+      activeLine: null,
+      sketch: s.sketch.copyWith(
+        lines: [...s.sketch.lines, s.activeLine!],
+      ),
     );
   }
 }
