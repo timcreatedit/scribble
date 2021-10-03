@@ -1,3 +1,13 @@
+## 0.1.0
+
+* Points now remember their time to calculate speed more accurately
+* Multiple fixes for drawing with real pens or touch
+* ``ScribbleState`` can now be serialized to JSON
+
+### Breaking:
+
+* speedFactor's value should now be higher for the same effect, the default value has changed to 0.4
+* ``color`` property in state is now an int to allow for easy JSON
 ## 0.0.13
 
 * Draw better line ends

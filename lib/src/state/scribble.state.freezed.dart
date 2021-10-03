@@ -19,11 +19,15 @@ class _$ScribbleStateTearOff {
 
   Drawing drawing(
       {required Sketch sketch,
+      SketchLine? activeLine,
+      List<int> activePointerIds = const [],
       Point? pointerPosition,
       Color selectedColor = Colors.black,
       double selectedWidth = 5}) {
     return Drawing(
       sketch: sketch,
+      activeLine: activeLine,
+      activePointerIds: activePointerIds,
       pointerPosition: pointerPosition,
       selectedColor: selectedColor,
       selectedWidth: selectedWidth,
@@ -32,11 +36,13 @@ class _$ScribbleStateTearOff {
 
   Erasing erasing(
       {required Sketch sketch,
+      List<int> activePointerIds = const [],
       Point? pointerPosition,
       bool lineMode = true,
       double selectedWidth = 5}) {
     return Erasing(
       sketch: sketch,
+      activePointerIds: activePointerIds,
       pointerPosition: pointerPosition,
       lineMode: lineMode,
       selectedWidth: selectedWidth,
@@ -50,36 +56,52 @@ const $ScribbleState = _$ScribbleStateTearOff();
 /// @nodoc
 mixin _$ScribbleState {
   Sketch get sketch => throw _privateConstructorUsedError;
+  List<int> get activePointerIds => throw _privateConstructorUsedError;
   Point? get pointerPosition => throw _privateConstructorUsedError;
   double get selectedWidth => throw _privateConstructorUsedError;
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Sketch sketch, Point? pointerPosition,
-            Color selectedColor, double selectedWidth)
+    required TResult Function(
+            Sketch sketch,
+            SketchLine? activeLine,
+            List<int> activePointerIds,
+            Point? pointerPosition,
+            Color selectedColor,
+            double selectedWidth)
         drawing,
-    required TResult Function(Sketch sketch, Point? pointerPosition,
-            bool lineMode, double selectedWidth)
+    required TResult Function(Sketch sketch, List<int> activePointerIds,
+            Point? pointerPosition, bool lineMode, double selectedWidth)
         erasing,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(Sketch sketch, Point? pointerPosition, Color selectedColor,
+    TResult Function(
+            Sketch sketch,
+            SketchLine? activeLine,
+            List<int> activePointerIds,
+            Point? pointerPosition,
+            Color selectedColor,
             double selectedWidth)?
         drawing,
-    TResult Function(Sketch sketch, Point? pointerPosition, bool lineMode,
-            double selectedWidth)?
+    TResult Function(Sketch sketch, List<int> activePointerIds,
+            Point? pointerPosition, bool lineMode, double selectedWidth)?
         erasing,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Sketch sketch, Point? pointerPosition, Color selectedColor,
+    TResult Function(
+            Sketch sketch,
+            SketchLine? activeLine,
+            List<int> activePointerIds,
+            Point? pointerPosition,
+            Color selectedColor,
             double selectedWidth)?
         drawing,
-    TResult Function(Sketch sketch, Point? pointerPosition, bool lineMode,
-            double selectedWidth)?
+    TResult Function(Sketch sketch, List<int> activePointerIds,
+            Point? pointerPosition, bool lineMode, double selectedWidth)?
         erasing,
     required TResult orElse(),
   }) =>
@@ -114,7 +136,11 @@ abstract class $ScribbleStateCopyWith<$Res> {
   factory $ScribbleStateCopyWith(
           ScribbleState value, $Res Function(ScribbleState) then) =
       _$ScribbleStateCopyWithImpl<$Res>;
-  $Res call({Sketch sketch, Point? pointerPosition, double selectedWidth});
+  $Res call(
+      {Sketch sketch,
+      List<int> activePointerIds,
+      Point? pointerPosition,
+      double selectedWidth});
 
   $SketchCopyWith<$Res> get sketch;
   $PointCopyWith<$Res>? get pointerPosition;
@@ -132,6 +158,7 @@ class _$ScribbleStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? sketch = freezed,
+    Object? activePointerIds = freezed,
     Object? pointerPosition = freezed,
     Object? selectedWidth = freezed,
   }) {
@@ -140,6 +167,10 @@ class _$ScribbleStateCopyWithImpl<$Res>
           ? _value.sketch
           : sketch // ignore: cast_nullable_to_non_nullable
               as Sketch,
+      activePointerIds: activePointerIds == freezed
+          ? _value.activePointerIds
+          : activePointerIds // ignore: cast_nullable_to_non_nullable
+              as List<int>,
       pointerPosition: pointerPosition == freezed
           ? _value.pointerPosition
           : pointerPosition // ignore: cast_nullable_to_non_nullable
@@ -177,12 +208,15 @@ abstract class $DrawingCopyWith<$Res> implements $ScribbleStateCopyWith<$Res> {
   @override
   $Res call(
       {Sketch sketch,
+      SketchLine? activeLine,
+      List<int> activePointerIds,
       Point? pointerPosition,
       Color selectedColor,
       double selectedWidth});
 
   @override
   $SketchCopyWith<$Res> get sketch;
+  $SketchLineCopyWith<$Res>? get activeLine;
   @override
   $PointCopyWith<$Res>? get pointerPosition;
 }
@@ -199,6 +233,8 @@ class _$DrawingCopyWithImpl<$Res> extends _$ScribbleStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? sketch = freezed,
+    Object? activeLine = freezed,
+    Object? activePointerIds = freezed,
     Object? pointerPosition = freezed,
     Object? selectedColor = freezed,
     Object? selectedWidth = freezed,
@@ -208,6 +244,14 @@ class _$DrawingCopyWithImpl<$Res> extends _$ScribbleStateCopyWithImpl<$Res>
           ? _value.sketch
           : sketch // ignore: cast_nullable_to_non_nullable
               as Sketch,
+      activeLine: activeLine == freezed
+          ? _value.activeLine
+          : activeLine // ignore: cast_nullable_to_non_nullable
+              as SketchLine?,
+      activePointerIds: activePointerIds == freezed
+          ? _value.activePointerIds
+          : activePointerIds // ignore: cast_nullable_to_non_nullable
+              as List<int>,
       pointerPosition: pointerPosition == freezed
           ? _value.pointerPosition
           : pointerPosition // ignore: cast_nullable_to_non_nullable
@@ -222,19 +266,38 @@ class _$DrawingCopyWithImpl<$Res> extends _$ScribbleStateCopyWithImpl<$Res>
               as double,
     ));
   }
+
+  @override
+  $SketchLineCopyWith<$Res>? get activeLine {
+    if (_value.activeLine == null) {
+      return null;
+    }
+
+    return $SketchLineCopyWith<$Res>(_value.activeLine!, (value) {
+      return _then(_value.copyWith(activeLine: value));
+    });
+  }
 }
 
 /// @nodoc
 
-class _$Drawing implements Drawing {
+class _$Drawing extends Drawing {
   const _$Drawing(
       {required this.sketch,
+      this.activeLine,
+      this.activePointerIds = const [],
       this.pointerPosition,
       this.selectedColor = Colors.black,
-      this.selectedWidth = 5});
+      this.selectedWidth = 5})
+      : super._();
 
   @override
   final Sketch sketch;
+  @override
+  final SketchLine? activeLine;
+  @JsonKey(defaultValue: const [])
+  @override
+  final List<int> activePointerIds;
   @override
   final Point? pointerPosition;
   @JsonKey(defaultValue: Colors.black)
@@ -246,7 +309,7 @@ class _$Drawing implements Drawing {
 
   @override
   String toString() {
-    return 'ScribbleState.drawing(sketch: $sketch, pointerPosition: $pointerPosition, selectedColor: $selectedColor, selectedWidth: $selectedWidth)';
+    return 'ScribbleState.drawing(sketch: $sketch, activeLine: $activeLine, activePointerIds: $activePointerIds, pointerPosition: $pointerPosition, selectedColor: $selectedColor, selectedWidth: $selectedWidth)';
   }
 
   @override
@@ -255,6 +318,12 @@ class _$Drawing implements Drawing {
         (other is Drawing &&
             (identical(other.sketch, sketch) ||
                 const DeepCollectionEquality().equals(other.sketch, sketch)) &&
+            (identical(other.activeLine, activeLine) ||
+                const DeepCollectionEquality()
+                    .equals(other.activeLine, activeLine)) &&
+            (identical(other.activePointerIds, activePointerIds) ||
+                const DeepCollectionEquality()
+                    .equals(other.activePointerIds, activePointerIds)) &&
             (identical(other.pointerPosition, pointerPosition) ||
                 const DeepCollectionEquality()
                     .equals(other.pointerPosition, pointerPosition)) &&
@@ -270,6 +339,8 @@ class _$Drawing implements Drawing {
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(sketch) ^
+      const DeepCollectionEquality().hash(activeLine) ^
+      const DeepCollectionEquality().hash(activePointerIds) ^
       const DeepCollectionEquality().hash(pointerPosition) ^
       const DeepCollectionEquality().hash(selectedColor) ^
       const DeepCollectionEquality().hash(selectedWidth);
@@ -282,42 +353,60 @@ class _$Drawing implements Drawing {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Sketch sketch, Point? pointerPosition,
-            Color selectedColor, double selectedWidth)
+    required TResult Function(
+            Sketch sketch,
+            SketchLine? activeLine,
+            List<int> activePointerIds,
+            Point? pointerPosition,
+            Color selectedColor,
+            double selectedWidth)
         drawing,
-    required TResult Function(Sketch sketch, Point? pointerPosition,
-            bool lineMode, double selectedWidth)
+    required TResult Function(Sketch sketch, List<int> activePointerIds,
+            Point? pointerPosition, bool lineMode, double selectedWidth)
         erasing,
   }) {
-    return drawing(sketch, pointerPosition, selectedColor, selectedWidth);
+    return drawing(sketch, activeLine, activePointerIds, pointerPosition,
+        selectedColor, selectedWidth);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(Sketch sketch, Point? pointerPosition, Color selectedColor,
+    TResult Function(
+            Sketch sketch,
+            SketchLine? activeLine,
+            List<int> activePointerIds,
+            Point? pointerPosition,
+            Color selectedColor,
             double selectedWidth)?
         drawing,
-    TResult Function(Sketch sketch, Point? pointerPosition, bool lineMode,
-            double selectedWidth)?
+    TResult Function(Sketch sketch, List<int> activePointerIds,
+            Point? pointerPosition, bool lineMode, double selectedWidth)?
         erasing,
   }) {
-    return drawing?.call(sketch, pointerPosition, selectedColor, selectedWidth);
+    return drawing?.call(sketch, activeLine, activePointerIds, pointerPosition,
+        selectedColor, selectedWidth);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Sketch sketch, Point? pointerPosition, Color selectedColor,
+    TResult Function(
+            Sketch sketch,
+            SketchLine? activeLine,
+            List<int> activePointerIds,
+            Point? pointerPosition,
+            Color selectedColor,
             double selectedWidth)?
         drawing,
-    TResult Function(Sketch sketch, Point? pointerPosition, bool lineMode,
-            double selectedWidth)?
+    TResult Function(Sketch sketch, List<int> activePointerIds,
+            Point? pointerPosition, bool lineMode, double selectedWidth)?
         erasing,
     required TResult orElse(),
   }) {
     if (drawing != null) {
-      return drawing(sketch, pointerPosition, selectedColor, selectedWidth);
+      return drawing(sketch, activeLine, activePointerIds, pointerPosition,
+          selectedColor, selectedWidth);
     }
     return orElse();
   }
@@ -354,15 +443,21 @@ class _$Drawing implements Drawing {
   }
 }
 
-abstract class Drawing implements ScribbleState {
+abstract class Drawing extends ScribbleState {
   const factory Drawing(
       {required Sketch sketch,
+      SketchLine? activeLine,
+      List<int> activePointerIds,
       Point? pointerPosition,
       Color selectedColor,
       double selectedWidth}) = _$Drawing;
+  const Drawing._() : super._();
 
   @override
   Sketch get sketch => throw _privateConstructorUsedError;
+  SketchLine? get activeLine => throw _privateConstructorUsedError;
+  @override
+  List<int> get activePointerIds => throw _privateConstructorUsedError;
   @override
   Point? get pointerPosition => throw _privateConstructorUsedError;
   Color get selectedColor => throw _privateConstructorUsedError;
@@ -380,6 +475,7 @@ abstract class $ErasingCopyWith<$Res> implements $ScribbleStateCopyWith<$Res> {
   @override
   $Res call(
       {Sketch sketch,
+      List<int> activePointerIds,
       Point? pointerPosition,
       bool lineMode,
       double selectedWidth});
@@ -402,6 +498,7 @@ class _$ErasingCopyWithImpl<$Res> extends _$ScribbleStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? sketch = freezed,
+    Object? activePointerIds = freezed,
     Object? pointerPosition = freezed,
     Object? lineMode = freezed,
     Object? selectedWidth = freezed,
@@ -411,6 +508,10 @@ class _$ErasingCopyWithImpl<$Res> extends _$ScribbleStateCopyWithImpl<$Res>
           ? _value.sketch
           : sketch // ignore: cast_nullable_to_non_nullable
               as Sketch,
+      activePointerIds: activePointerIds == freezed
+          ? _value.activePointerIds
+          : activePointerIds // ignore: cast_nullable_to_non_nullable
+              as List<int>,
       pointerPosition: pointerPosition == freezed
           ? _value.pointerPosition
           : pointerPosition // ignore: cast_nullable_to_non_nullable
@@ -429,15 +530,20 @@ class _$ErasingCopyWithImpl<$Res> extends _$ScribbleStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$Erasing implements Erasing {
+class _$Erasing extends Erasing {
   const _$Erasing(
       {required this.sketch,
+      this.activePointerIds = const [],
       this.pointerPosition,
       this.lineMode = true,
-      this.selectedWidth = 5});
+      this.selectedWidth = 5})
+      : super._();
 
   @override
   final Sketch sketch;
+  @JsonKey(defaultValue: const [])
+  @override
+  final List<int> activePointerIds;
   @override
   final Point? pointerPosition;
   @JsonKey(defaultValue: true)
@@ -449,7 +555,7 @@ class _$Erasing implements Erasing {
 
   @override
   String toString() {
-    return 'ScribbleState.erasing(sketch: $sketch, pointerPosition: $pointerPosition, lineMode: $lineMode, selectedWidth: $selectedWidth)';
+    return 'ScribbleState.erasing(sketch: $sketch, activePointerIds: $activePointerIds, pointerPosition: $pointerPosition, lineMode: $lineMode, selectedWidth: $selectedWidth)';
   }
 
   @override
@@ -458,6 +564,9 @@ class _$Erasing implements Erasing {
         (other is Erasing &&
             (identical(other.sketch, sketch) ||
                 const DeepCollectionEquality().equals(other.sketch, sketch)) &&
+            (identical(other.activePointerIds, activePointerIds) ||
+                const DeepCollectionEquality()
+                    .equals(other.activePointerIds, activePointerIds)) &&
             (identical(other.pointerPosition, pointerPosition) ||
                 const DeepCollectionEquality()
                     .equals(other.pointerPosition, pointerPosition)) &&
@@ -473,6 +582,7 @@ class _$Erasing implements Erasing {
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(sketch) ^
+      const DeepCollectionEquality().hash(activePointerIds) ^
       const DeepCollectionEquality().hash(pointerPosition) ^
       const DeepCollectionEquality().hash(lineMode) ^
       const DeepCollectionEquality().hash(selectedWidth);
@@ -485,42 +595,60 @@ class _$Erasing implements Erasing {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Sketch sketch, Point? pointerPosition,
-            Color selectedColor, double selectedWidth)
+    required TResult Function(
+            Sketch sketch,
+            SketchLine? activeLine,
+            List<int> activePointerIds,
+            Point? pointerPosition,
+            Color selectedColor,
+            double selectedWidth)
         drawing,
-    required TResult Function(Sketch sketch, Point? pointerPosition,
-            bool lineMode, double selectedWidth)
+    required TResult Function(Sketch sketch, List<int> activePointerIds,
+            Point? pointerPosition, bool lineMode, double selectedWidth)
         erasing,
   }) {
-    return erasing(sketch, pointerPosition, lineMode, selectedWidth);
+    return erasing(
+        sketch, activePointerIds, pointerPosition, lineMode, selectedWidth);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(Sketch sketch, Point? pointerPosition, Color selectedColor,
+    TResult Function(
+            Sketch sketch,
+            SketchLine? activeLine,
+            List<int> activePointerIds,
+            Point? pointerPosition,
+            Color selectedColor,
             double selectedWidth)?
         drawing,
-    TResult Function(Sketch sketch, Point? pointerPosition, bool lineMode,
-            double selectedWidth)?
+    TResult Function(Sketch sketch, List<int> activePointerIds,
+            Point? pointerPosition, bool lineMode, double selectedWidth)?
         erasing,
   }) {
-    return erasing?.call(sketch, pointerPosition, lineMode, selectedWidth);
+    return erasing?.call(
+        sketch, activePointerIds, pointerPosition, lineMode, selectedWidth);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Sketch sketch, Point? pointerPosition, Color selectedColor,
+    TResult Function(
+            Sketch sketch,
+            SketchLine? activeLine,
+            List<int> activePointerIds,
+            Point? pointerPosition,
+            Color selectedColor,
             double selectedWidth)?
         drawing,
-    TResult Function(Sketch sketch, Point? pointerPosition, bool lineMode,
-            double selectedWidth)?
+    TResult Function(Sketch sketch, List<int> activePointerIds,
+            Point? pointerPosition, bool lineMode, double selectedWidth)?
         erasing,
     required TResult orElse(),
   }) {
     if (erasing != null) {
-      return erasing(sketch, pointerPosition, lineMode, selectedWidth);
+      return erasing(
+          sketch, activePointerIds, pointerPosition, lineMode, selectedWidth);
     }
     return orElse();
   }
@@ -557,15 +685,19 @@ class _$Erasing implements Erasing {
   }
 }
 
-abstract class Erasing implements ScribbleState {
+abstract class Erasing extends ScribbleState {
   const factory Erasing(
       {required Sketch sketch,
+      List<int> activePointerIds,
       Point? pointerPosition,
       bool lineMode,
       double selectedWidth}) = _$Erasing;
+  const Erasing._() : super._();
 
   @override
   Sketch get sketch => throw _privateConstructorUsedError;
+  @override
+  List<int> get activePointerIds => throw _privateConstructorUsedError;
   @override
   Point? get pointerPosition => throw _privateConstructorUsedError;
   bool get lineMode => throw _privateConstructorUsedError;

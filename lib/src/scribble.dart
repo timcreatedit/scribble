@@ -29,9 +29,9 @@ class Scribble extends StatefulWidget {
 
     /// How much the distance between two points reduces the line width.
     ///
-    /// Defaults to 0.4, higher values quickly lead to the line becoming super
+    /// Defaults to 0.1, higher values quickly lead to the line becoming super
     /// thin.
-    this.speedFactor = 0.4,
+    this.speedFactor = 0.1,
 
     /// The  relative minimum width of the line.
     ///
@@ -80,31 +80,39 @@ class _ScribbleState extends State<Scribble> {
       builder: (context, state, _) {
         final drawCurrent = widget.drawPen && state is Drawing ||
             widget.drawEraser && state is Erasing;
-        return SizedBox.expand(
-          child: MouseRegion(
-            cursor: drawCurrent ? SystemMouseCursors.none : MouseCursor.defer,
-            onExit: widget.notifier.onPointerExit,
-            child: Listener(
-              onPointerDown: widget.notifier.onPointerDown,
-              onPointerMove: widget.notifier.onPointerUpdate,
-              onPointerUp: widget.notifier.onPointerUp,
-              onPointerHover: widget.notifier.onPointerHover,
-              onPointerCancel: widget.notifier.onPointerCancel,
-              child: RepaintBoundary(
-                child: CustomPaint(
-                  painter: ScribblePainter(
-                    state: state,
-                    drawPointer: widget.drawPen,
-                    drawEraser: widget.drawEraser,
-                    pressureFactor: widget.pressureFactor,
-                    minWidthFactor: widget.minWidthFactor,
-                    speedFactor: widget.speedFactor,
-                  ),
-                ),
+        final child = SizedBox.expand(
+          child: RepaintBoundary(
+            child: CustomPaint(
+              painter: ScribblePainter(
+                state: state,
+                drawPointer: widget.drawPen,
+                drawEraser: widget.drawEraser,
+                pressureFactor: widget.pressureFactor,
+                minWidthFactor: widget.minWidthFactor,
+                speedFactor: widget.speedFactor,
               ),
             ),
           ),
         );
+        return !state.active
+            ? child
+            : GestureDetector(
+                onVerticalDragUpdate: (_) {},
+                onHorizontalDragUpdate: (_) {},
+                child: MouseRegion(
+                  cursor:
+                      drawCurrent ? SystemMouseCursors.none : MouseCursor.defer,
+                  onExit: widget.notifier.onPointerExit,
+                  child: Listener(
+                    onPointerDown: widget.notifier.onPointerDown,
+                    onPointerMove: widget.notifier.onPointerUpdate,
+                    onPointerUp: widget.notifier.onPointerUp,
+                    onPointerHover: widget.notifier.onPointerHover,
+                    onPointerCancel: widget.notifier.onPointerCancel,
+                    child: child,
+                  ),
+                ),
+              );
       },
     );
   }
