@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:scribble/scribble.dart';
 import 'package:vector_math/vector_math.dart';
 
-const double _maxDistanceToDrawPoint = kPrecisePointerPanSlop * 4;
+const double _maxDistanceToDrawPoint = kPrecisePointerPanSlop * 1;
 
 class ScribblePainter extends CustomPainter {
   ScribblePainter({
@@ -66,14 +66,14 @@ class ScribblePainter extends CustomPainter {
         erasing: (_) => PaintingStyle.stroke,
       );
       paint.color = state.map(
-        drawing: (s) => s.selectedColor,
+        drawing: (s) => Color(s.selectedColor),
         erasing: (s) => const Color(0xFF000000),
       );
       paint.strokeWidth = 1;
       canvas.drawCircle(
           state.pointerPosition!.asOffset,
           _getWidth(
-            state.selectedWidth,
+            state.selectedWidth / state.scaleFactor,
             state.pointerPosition!.pressure,
             0,
             1,

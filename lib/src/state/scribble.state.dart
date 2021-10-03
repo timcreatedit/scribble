@@ -4,6 +4,8 @@ import 'package:scribble/src/model/sketch/sketch.dart';
 
 part 'scribble.state.freezed.dart';
 
+part 'scribble.state.g.dart';
+
 @freezed
 class ScribbleState with _$ScribbleState {
   const ScribbleState._();
@@ -13,8 +15,9 @@ class ScribbleState with _$ScribbleState {
     SketchLine? activeLine,
     @Default([]) List<int> activePointerIds,
     Point? pointerPosition,
-    @Default(Colors.black) Color selectedColor,
+    @Default(0xFF000000) int selectedColor,
     @Default(5) double selectedWidth,
+    @Default(1) double scaleFactor,
   }) = Drawing;
 
   const factory ScribbleState.erasing({
@@ -23,6 +26,7 @@ class ScribbleState with _$ScribbleState {
     Point? pointerPosition,
     @Default(true) bool lineMode,
     @Default(5) double selectedWidth,
+    @Default(1) double scaleFactor,
   }) = Erasing;
 
   bool get active => activePointerIds.length <= 1;
@@ -32,4 +36,7 @@ class ScribbleState with _$ScribbleState {
           ? sketch.lines
           : [...sketch.lines, d.activeLine!],
       erasing: (d) => d.sketch.lines);
+
+  factory ScribbleState.fromJson(Map<String, dynamic> json) =>
+      _$ScribbleStateFromJson(json);
 }
