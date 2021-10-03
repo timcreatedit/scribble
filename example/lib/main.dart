@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
             height: strokeWidth * 2,
             decoration: BoxDecoration(
                 color: state.map(
-                  drawing: (s) => s.selectedColor,
+                  drawing: (s) => Color(s.selectedColor),
                   erasing: (_) => Colors.transparent,
                 ),
                 border: state.map(
@@ -172,7 +172,7 @@ class _HomePageState extends State<HomePage> {
     required Color color,
     required ScribbleState state,
   }) {
-    final isSelected = state is Drawing && state.selectedColor == color;
+    final isSelected = state is Drawing && state.selectedColor == color.value;
     return Padding(
       padding: const EdgeInsets.all(4),
       child: FloatingActionButton.small(
