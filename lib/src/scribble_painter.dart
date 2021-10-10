@@ -42,14 +42,13 @@ class ScribblePainter extends CustomPainter {
             : (line.points[1].asOffset - p.asOffset).distance;
         if (distance <= _maxDistanceToDrawPoint) {
           canvas.drawCircle(
-              p.asOffset, _getWidth(line.width, p.pressure, 0,), paint);
+              p.asOffset, _getWidth(line.width, p.pressure, 0), paint);
         }
 
         if (line.points.length > 1) {
           final p2 = line.points.last;
           final p1 = line.points[line.points.length - 2];
           final distance = (p2.asOffset - p1.asOffset).distance;
-          final deltaTime = (p2.time - p1.time);
           if (distance <= _maxDistanceToDrawPoint) {
             canvas.drawCircle(p2.asOffset,
                 _getWidth(line.width, p2.pressure, distance), paint);
