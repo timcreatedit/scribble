@@ -13,7 +13,6 @@ class Point with _$Point {
   const factory Point(
     double x,
     double y, {
-    required int time,
     @Default(1) double pressure,
   }) = _Point;
 

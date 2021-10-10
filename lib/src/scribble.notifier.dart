@@ -282,7 +282,6 @@ class ScribbleNotifier extends StateNotifier<ScribbleState>
       event.localPosition.dx,
       event.localPosition.dy,
       pressure: pressureCurve.transform(p),
-      time: event.timeStamp.inMilliseconds,
     );
   }
 
