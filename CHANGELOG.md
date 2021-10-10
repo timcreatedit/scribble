@@ -1,3 +1,7 @@
+## 0.1.2
+
+* Removed the speed calculation using time due to precision issues
+
 ## 0.1.1
 * Added scaleFactor to support zoomable canvases. This allows you to for example wrap the Scribble Widget in an
 InteractiveViewer, so that users can draw finer details.
