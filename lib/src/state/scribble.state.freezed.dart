@@ -33,6 +33,7 @@ class _$ScribbleStateTearOff {
   Drawing drawing(
       {required Sketch sketch,
       SketchLine? activeLine,
+      ScribblePointerModes allowedPointersMode = ScribblePointerModes.all,
       List<int> activePointerIds = const [],
       Point? pointerPosition,
       int selectedColor = 0xFF000000,
@@ -41,6 +42,7 @@ class _$ScribbleStateTearOff {
     return Drawing(
       sketch: sketch,
       activeLine: activeLine,
+      allowedPointersMode: allowedPointersMode,
       activePointerIds: activePointerIds,
       pointerPosition: pointerPosition,
       selectedColor: selectedColor,
@@ -51,16 +53,16 @@ class _$ScribbleStateTearOff {
 
   Erasing erasing(
       {required Sketch sketch,
+      ScribblePointerModes allowedPointersMode = ScribblePointerModes.all,
       List<int> activePointerIds = const [],
       Point? pointerPosition,
-      bool lineMode = true,
       double selectedWidth = 5,
       double scaleFactor = 1}) {
     return Erasing(
       sketch: sketch,
+      allowedPointersMode: allowedPointersMode,
       activePointerIds: activePointerIds,
       pointerPosition: pointerPosition,
-      lineMode: lineMode,
       selectedWidth: selectedWidth,
       scaleFactor: scaleFactor,
     );
@@ -76,10 +78,28 @@ const $ScribbleState = _$ScribbleStateTearOff();
 
 /// @nodoc
 mixin _$ScribbleState {
+  /// The current state of the sketch
   Sketch get sketch => throw _privateConstructorUsedError;
+
+  /// Which pointers are allowed for drawing and will be captured by the
+  /// scribble widget.
+  ScribblePointerModes get allowedPointersMode =>
+      throw _privateConstructorUsedError;
+
+  /// The ids of all supported pointers that are currently interacting with
+  /// the widget.
   List<int> get activePointerIds => throw _privateConstructorUsedError;
+
+  /// The current position of the pointer
   Point? get pointerPosition => throw _privateConstructorUsedError;
+
+  /// The current width of the pen
   double get selectedWidth => throw _privateConstructorUsedError;
+
+  /// How much the widget is scaled at the moment.
+  ///
+  /// Can be used if zoom functionality is needed
+  /// (e.g. through InteractiveViewer) so that the pen width remains the same.
   double get scaleFactor => throw _privateConstructorUsedError;
 
   @optionalTypeArgs
@@ -87,6 +107,7 @@ mixin _$ScribbleState {
     required TResult Function(
             Sketch sketch,
             SketchLine? activeLine,
+            ScribblePointerModes allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             int selectedColor,
@@ -95,9 +116,9 @@ mixin _$ScribbleState {
         drawing,
     required TResult Function(
             Sketch sketch,
+            ScribblePointerModes allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
-            bool lineMode,
             double selectedWidth,
             double scaleFactor)
         erasing,
@@ -108,6 +129,7 @@ mixin _$ScribbleState {
     TResult Function(
             Sketch sketch,
             SketchLine? activeLine,
+            ScribblePointerModes allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             int selectedColor,
@@ -116,9 +138,9 @@ mixin _$ScribbleState {
         drawing,
     TResult Function(
             Sketch sketch,
+            ScribblePointerModes allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
-            bool lineMode,
             double selectedWidth,
             double scaleFactor)?
         erasing,
@@ -129,6 +151,7 @@ mixin _$ScribbleState {
     TResult Function(
             Sketch sketch,
             SketchLine? activeLine,
+            ScribblePointerModes allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             int selectedColor,
@@ -137,9 +160,9 @@ mixin _$ScribbleState {
         drawing,
     TResult Function(
             Sketch sketch,
+            ScribblePointerModes allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
-            bool lineMode,
             double selectedWidth,
             double scaleFactor)?
         erasing,
@@ -178,6 +201,7 @@ abstract class $ScribbleStateCopyWith<$Res> {
       _$ScribbleStateCopyWithImpl<$Res>;
   $Res call(
       {Sketch sketch,
+      ScribblePointerModes allowedPointersMode,
       List<int> activePointerIds,
       Point? pointerPosition,
       double selectedWidth,
@@ -199,6 +223,7 @@ class _$ScribbleStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? sketch = freezed,
+    Object? allowedPointersMode = freezed,
     Object? activePointerIds = freezed,
     Object? pointerPosition = freezed,
     Object? selectedWidth = freezed,
@@ -209,6 +234,10 @@ class _$ScribbleStateCopyWithImpl<$Res>
           ? _value.sketch
           : sketch // ignore: cast_nullable_to_non_nullable
               as Sketch,
+      allowedPointersMode: allowedPointersMode == freezed
+          ? _value.allowedPointersMode
+          : allowedPointersMode // ignore: cast_nullable_to_non_nullable
+              as ScribblePointerModes,
       activePointerIds: activePointerIds == freezed
           ? _value.activePointerIds
           : activePointerIds // ignore: cast_nullable_to_non_nullable
@@ -255,6 +284,7 @@ abstract class $DrawingCopyWith<$Res> implements $ScribbleStateCopyWith<$Res> {
   $Res call(
       {Sketch sketch,
       SketchLine? activeLine,
+      ScribblePointerModes allowedPointersMode,
       List<int> activePointerIds,
       Point? pointerPosition,
       int selectedColor,
@@ -281,6 +311,7 @@ class _$DrawingCopyWithImpl<$Res> extends _$ScribbleStateCopyWithImpl<$Res>
   $Res call({
     Object? sketch = freezed,
     Object? activeLine = freezed,
+    Object? allowedPointersMode = freezed,
     Object? activePointerIds = freezed,
     Object? pointerPosition = freezed,
     Object? selectedColor = freezed,
@@ -296,6 +327,10 @@ class _$DrawingCopyWithImpl<$Res> extends _$ScribbleStateCopyWithImpl<$Res>
           ? _value.activeLine
           : activeLine // ignore: cast_nullable_to_non_nullable
               as SketchLine?,
+      allowedPointersMode: allowedPointersMode == freezed
+          ? _value.allowedPointersMode
+          : allowedPointersMode // ignore: cast_nullable_to_non_nullable
+              as ScribblePointerModes,
       activePointerIds: activePointerIds == freezed
           ? _value.activePointerIds
           : activePointerIds // ignore: cast_nullable_to_non_nullable
@@ -337,6 +372,7 @@ class _$Drawing extends Drawing {
   const _$Drawing(
       {required this.sketch,
       this.activeLine,
+      this.allowedPointersMode = ScribblePointerModes.all,
       this.activePointerIds = const [],
       this.pointerPosition,
       this.selectedColor = 0xFF000000,
@@ -348,27 +384,51 @@ class _$Drawing extends Drawing {
       _$$DrawingFromJson(json);
 
   @override
+
+  /// The current state of the sketch
   final Sketch sketch;
   @override
+
+  /// The line that is currently being drawn
   final SketchLine? activeLine;
+  @JsonKey(defaultValue: ScribblePointerModes.all)
+  @override
+
+  /// Which pointers are allowed for drawing and will be captured by the
+  /// scribble widget.
+  final ScribblePointerModes allowedPointersMode;
   @JsonKey(defaultValue: const [])
   @override
+
+  /// The ids of all supported pointers that are currently interacting with
+  /// the widget.
   final List<int> activePointerIds;
   @override
+
+  /// The current position of the pointer
   final Point? pointerPosition;
   @JsonKey(defaultValue: 0xFF000000)
   @override
+
+  /// The color that is currently being drawn with
   final int selectedColor;
   @JsonKey(defaultValue: 5)
   @override
+
+  /// The current width of the pen
   final double selectedWidth;
   @JsonKey(defaultValue: 1)
   @override
+
+  /// How much the widget is scaled at the moment.
+  ///
+  /// Can be used if zoom functionality is needed
+  /// (e.g. through InteractiveViewer) so that the pen width remains the same.
   final double scaleFactor;
 
   @override
   String toString() {
-    return 'ScribbleState.drawing(sketch: $sketch, activeLine: $activeLine, activePointerIds: $activePointerIds, pointerPosition: $pointerPosition, selectedColor: $selectedColor, selectedWidth: $selectedWidth, scaleFactor: $scaleFactor)';
+    return 'ScribbleState.drawing(sketch: $sketch, activeLine: $activeLine, allowedPointersMode: $allowedPointersMode, activePointerIds: $activePointerIds, pointerPosition: $pointerPosition, selectedColor: $selectedColor, selectedWidth: $selectedWidth, scaleFactor: $scaleFactor)';
   }
 
   @override
@@ -380,6 +440,9 @@ class _$Drawing extends Drawing {
             (identical(other.activeLine, activeLine) ||
                 const DeepCollectionEquality()
                     .equals(other.activeLine, activeLine)) &&
+            (identical(other.allowedPointersMode, allowedPointersMode) ||
+                const DeepCollectionEquality()
+                    .equals(other.allowedPointersMode, allowedPointersMode)) &&
             (identical(other.activePointerIds, activePointerIds) ||
                 const DeepCollectionEquality()
                     .equals(other.activePointerIds, activePointerIds)) &&
@@ -402,6 +465,7 @@ class _$Drawing extends Drawing {
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(sketch) ^
       const DeepCollectionEquality().hash(activeLine) ^
+      const DeepCollectionEquality().hash(allowedPointersMode) ^
       const DeepCollectionEquality().hash(activePointerIds) ^
       const DeepCollectionEquality().hash(pointerPosition) ^
       const DeepCollectionEquality().hash(selectedColor) ^
@@ -419,6 +483,7 @@ class _$Drawing extends Drawing {
     required TResult Function(
             Sketch sketch,
             SketchLine? activeLine,
+            ScribblePointerModes allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             int selectedColor,
@@ -427,15 +492,15 @@ class _$Drawing extends Drawing {
         drawing,
     required TResult Function(
             Sketch sketch,
+            ScribblePointerModes allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
-            bool lineMode,
             double selectedWidth,
             double scaleFactor)
         erasing,
   }) {
-    return drawing(sketch, activeLine, activePointerIds, pointerPosition,
-        selectedColor, selectedWidth, scaleFactor);
+    return drawing(sketch, activeLine, allowedPointersMode, activePointerIds,
+        pointerPosition, selectedColor, selectedWidth, scaleFactor);
   }
 
   @override
@@ -444,6 +509,7 @@ class _$Drawing extends Drawing {
     TResult Function(
             Sketch sketch,
             SketchLine? activeLine,
+            ScribblePointerModes allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             int selectedColor,
@@ -452,15 +518,22 @@ class _$Drawing extends Drawing {
         drawing,
     TResult Function(
             Sketch sketch,
+            ScribblePointerModes allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
-            bool lineMode,
             double selectedWidth,
             double scaleFactor)?
         erasing,
   }) {
-    return drawing?.call(sketch, activeLine, activePointerIds, pointerPosition,
-        selectedColor, selectedWidth, scaleFactor);
+    return drawing?.call(
+        sketch,
+        activeLine,
+        allowedPointersMode,
+        activePointerIds,
+        pointerPosition,
+        selectedColor,
+        selectedWidth,
+        scaleFactor);
   }
 
   @override
@@ -469,6 +542,7 @@ class _$Drawing extends Drawing {
     TResult Function(
             Sketch sketch,
             SketchLine? activeLine,
+            ScribblePointerModes allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             int selectedColor,
@@ -477,17 +551,17 @@ class _$Drawing extends Drawing {
         drawing,
     TResult Function(
             Sketch sketch,
+            ScribblePointerModes allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
-            bool lineMode,
             double selectedWidth,
             double scaleFactor)?
         erasing,
     required TResult orElse(),
   }) {
     if (drawing != null) {
-      return drawing(sketch, activeLine, activePointerIds, pointerPosition,
-          selectedColor, selectedWidth, scaleFactor);
+      return drawing(sketch, activeLine, allowedPointersMode, activePointerIds,
+          pointerPosition, selectedColor, selectedWidth, scaleFactor);
     }
     return orElse();
   }
@@ -533,6 +607,7 @@ abstract class Drawing extends ScribbleState {
   const factory Drawing(
       {required Sketch sketch,
       SketchLine? activeLine,
+      ScribblePointerModes allowedPointersMode,
       List<int> activePointerIds,
       Point? pointerPosition,
       int selectedColor,
@@ -543,16 +618,40 @@ abstract class Drawing extends ScribbleState {
   factory Drawing.fromJson(Map<String, dynamic> json) = _$Drawing.fromJson;
 
   @override
+
+  /// The current state of the sketch
   Sketch get sketch => throw _privateConstructorUsedError;
+
+  /// The line that is currently being drawn
   SketchLine? get activeLine => throw _privateConstructorUsedError;
   @override
+
+  /// Which pointers are allowed for drawing and will be captured by the
+  /// scribble widget.
+  ScribblePointerModes get allowedPointersMode =>
+      throw _privateConstructorUsedError;
+  @override
+
+  /// The ids of all supported pointers that are currently interacting with
+  /// the widget.
   List<int> get activePointerIds => throw _privateConstructorUsedError;
   @override
+
+  /// The current position of the pointer
   Point? get pointerPosition => throw _privateConstructorUsedError;
+
+  /// The color that is currently being drawn with
   int get selectedColor => throw _privateConstructorUsedError;
   @override
+
+  /// The current width of the pen
   double get selectedWidth => throw _privateConstructorUsedError;
   @override
+
+  /// How much the widget is scaled at the moment.
+  ///
+  /// Can be used if zoom functionality is needed
+  /// (e.g. through InteractiveViewer) so that the pen width remains the same.
   double get scaleFactor => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
@@ -566,9 +665,9 @@ abstract class $ErasingCopyWith<$Res> implements $ScribbleStateCopyWith<$Res> {
   @override
   $Res call(
       {Sketch sketch,
+      ScribblePointerModes allowedPointersMode,
       List<int> activePointerIds,
       Point? pointerPosition,
-      bool lineMode,
       double selectedWidth,
       double scaleFactor});
 
@@ -590,9 +689,9 @@ class _$ErasingCopyWithImpl<$Res> extends _$ScribbleStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? sketch = freezed,
+    Object? allowedPointersMode = freezed,
     Object? activePointerIds = freezed,
     Object? pointerPosition = freezed,
-    Object? lineMode = freezed,
     Object? selectedWidth = freezed,
     Object? scaleFactor = freezed,
   }) {
@@ -601,6 +700,10 @@ class _$ErasingCopyWithImpl<$Res> extends _$ScribbleStateCopyWithImpl<$Res>
           ? _value.sketch
           : sketch // ignore: cast_nullable_to_non_nullable
               as Sketch,
+      allowedPointersMode: allowedPointersMode == freezed
+          ? _value.allowedPointersMode
+          : allowedPointersMode // ignore: cast_nullable_to_non_nullable
+              as ScribblePointerModes,
       activePointerIds: activePointerIds == freezed
           ? _value.activePointerIds
           : activePointerIds // ignore: cast_nullable_to_non_nullable
@@ -609,10 +712,6 @@ class _$ErasingCopyWithImpl<$Res> extends _$ScribbleStateCopyWithImpl<$Res>
           ? _value.pointerPosition
           : pointerPosition // ignore: cast_nullable_to_non_nullable
               as Point?,
-      lineMode: lineMode == freezed
-          ? _value.lineMode
-          : lineMode // ignore: cast_nullable_to_non_nullable
-              as bool,
       selectedWidth: selectedWidth == freezed
           ? _value.selectedWidth
           : selectedWidth // ignore: cast_nullable_to_non_nullable
@@ -630,9 +729,9 @@ class _$ErasingCopyWithImpl<$Res> extends _$ScribbleStateCopyWithImpl<$Res>
 class _$Erasing extends Erasing {
   const _$Erasing(
       {required this.sketch,
+      this.allowedPointersMode = ScribblePointerModes.all,
       this.activePointerIds = const [],
       this.pointerPosition,
-      this.lineMode = true,
       this.selectedWidth = 5,
       this.scaleFactor = 1})
       : super._();
@@ -641,25 +740,42 @@ class _$Erasing extends Erasing {
       _$$ErasingFromJson(json);
 
   @override
+
+  /// The current state of the sketch
   final Sketch sketch;
+  @JsonKey(defaultValue: ScribblePointerModes.all)
+  @override
+
+  /// Which pointers are allowed for drawing and will be captured by the
+  /// scribble widget.
+  final ScribblePointerModes allowedPointersMode;
   @JsonKey(defaultValue: const [])
   @override
+
+  /// The ids of all supported pointers that are currently interacting with
+  /// the widget.
   final List<int> activePointerIds;
   @override
+
+  /// The current position of the pointer
   final Point? pointerPosition;
-  @JsonKey(defaultValue: true)
-  @override
-  final bool lineMode;
   @JsonKey(defaultValue: 5)
   @override
+
+  /// The current width of the pen
   final double selectedWidth;
   @JsonKey(defaultValue: 1)
   @override
+
+  /// How much the widget is scaled at the moment.
+  ///
+  /// Can be used if zoom functionality is needed
+  /// (e.g. through InteractiveViewer) so that the pen width remains the same.
   final double scaleFactor;
 
   @override
   String toString() {
-    return 'ScribbleState.erasing(sketch: $sketch, activePointerIds: $activePointerIds, pointerPosition: $pointerPosition, lineMode: $lineMode, selectedWidth: $selectedWidth, scaleFactor: $scaleFactor)';
+    return 'ScribbleState.erasing(sketch: $sketch, allowedPointersMode: $allowedPointersMode, activePointerIds: $activePointerIds, pointerPosition: $pointerPosition, selectedWidth: $selectedWidth, scaleFactor: $scaleFactor)';
   }
 
   @override
@@ -668,15 +784,15 @@ class _$Erasing extends Erasing {
         (other is Erasing &&
             (identical(other.sketch, sketch) ||
                 const DeepCollectionEquality().equals(other.sketch, sketch)) &&
+            (identical(other.allowedPointersMode, allowedPointersMode) ||
+                const DeepCollectionEquality()
+                    .equals(other.allowedPointersMode, allowedPointersMode)) &&
             (identical(other.activePointerIds, activePointerIds) ||
                 const DeepCollectionEquality()
                     .equals(other.activePointerIds, activePointerIds)) &&
             (identical(other.pointerPosition, pointerPosition) ||
                 const DeepCollectionEquality()
                     .equals(other.pointerPosition, pointerPosition)) &&
-            (identical(other.lineMode, lineMode) ||
-                const DeepCollectionEquality()
-                    .equals(other.lineMode, lineMode)) &&
             (identical(other.selectedWidth, selectedWidth) ||
                 const DeepCollectionEquality()
                     .equals(other.selectedWidth, selectedWidth)) &&
@@ -689,9 +805,9 @@ class _$Erasing extends Erasing {
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(sketch) ^
+      const DeepCollectionEquality().hash(allowedPointersMode) ^
       const DeepCollectionEquality().hash(activePointerIds) ^
       const DeepCollectionEquality().hash(pointerPosition) ^
-      const DeepCollectionEquality().hash(lineMode) ^
       const DeepCollectionEquality().hash(selectedWidth) ^
       const DeepCollectionEquality().hash(scaleFactor);
 
@@ -706,6 +822,7 @@ class _$Erasing extends Erasing {
     required TResult Function(
             Sketch sketch,
             SketchLine? activeLine,
+            ScribblePointerModes allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             int selectedColor,
@@ -714,15 +831,15 @@ class _$Erasing extends Erasing {
         drawing,
     required TResult Function(
             Sketch sketch,
+            ScribblePointerModes allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
-            bool lineMode,
             double selectedWidth,
             double scaleFactor)
         erasing,
   }) {
-    return erasing(sketch, activePointerIds, pointerPosition, lineMode,
-        selectedWidth, scaleFactor);
+    return erasing(sketch, allowedPointersMode, activePointerIds,
+        pointerPosition, selectedWidth, scaleFactor);
   }
 
   @override
@@ -731,6 +848,7 @@ class _$Erasing extends Erasing {
     TResult Function(
             Sketch sketch,
             SketchLine? activeLine,
+            ScribblePointerModes allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             int selectedColor,
@@ -739,15 +857,15 @@ class _$Erasing extends Erasing {
         drawing,
     TResult Function(
             Sketch sketch,
+            ScribblePointerModes allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
-            bool lineMode,
             double selectedWidth,
             double scaleFactor)?
         erasing,
   }) {
-    return erasing?.call(sketch, activePointerIds, pointerPosition, lineMode,
-        selectedWidth, scaleFactor);
+    return erasing?.call(sketch, allowedPointersMode, activePointerIds,
+        pointerPosition, selectedWidth, scaleFactor);
   }
 
   @override
@@ -756,6 +874,7 @@ class _$Erasing extends Erasing {
     TResult Function(
             Sketch sketch,
             SketchLine? activeLine,
+            ScribblePointerModes allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             int selectedColor,
@@ -764,17 +883,17 @@ class _$Erasing extends Erasing {
         drawing,
     TResult Function(
             Sketch sketch,
+            ScribblePointerModes allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
-            bool lineMode,
             double selectedWidth,
             double scaleFactor)?
         erasing,
     required TResult orElse(),
   }) {
     if (erasing != null) {
-      return erasing(sketch, activePointerIds, pointerPosition, lineMode,
-          selectedWidth, scaleFactor);
+      return erasing(sketch, allowedPointersMode, activePointerIds,
+          pointerPosition, selectedWidth, scaleFactor);
     }
     return orElse();
   }
@@ -819,9 +938,9 @@ class _$Erasing extends Erasing {
 abstract class Erasing extends ScribbleState {
   const factory Erasing(
       {required Sketch sketch,
+      ScribblePointerModes allowedPointersMode,
       List<int> activePointerIds,
       Point? pointerPosition,
-      bool lineMode,
       double selectedWidth,
       double scaleFactor}) = _$Erasing;
   const Erasing._() : super._();
@@ -829,15 +948,34 @@ abstract class Erasing extends ScribbleState {
   factory Erasing.fromJson(Map<String, dynamic> json) = _$Erasing.fromJson;
 
   @override
+
+  /// The current state of the sketch
   Sketch get sketch => throw _privateConstructorUsedError;
   @override
+
+  /// Which pointers are allowed for drawing and will be captured by the
+  /// scribble widget.
+  ScribblePointerModes get allowedPointersMode =>
+      throw _privateConstructorUsedError;
+  @override
+
+  /// The ids of all supported pointers that are currently interacting with
+  /// the widget.
   List<int> get activePointerIds => throw _privateConstructorUsedError;
   @override
+
+  /// The current position of the pointer
   Point? get pointerPosition => throw _privateConstructorUsedError;
-  bool get lineMode => throw _privateConstructorUsedError;
   @override
+
+  /// The current width of the pen
   double get selectedWidth => throw _privateConstructorUsedError;
   @override
+
+  /// How much the widget is scaled at the moment.
+  ///
+  /// Can be used if zoom functionality is needed
+  /// (e.g. through InteractiveViewer) so that the pen width remains the same.
   double get scaleFactor => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)

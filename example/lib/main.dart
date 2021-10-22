@@ -46,15 +46,20 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Stack(
-        children: [
-          Scribble(
-            notifier: notifier,
-            drawPen: true,
+      body: SingleChildScrollView(
+        child: SizedBox(
+          height: 1000,
+          child: Stack(
+            children: [
+              Scribble(
+                notifier: notifier,
+                drawPen: true,
+              ),
+              _buildColorToolbar(context),
+              _buildStrokeToolbar(context),
+            ],
           ),
-          _buildColorToolbar(context),
-          _buildStrokeToolbar(context),
-        ],
+        ),
       ),
     );
   }
