@@ -33,7 +33,7 @@ class _$ScribbleStateTearOff {
   Drawing drawing(
       {required Sketch sketch,
       SketchLine? activeLine,
-      ScribblePointerModes allowedPointersMode = ScribblePointerModes.all,
+      ScribblePointerMode allowedPointersMode = ScribblePointerMode.all,
       List<int> activePointerIds = const [],
       Point? pointerPosition,
       int selectedColor = 0xFF000000,
@@ -53,7 +53,7 @@ class _$ScribbleStateTearOff {
 
   Erasing erasing(
       {required Sketch sketch,
-      ScribblePointerModes allowedPointersMode = ScribblePointerModes.all,
+      ScribblePointerMode allowedPointersMode = ScribblePointerMode.all,
       List<int> activePointerIds = const [],
       Point? pointerPosition,
       double selectedWidth = 5,
@@ -83,7 +83,7 @@ mixin _$ScribbleState {
 
   /// Which pointers are allowed for drawing and will be captured by the
   /// scribble widget.
-  ScribblePointerModes get allowedPointersMode =>
+  ScribblePointerMode get allowedPointersMode =>
       throw _privateConstructorUsedError;
 
   /// The ids of all supported pointers that are currently interacting with
@@ -107,7 +107,7 @@ mixin _$ScribbleState {
     required TResult Function(
             Sketch sketch,
             SketchLine? activeLine,
-            ScribblePointerModes allowedPointersMode,
+            ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             int selectedColor,
@@ -116,7 +116,7 @@ mixin _$ScribbleState {
         drawing,
     required TResult Function(
             Sketch sketch,
-            ScribblePointerModes allowedPointersMode,
+            ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             double selectedWidth,
@@ -129,7 +129,7 @@ mixin _$ScribbleState {
     TResult Function(
             Sketch sketch,
             SketchLine? activeLine,
-            ScribblePointerModes allowedPointersMode,
+            ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             int selectedColor,
@@ -138,7 +138,7 @@ mixin _$ScribbleState {
         drawing,
     TResult Function(
             Sketch sketch,
-            ScribblePointerModes allowedPointersMode,
+            ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             double selectedWidth,
@@ -151,7 +151,7 @@ mixin _$ScribbleState {
     TResult Function(
             Sketch sketch,
             SketchLine? activeLine,
-            ScribblePointerModes allowedPointersMode,
+            ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             int selectedColor,
@@ -160,7 +160,7 @@ mixin _$ScribbleState {
         drawing,
     TResult Function(
             Sketch sketch,
-            ScribblePointerModes allowedPointersMode,
+            ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             double selectedWidth,
@@ -201,7 +201,7 @@ abstract class $ScribbleStateCopyWith<$Res> {
       _$ScribbleStateCopyWithImpl<$Res>;
   $Res call(
       {Sketch sketch,
-      ScribblePointerModes allowedPointersMode,
+      ScribblePointerMode allowedPointersMode,
       List<int> activePointerIds,
       Point? pointerPosition,
       double selectedWidth,
@@ -237,7 +237,7 @@ class _$ScribbleStateCopyWithImpl<$Res>
       allowedPointersMode: allowedPointersMode == freezed
           ? _value.allowedPointersMode
           : allowedPointersMode // ignore: cast_nullable_to_non_nullable
-              as ScribblePointerModes,
+              as ScribblePointerMode,
       activePointerIds: activePointerIds == freezed
           ? _value.activePointerIds
           : activePointerIds // ignore: cast_nullable_to_non_nullable
@@ -284,7 +284,7 @@ abstract class $DrawingCopyWith<$Res> implements $ScribbleStateCopyWith<$Res> {
   $Res call(
       {Sketch sketch,
       SketchLine? activeLine,
-      ScribblePointerModes allowedPointersMode,
+      ScribblePointerMode allowedPointersMode,
       List<int> activePointerIds,
       Point? pointerPosition,
       int selectedColor,
@@ -330,7 +330,7 @@ class _$DrawingCopyWithImpl<$Res> extends _$ScribbleStateCopyWithImpl<$Res>
       allowedPointersMode: allowedPointersMode == freezed
           ? _value.allowedPointersMode
           : allowedPointersMode // ignore: cast_nullable_to_non_nullable
-              as ScribblePointerModes,
+              as ScribblePointerMode,
       activePointerIds: activePointerIds == freezed
           ? _value.activePointerIds
           : activePointerIds // ignore: cast_nullable_to_non_nullable
@@ -372,7 +372,7 @@ class _$Drawing extends Drawing {
   const _$Drawing(
       {required this.sketch,
       this.activeLine,
-      this.allowedPointersMode = ScribblePointerModes.all,
+      this.allowedPointersMode = ScribblePointerMode.all,
       this.activePointerIds = const [],
       this.pointerPosition,
       this.selectedColor = 0xFF000000,
@@ -391,12 +391,12 @@ class _$Drawing extends Drawing {
 
   /// The line that is currently being drawn
   final SketchLine? activeLine;
-  @JsonKey(defaultValue: ScribblePointerModes.all)
+  @JsonKey(defaultValue: ScribblePointerMode.all)
   @override
 
   /// Which pointers are allowed for drawing and will be captured by the
   /// scribble widget.
-  final ScribblePointerModes allowedPointersMode;
+  final ScribblePointerMode allowedPointersMode;
   @JsonKey(defaultValue: const [])
   @override
 
@@ -483,7 +483,7 @@ class _$Drawing extends Drawing {
     required TResult Function(
             Sketch sketch,
             SketchLine? activeLine,
-            ScribblePointerModes allowedPointersMode,
+            ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             int selectedColor,
@@ -492,7 +492,7 @@ class _$Drawing extends Drawing {
         drawing,
     required TResult Function(
             Sketch sketch,
-            ScribblePointerModes allowedPointersMode,
+            ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             double selectedWidth,
@@ -509,7 +509,7 @@ class _$Drawing extends Drawing {
     TResult Function(
             Sketch sketch,
             SketchLine? activeLine,
-            ScribblePointerModes allowedPointersMode,
+            ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             int selectedColor,
@@ -518,7 +518,7 @@ class _$Drawing extends Drawing {
         drawing,
     TResult Function(
             Sketch sketch,
-            ScribblePointerModes allowedPointersMode,
+            ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             double selectedWidth,
@@ -542,7 +542,7 @@ class _$Drawing extends Drawing {
     TResult Function(
             Sketch sketch,
             SketchLine? activeLine,
-            ScribblePointerModes allowedPointersMode,
+            ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             int selectedColor,
@@ -551,7 +551,7 @@ class _$Drawing extends Drawing {
         drawing,
     TResult Function(
             Sketch sketch,
-            ScribblePointerModes allowedPointersMode,
+            ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             double selectedWidth,
@@ -607,7 +607,7 @@ abstract class Drawing extends ScribbleState {
   const factory Drawing(
       {required Sketch sketch,
       SketchLine? activeLine,
-      ScribblePointerModes allowedPointersMode,
+      ScribblePointerMode allowedPointersMode,
       List<int> activePointerIds,
       Point? pointerPosition,
       int selectedColor,
@@ -628,7 +628,7 @@ abstract class Drawing extends ScribbleState {
 
   /// Which pointers are allowed for drawing and will be captured by the
   /// scribble widget.
-  ScribblePointerModes get allowedPointersMode =>
+  ScribblePointerMode get allowedPointersMode =>
       throw _privateConstructorUsedError;
   @override
 
@@ -665,7 +665,7 @@ abstract class $ErasingCopyWith<$Res> implements $ScribbleStateCopyWith<$Res> {
   @override
   $Res call(
       {Sketch sketch,
-      ScribblePointerModes allowedPointersMode,
+      ScribblePointerMode allowedPointersMode,
       List<int> activePointerIds,
       Point? pointerPosition,
       double selectedWidth,
@@ -703,7 +703,7 @@ class _$ErasingCopyWithImpl<$Res> extends _$ScribbleStateCopyWithImpl<$Res>
       allowedPointersMode: allowedPointersMode == freezed
           ? _value.allowedPointersMode
           : allowedPointersMode // ignore: cast_nullable_to_non_nullable
-              as ScribblePointerModes,
+              as ScribblePointerMode,
       activePointerIds: activePointerIds == freezed
           ? _value.activePointerIds
           : activePointerIds // ignore: cast_nullable_to_non_nullable
@@ -729,7 +729,7 @@ class _$ErasingCopyWithImpl<$Res> extends _$ScribbleStateCopyWithImpl<$Res>
 class _$Erasing extends Erasing {
   const _$Erasing(
       {required this.sketch,
-      this.allowedPointersMode = ScribblePointerModes.all,
+      this.allowedPointersMode = ScribblePointerMode.all,
       this.activePointerIds = const [],
       this.pointerPosition,
       this.selectedWidth = 5,
@@ -743,12 +743,12 @@ class _$Erasing extends Erasing {
 
   /// The current state of the sketch
   final Sketch sketch;
-  @JsonKey(defaultValue: ScribblePointerModes.all)
+  @JsonKey(defaultValue: ScribblePointerMode.all)
   @override
 
   /// Which pointers are allowed for drawing and will be captured by the
   /// scribble widget.
-  final ScribblePointerModes allowedPointersMode;
+  final ScribblePointerMode allowedPointersMode;
   @JsonKey(defaultValue: const [])
   @override
 
@@ -822,7 +822,7 @@ class _$Erasing extends Erasing {
     required TResult Function(
             Sketch sketch,
             SketchLine? activeLine,
-            ScribblePointerModes allowedPointersMode,
+            ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             int selectedColor,
@@ -831,7 +831,7 @@ class _$Erasing extends Erasing {
         drawing,
     required TResult Function(
             Sketch sketch,
-            ScribblePointerModes allowedPointersMode,
+            ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             double selectedWidth,
@@ -848,7 +848,7 @@ class _$Erasing extends Erasing {
     TResult Function(
             Sketch sketch,
             SketchLine? activeLine,
-            ScribblePointerModes allowedPointersMode,
+            ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             int selectedColor,
@@ -857,7 +857,7 @@ class _$Erasing extends Erasing {
         drawing,
     TResult Function(
             Sketch sketch,
-            ScribblePointerModes allowedPointersMode,
+            ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             double selectedWidth,
@@ -874,7 +874,7 @@ class _$Erasing extends Erasing {
     TResult Function(
             Sketch sketch,
             SketchLine? activeLine,
-            ScribblePointerModes allowedPointersMode,
+            ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             int selectedColor,
@@ -883,7 +883,7 @@ class _$Erasing extends Erasing {
         drawing,
     TResult Function(
             Sketch sketch,
-            ScribblePointerModes allowedPointersMode,
+            ScribblePointerMode allowedPointersMode,
             List<int> activePointerIds,
             Point? pointerPosition,
             double selectedWidth,
@@ -938,7 +938,7 @@ class _$Erasing extends Erasing {
 abstract class Erasing extends ScribbleState {
   const factory Erasing(
       {required Sketch sketch,
-      ScribblePointerModes allowedPointersMode,
+      ScribblePointerMode allowedPointersMode,
       List<int> activePointerIds,
       Point? pointerPosition,
       double selectedWidth,
@@ -955,7 +955,7 @@ abstract class Erasing extends ScribbleState {
 
   /// Which pointers are allowed for drawing and will be captured by the
   /// scribble widget.
-  ScribblePointerModes get allowedPointersMode =>
+  ScribblePointerMode get allowedPointersMode =>
       throw _privateConstructorUsedError;
   @override
 

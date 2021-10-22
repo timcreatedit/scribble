@@ -14,6 +14,7 @@ class GestureCatcher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RawGestureDetector(
+      key: ValueKey(pointerKindsToCatch),
       gestures: {
         GestureCatcherRecognizer:
             GestureRecognizerFactoryWithHandlers<GestureCatcherRecognizer>(

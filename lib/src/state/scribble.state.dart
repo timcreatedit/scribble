@@ -8,7 +8,7 @@ part 'scribble.state.freezed.dart';
 
 part 'scribble.state.g.dart';
 
-enum ScribblePointerModes {
+enum ScribblePointerMode {
   all,
   mouseOnly,
   penOnly,
@@ -28,7 +28,7 @@ class ScribbleState with _$ScribbleState {
 
     /// Which pointers are allowed for drawing and will be captured by the
     /// scribble widget.
-    @Default(ScribblePointerModes.all) ScribblePointerModes allowedPointersMode,
+    @Default(ScribblePointerMode.all) ScribblePointerMode allowedPointersMode,
 
     /// The ids of all supported pointers that are currently interacting with
     /// the widget.
@@ -56,7 +56,7 @@ class ScribbleState with _$ScribbleState {
 
     /// Which pointers are allowed for drawing and will be captured by the
     /// scribble widget.
-    @Default(ScribblePointerModes.all) ScribblePointerModes allowedPointersMode,
+    @Default(ScribblePointerMode.all) ScribblePointerMode allowedPointersMode,
 
     /// The ids of all supported pointers that are currently interacting with
     /// the widget.
@@ -87,16 +87,16 @@ class ScribbleState with _$ScribbleState {
   /// supported devices, depending on [state.allowedPointersMode].
   Set<PointerDeviceKind> get supportedPointerKinds {
     switch (allowedPointersMode) {
-      case ScribblePointerModes.all:
+      case ScribblePointerMode.all:
         return Set.from(PointerDeviceKind.values);
-      case ScribblePointerModes.mouseOnly:
+      case ScribblePointerMode.mouseOnly:
         return const {PointerDeviceKind.mouse};
-      case ScribblePointerModes.penOnly:
+      case ScribblePointerMode.penOnly:
         return const {
           PointerDeviceKind.stylus,
           PointerDeviceKind.invertedStylus,
         };
-      case ScribblePointerModes.mouseAndPen:
+      case ScribblePointerMode.mouseAndPen:
         return const {
           PointerDeviceKind.mouse,
           PointerDeviceKind.stylus,

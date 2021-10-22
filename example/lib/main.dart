@@ -142,6 +142,9 @@ class _HomePageState extends State<HomePage> {
             const Divider(
               height: 20.0,
             ),
+            _buildPointerModeSwitcher(context,
+                penMode:
+                    state.allowedPointersMode == ScribblePointerMode.penOnly),
             _buildEraserButton(context, isSelected: state is Erasing),
             _buildColorButton(context, color: Colors.black, state: state),
             _buildColorButton(context, color: Colors.red, state: state),
@@ -150,6 +153,21 @@ class _HomePageState extends State<HomePage> {
             _buildColorButton(context, color: Colors.yellow, state: state),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildPointerModeSwitcher(BuildContext context,
+      {required bool penMode}) {
+    return FloatingActionButton.small(
+      onPressed: () => notifier.setAllowedPointersMode(
+        penMode ? ScribblePointerMode.all : ScribblePointerMode.penOnly,
+      ),
+      child: AnimatedSwitcher(
+        duration: kThemeAnimationDuration,
+        child: !penMode
+            ? const  Icon(Icons.touch_app, key: ValueKey(true),)
+            : const Icon(Icons.do_not_touch, key: ValueKey(false),),
       ),
     );
   }

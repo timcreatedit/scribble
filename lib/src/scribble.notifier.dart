@@ -34,8 +34,7 @@ class ScribbleNotifier extends StateNotifier<ScribbleState>
     Sketch? sketch,
 
     /// Which pointers can be drawn with and are captured.
-    ScribblePointerModes allowedPointersMode = ScribblePointerModes.all
-    ,
+    ScribblePointerMode allowedPointersMode = ScribblePointerMode.all,
 
     /// How many states you want stored in the undo history, 30 by default.
     int maxHistoryLength = 30,
@@ -124,6 +123,13 @@ class ScribbleNotifier extends StateNotifier<ScribbleState>
       selectedWidth: state.selectedWidth,
       scaleFactor: state.scaleFactor,
       activePointerIds: state.activePointerIds,
+    );
+  }
+
+  /// Sets the current mode of allowed pointers to the given [ScribblePointerMode]
+  void setAllowedPointersMode(ScribblePointerMode allowedPointersMode) {
+    temporaryState = state.copyWith(
+      allowedPointersMode: allowedPointersMode,
     );
   }
 
