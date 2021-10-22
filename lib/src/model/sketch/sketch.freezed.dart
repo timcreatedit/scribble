@@ -27,7 +27,7 @@ class _$SketchTearOff {
     );
   }
 
-  Sketch fromJson(Map<String, Object> json) {
+  Sketch fromJson(Map<String, Object?> json) {
     return Sketch.fromJson(json);
   }
 }
@@ -121,14 +121,14 @@ class _$_Sketch implements _Sketch {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _Sketch &&
-            (identical(other.lines, lines) ||
-                const DeepCollectionEquality().equals(other.lines, lines)));
+        (other.runtimeType == runtimeType &&
+            other is _Sketch &&
+            const DeepCollectionEquality().equals(other.lines, lines));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(lines);
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(lines));
 
   @JsonKey(ignore: true)
   @override
@@ -147,7 +147,7 @@ abstract class _Sketch implements Sketch {
   factory _Sketch.fromJson(Map<String, dynamic> json) = _$_Sketch.fromJson;
 
   @override
-  List<SketchLine> get lines => throw _privateConstructorUsedError;
+  List<SketchLine> get lines;
   @override
   @JsonKey(ignore: true)
   _$SketchCopyWith<_Sketch> get copyWith => throw _privateConstructorUsedError;

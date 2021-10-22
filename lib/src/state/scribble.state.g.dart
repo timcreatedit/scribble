@@ -12,7 +12,7 @@ _$Drawing _$$DrawingFromJson(Map<String, dynamic> json) => _$Drawing(
           ? null
           : SketchLine.fromJson(json['activeLine'] as Map<String, dynamic>),
       allowedPointersMode: _$enumDecodeNullable(
-              _$ScribblePointerModesEnumMap, json['allowedPointersMode']) ??
+              _$ScribblePointerModeEnumMap, json['allowedPointersMode']) ??
           ScribblePointerMode.all,
       activePointerIds: (json['activePointerIds'] as List<dynamic>?)
               ?.map((e) => e as int)
@@ -30,7 +30,7 @@ Map<String, dynamic> _$$DrawingToJson(_$Drawing instance) => <String, dynamic>{
       'sketch': instance.sketch.toJson(),
       'activeLine': instance.activeLine?.toJson(),
       'allowedPointersMode':
-          _$ScribblePointerModesEnumMap[instance.allowedPointersMode],
+          _$ScribblePointerModeEnumMap[instance.allowedPointersMode],
       'activePointerIds': instance.activePointerIds,
       'pointerPosition': instance.pointerPosition?.toJson(),
       'selectedColor': instance.selectedColor,
@@ -75,7 +75,7 @@ K? _$enumDecodeNullable<K, V>(
   return _$enumDecode<K, V>(enumValues, source, unknownValue: unknownValue);
 }
 
-const _$ScribblePointerModesEnumMap = {
+const _$ScribblePointerModeEnumMap = {
   ScribblePointerMode.all: 'all',
   ScribblePointerMode.mouseOnly: 'mouseOnly',
   ScribblePointerMode.penOnly: 'penOnly',
@@ -85,7 +85,7 @@ const _$ScribblePointerModesEnumMap = {
 _$Erasing _$$ErasingFromJson(Map<String, dynamic> json) => _$Erasing(
       sketch: Sketch.fromJson(json['sketch'] as Map<String, dynamic>),
       allowedPointersMode: _$enumDecodeNullable(
-              _$ScribblePointerModesEnumMap, json['allowedPointersMode']) ??
+              _$ScribblePointerModeEnumMap, json['allowedPointersMode']) ??
           ScribblePointerMode.all,
       activePointerIds: (json['activePointerIds'] as List<dynamic>?)
               ?.map((e) => e as int)
@@ -101,7 +101,7 @@ _$Erasing _$$ErasingFromJson(Map<String, dynamic> json) => _$Erasing(
 Map<String, dynamic> _$$ErasingToJson(_$Erasing instance) => <String, dynamic>{
       'sketch': instance.sketch.toJson(),
       'allowedPointersMode':
-          _$ScribblePointerModesEnumMap[instance.allowedPointersMode],
+          _$ScribblePointerModeEnumMap[instance.allowedPointersMode],
       'activePointerIds': instance.activePointerIds,
       'pointerPosition': instance.pointerPosition?.toJson(),
       'selectedWidth': instance.selectedWidth,

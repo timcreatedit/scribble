@@ -9,6 +9,8 @@ Check the updated example to try it out!
 #### Other Changes:
 * ``ScribbleNotifier`` now has the option to set the sketch from outside after it has been constructed using the ``setSketch()`` method. You can even choose whether you want it to be committed to the undo history.
 * Added documentation to ``ScribbleState``
+* Updated example
+* Updated dependencies
 
 ## 0.1.2
 

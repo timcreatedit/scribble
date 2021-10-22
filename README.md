@@ -1,6 +1,5 @@
 # Scribble
 Scribble is a lightweight library for freehand drawing in Flutter supporting pressure, variable line width and more!
-> At the moment, scribble needs at least Flutter 2.5 to work
 
 ![scribble_demo](./scribble_demo.gif)
 
@@ -10,6 +9,7 @@ Scribble is a lightweight library for freehand drawing in Flutter supporting pre
 
 * Variable line width
 * Pen and touch pressure support
+* Choose which pointers can draw (touch, pen, mouse, etc.)
 * Lines get slimmer when the pen is moved more quickly
 * Line eraser support
 * Full undo/redo support using [history_state_notifier](https://pub.dev/packages/history_state_notifier)
