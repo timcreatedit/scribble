@@ -1,3 +1,15 @@
+## 0.1.3
+#### Filter for Pointers:
+You can now switch between different ``ScribblePointerMode``s, even at runtime.
+
+This is very helpful for example, if Scribble lives inside a Scrollable and you want users to be able to navigate with their finger while drawing with their pen.
+
+Check the updated example to try it out!
+
+#### Other Changes:
+* ``ScribbleNotifier`` now has the option to set the sketch from outside after it has been constructed using the ``setSketch()`` method. You can even choose whether you want it to be committed to the undo history.
+* Added documentation to ``ScribbleState``
+
 ## 0.1.2
 
 * Removed the speed calculation using time due to precision issues
