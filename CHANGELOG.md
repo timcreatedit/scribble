@@ -1,3 +1,7 @@
+## 0.2.1
+- Updated README to include the newest features
+- Downgraded json_serializable due to a bug with freezed
+
 ## 0.2.0
 #### BREAKING:
 - Custom ScribbleNotifiers now need to provide a GlobalKey which is used in the renderImage() method to access Scribble's

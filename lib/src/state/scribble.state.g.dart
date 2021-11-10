@@ -11,7 +11,7 @@ _$Drawing _$$DrawingFromJson(Map<String, dynamic> json) => _$Drawing(
       activeLine: json['activeLine'] == null
           ? null
           : SketchLine.fromJson(json['activeLine'] as Map<String, dynamic>),
-      allowedPointersMode: $enumDecodeNullable(
+      allowedPointersMode: _$enumDecodeNullable(
               _$ScribblePointerModeEnumMap, json['allowedPointersMode']) ??
           ScribblePointerMode.all,
       activePointerIds: (json['activePointerIds'] as List<dynamic>?)
@@ -40,6 +40,43 @@ Map<String, dynamic> _$$DrawingToJson(_$Drawing instance) => <String, dynamic>{
       'type': instance.$type,
     };
 
+K _$enumDecode<K, V>(
+  Map<K, V> enumValues,
+  Object? source, {
+  K? unknownValue,
+}) {
+  if (source == null) {
+    throw ArgumentError(
+      'A value must be provided. Supported values: '
+      '${enumValues.values.join(', ')}',
+    );
+  }
+
+  return enumValues.entries.singleWhere(
+    (e) => e.value == source,
+    orElse: () {
+      if (unknownValue == null) {
+        throw ArgumentError(
+          '`$source` is not one of the supported values: '
+          '${enumValues.values.join(', ')}',
+        );
+      }
+      return MapEntry(unknownValue, enumValues.values.first);
+    },
+  ).key;
+}
+
+K? _$enumDecodeNullable<K, V>(
+  Map<K, V> enumValues,
+  dynamic source, {
+  K? unknownValue,
+}) {
+  if (source == null) {
+    return null;
+  }
+  return _$enumDecode<K, V>(enumValues, source, unknownValue: unknownValue);
+}
+
 const _$ScribblePointerModeEnumMap = {
   ScribblePointerMode.all: 'all',
   ScribblePointerMode.mouseOnly: 'mouseOnly',
@@ -49,7 +86,7 @@ const _$ScribblePointerModeEnumMap = {
 
 _$Erasing _$$ErasingFromJson(Map<String, dynamic> json) => _$Erasing(
       sketch: Sketch.fromJson(json['sketch'] as Map<String, dynamic>),
-      allowedPointersMode: $enumDecodeNullable(
+      allowedPointersMode: _$enumDecodeNullable(
               _$ScribblePointerModeEnumMap, json['allowedPointersMode']) ??
           ScribblePointerMode.all,
       activePointerIds: (json['activePointerIds'] as List<dynamic>?)

@@ -8,17 +8,18 @@ Scribble is a lightweight library for freehand drawing in Flutter supporting pre
 ## Features
 
 * Variable line width
+* Image Export
 * Pen and touch pressure support
 * Choose which pointers can draw (touch, pen, mouse, etc.)
 * Lines get slimmer when the pen is moved more quickly
 * Line eraser support
 * Full undo/redo support using [history_state_notifier](https://pub.dev/packages/history_state_notifier)
-* Sketches are fully serializable
+* Sketches are fully serializable to JSON
 
 ## Pipeline
 
 * [X] Load sketches
-* [ ] PNG export
+* [X] PNG export
 
 ## Usage
 
@@ -69,7 +70,10 @@ notifier.clear();
 // Undo
 notifier.undo();
 
-//... 
+// Export to Image
+notifier.renderImage(pixelRatio: 2.0);
+
+// And more ... 
 ```
 
 ## Additional information
