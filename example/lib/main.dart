@@ -46,15 +46,31 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Stack(
-        children: [
-          Scribble(
-            notifier: notifier,
-            drawPen: true,
+      body: SingleChildScrollView(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 2,
+          child: Stack(
+            children: [
+              Scribble(
+                notifier: notifier,
+                drawPen: true,
+              ),
+              Positioned(
+                top: 16,
+                right: 16,
+                child: Column(
+                  children: [
+                    _buildColorToolbar(context),
+                    const Divider(
+                      height: 32,
+                    ),
+                    _buildStrokeToolbar(context),
+                  ],
+                ),
+              )
+            ],
           ),
-          _buildColorToolbar(context),
-          _buildStrokeToolbar(context),
-        ],
+        ),
       ),
     );
   }
@@ -62,21 +78,17 @@ class _HomePageState extends State<HomePage> {
   Widget _buildStrokeToolbar(BuildContext context) {
     return StateNotifierBuilder<ScribbleState>(
       stateNotifier: notifier,
-      builder: (context, state, _) => Positioned(
-        bottom: 16,
-        right: 16,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            for (final w in notifier.widths)
-              _buildStrokeButton(
-                context,
-                strokeWidth: w,
-                state: state,
-              ),
-          ],
-        ),
+      builder: (context, state, _) => Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          for (final w in notifier.widths)
+            _buildStrokeButton(
+              context,
+              strokeWidth: w,
+              state: state,
+            ),
+        ],
       ),
     );
   }
@@ -118,33 +130,58 @@ class _HomePageState extends State<HomePage> {
   Widget _buildColorToolbar(BuildContext context) {
     return StateNotifierBuilder<ScribbleState>(
       stateNotifier: notifier,
-      builder: (context, state, _) => Positioned(
-        top: 16,
-        right: 16,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            _buildUndoButton(context),
-            const Divider(
-              height: 4.0,
-            ),
-            _buildRedoButton(context),
-            const Divider(
-              height: 4.0,
-            ),
-            _buildClearButton(context),
-            const Divider(
-              height: 20.0,
-            ),
-            _buildEraserButton(context, isSelected: state is Erasing),
-            _buildColorButton(context, color: Colors.black, state: state),
-            _buildColorButton(context, color: Colors.red, state: state),
-            _buildColorButton(context, color: Colors.green, state: state),
-            _buildColorButton(context, color: Colors.blue, state: state),
-            _buildColorButton(context, color: Colors.yellow, state: state),
-          ],
-        ),
+      builder: (context, state, _) => Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          _buildUndoButton(context),
+          const Divider(
+            height: 4.0,
+          ),
+          _buildRedoButton(context),
+          const Divider(
+            height: 4.0,
+          ),
+          _buildClearButton(context),
+          const Divider(
+            height: 20.0,
+          ),
+          _buildPointerModeSwitcher(context,
+              penMode:
+                  state.allowedPointersMode == ScribblePointerMode.penOnly),
+          const Divider(
+            height: 20.0,
+          ),
+          _buildEraserButton(context, isSelected: state is Erasing),
+          _buildColorButton(context, color: Colors.black, state: state),
+          _buildColorButton(context, color: Colors.red, state: state),
+          _buildColorButton(context, color: Colors.green, state: state),
+          _buildColorButton(context, color: Colors.blue, state: state),
+          _buildColorButton(context, color: Colors.yellow, state: state),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPointerModeSwitcher(BuildContext context,
+      {required bool penMode}) {
+    return FloatingActionButton.small(
+      onPressed: () => notifier.setAllowedPointersMode(
+        penMode ? ScribblePointerMode.all : ScribblePointerMode.penOnly,
+      ),
+      tooltip:
+          "Switch drawing mode to " + (penMode ? "all pointers" : "pen only"),
+      child: AnimatedSwitcher(
+        duration: kThemeAnimationDuration,
+        child: !penMode
+            ? const Icon(
+                Icons.touch_app,
+                key: ValueKey(true),
+              )
+            : const Icon(
+                Icons.do_not_touch,
+                key: ValueKey(false),
+              ),
       ),
     );
   }
