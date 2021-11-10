@@ -14,15 +14,15 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 ScribbleState _$ScribbleStateFromJson(Map<String, dynamic> json) {
-  switch (json['runtimeType'] as String?) {
+  switch (json['type']) {
     case 'drawing':
       return Drawing.fromJson(json);
     case 'erasing':
       return Erasing.fromJson(json);
 
     default:
-      throw CheckedFromJsonException(json, 'runtimeType', 'ScribbleState',
-          'Invalid union type "${json['runtimeType']}"!');
+      throw CheckedFromJsonException(json, 'type', 'ScribbleState',
+          'Invalid union type "${json['type']}"!');
   }
 }
 
@@ -377,8 +377,10 @@ class _$Drawing extends Drawing {
       this.pointerPosition,
       this.selectedColor = 0xFF000000,
       this.selectedWidth = 5,
-      this.scaleFactor = 1})
-      : super._();
+      this.scaleFactor = 1,
+      String? $type})
+      : $type = $type ?? 'drawing',
+        super._();
 
   factory _$Drawing.fromJson(Map<String, dynamic> json) =>
       _$$DrawingFromJson(json);
@@ -425,6 +427,9 @@ class _$Drawing extends Drawing {
   /// Can be used if zoom functionality is needed
   /// (e.g. through InteractiveViewer) so that the pen width remains the same.
   final double scaleFactor;
+
+  @JsonKey(name: 'type')
+  final String $type;
 
   @override
   String toString() {
@@ -592,7 +597,7 @@ class _$Drawing extends Drawing {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$DrawingToJson(this)..['runtimeType'] = 'drawing';
+    return _$$DrawingToJson(this);
   }
 }
 
@@ -725,8 +730,10 @@ class _$Erasing extends Erasing {
       this.activePointerIds = const [],
       this.pointerPosition,
       this.selectedWidth = 5,
-      this.scaleFactor = 1})
-      : super._();
+      this.scaleFactor = 1,
+      String? $type})
+      : $type = $type ?? 'erasing',
+        super._();
 
   factory _$Erasing.fromJson(Map<String, dynamic> json) =>
       _$$ErasingFromJson(json);
@@ -764,6 +771,9 @@ class _$Erasing extends Erasing {
   /// Can be used if zoom functionality is needed
   /// (e.g. through InteractiveViewer) so that the pen width remains the same.
   final double scaleFactor;
+
+  @JsonKey(name: 'type')
+  final String $type;
 
   @override
   String toString() {
@@ -918,7 +928,7 @@ class _$Erasing extends Erasing {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ErasingToJson(this)..['runtimeType'] = 'erasing';
+    return _$$ErasingToJson(this);
   }
 }
 
