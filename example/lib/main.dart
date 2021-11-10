@@ -45,6 +45,11 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        leading: IconButton(
+          icon: const Icon(Icons.save),
+          tooltip: "Save to Image",
+          onPressed: () => _saveImage(context),
+        ),
       ),
       body: SingleChildScrollView(
         child: SizedBox(
@@ -71,6 +76,17 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Future<void> _saveImage(BuildContext context) async {
+    final image = await notifier.renderImage();
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Your Image"),
+        content: Image.memory(image.buffer.asUint8List()),
       ),
     );
   }
