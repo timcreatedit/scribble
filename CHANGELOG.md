@@ -10,6 +10,7 @@
 #### Other Changes:
 - The pressure on web is overridden so the cursor matches the selected pen width!
 - ``ScribbleNotifier`` now extends ``ScribbleNotifierBase`` instead of implementing it as an interface.
+- Updated dependencies
 
 ## 0.1.3
 #### Filter for Pointers:
