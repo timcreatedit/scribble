@@ -29,7 +29,7 @@ class _$PointTearOff {
     );
   }
 
-  Point fromJson(Map<String, Object> json) {
+  Point fromJson(Map<String, Object?> json) {
     return Point.fromJson(json);
   }
 }
@@ -150,22 +150,16 @@ class _$_Point extends _Point {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _Point &&
-            (identical(other.x, x) ||
-                const DeepCollectionEquality().equals(other.x, x)) &&
-            (identical(other.y, y) ||
-                const DeepCollectionEquality().equals(other.y, y)) &&
+        (other.runtimeType == runtimeType &&
+            other is _Point &&
+            (identical(other.x, x) || other.x == x) &&
+            (identical(other.y, y) || other.y == y) &&
             (identical(other.pressure, pressure) ||
-                const DeepCollectionEquality()
-                    .equals(other.pressure, pressure)));
+                other.pressure == pressure));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(x) ^
-      const DeepCollectionEquality().hash(y) ^
-      const DeepCollectionEquality().hash(pressure);
+  int get hashCode => Object.hash(runtimeType, x, y, pressure);
 
   @JsonKey(ignore: true)
   @override
@@ -185,11 +179,11 @@ abstract class _Point extends Point {
   factory _Point.fromJson(Map<String, dynamic> json) = _$_Point.fromJson;
 
   @override
-  double get x => throw _privateConstructorUsedError;
+  double get x;
   @override
-  double get y => throw _privateConstructorUsedError;
+  double get y;
   @override
-  double get pressure => throw _privateConstructorUsedError;
+  double get pressure;
   @override
   @JsonKey(ignore: true)
   _$PointCopyWith<_Point> get copyWith => throw _privateConstructorUsedError;

@@ -32,7 +32,7 @@ class _$SketchLineTearOff {
     );
   }
 
-  SketchLine fromJson(Map<String, Object> json) {
+  SketchLine fromJson(Map<String, Object?> json) {
     return SketchLine.fromJson(json);
   }
 }
@@ -157,21 +157,16 @@ class _$_SketchLine implements _SketchLine {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _SketchLine &&
-            (identical(other.points, points) ||
-                const DeepCollectionEquality().equals(other.points, points)) &&
-            (identical(other.color, color) ||
-                const DeepCollectionEquality().equals(other.color, color)) &&
-            (identical(other.width, width) ||
-                const DeepCollectionEquality().equals(other.width, width)));
+        (other.runtimeType == runtimeType &&
+            other is _SketchLine &&
+            const DeepCollectionEquality().equals(other.points, points) &&
+            (identical(other.color, color) || other.color == color) &&
+            (identical(other.width, width) || other.width == width));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(points) ^
-      const DeepCollectionEquality().hash(color) ^
-      const DeepCollectionEquality().hash(width);
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(points), color, width);
 
   @JsonKey(ignore: true)
   @override
@@ -194,11 +189,11 @@ abstract class _SketchLine implements SketchLine {
       _$_SketchLine.fromJson;
 
   @override
-  List<Point> get points => throw _privateConstructorUsedError;
+  List<Point> get points;
   @override
-  int get color => throw _privateConstructorUsedError;
+  int get color;
   @override
-  double get width => throw _privateConstructorUsedError;
+  double get width;
   @override
   @JsonKey(ignore: true)
   _$SketchLineCopyWith<_SketchLine> get copyWith =>

@@ -68,7 +68,7 @@ class _$ScribbleStateTearOff {
     );
   }
 
-  ScribbleState fromJson(Map<String, Object> json) {
+  ScribbleState fromJson(Map<String, Object?> json) {
     return ScribbleState.fromJson(json);
   }
 }
@@ -434,43 +434,36 @@ class _$Drawing extends Drawing {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is Drawing &&
-            (identical(other.sketch, sketch) ||
-                const DeepCollectionEquality().equals(other.sketch, sketch)) &&
+        (other.runtimeType == runtimeType &&
+            other is Drawing &&
+            (identical(other.sketch, sketch) || other.sketch == sketch) &&
             (identical(other.activeLine, activeLine) ||
-                const DeepCollectionEquality()
-                    .equals(other.activeLine, activeLine)) &&
+                other.activeLine == activeLine) &&
             (identical(other.allowedPointersMode, allowedPointersMode) ||
-                const DeepCollectionEquality()
-                    .equals(other.allowedPointersMode, allowedPointersMode)) &&
-            (identical(other.activePointerIds, activePointerIds) ||
-                const DeepCollectionEquality()
-                    .equals(other.activePointerIds, activePointerIds)) &&
+                other.allowedPointersMode == allowedPointersMode) &&
+            const DeepCollectionEquality()
+                .equals(other.activePointerIds, activePointerIds) &&
             (identical(other.pointerPosition, pointerPosition) ||
-                const DeepCollectionEquality()
-                    .equals(other.pointerPosition, pointerPosition)) &&
+                other.pointerPosition == pointerPosition) &&
             (identical(other.selectedColor, selectedColor) ||
-                const DeepCollectionEquality()
-                    .equals(other.selectedColor, selectedColor)) &&
+                other.selectedColor == selectedColor) &&
             (identical(other.selectedWidth, selectedWidth) ||
-                const DeepCollectionEquality()
-                    .equals(other.selectedWidth, selectedWidth)) &&
+                other.selectedWidth == selectedWidth) &&
             (identical(other.scaleFactor, scaleFactor) ||
-                const DeepCollectionEquality()
-                    .equals(other.scaleFactor, scaleFactor)));
+                other.scaleFactor == scaleFactor));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(sketch) ^
-      const DeepCollectionEquality().hash(activeLine) ^
-      const DeepCollectionEquality().hash(allowedPointersMode) ^
-      const DeepCollectionEquality().hash(activePointerIds) ^
-      const DeepCollectionEquality().hash(pointerPosition) ^
-      const DeepCollectionEquality().hash(selectedColor) ^
-      const DeepCollectionEquality().hash(selectedWidth) ^
-      const DeepCollectionEquality().hash(scaleFactor);
+  int get hashCode => Object.hash(
+      runtimeType,
+      sketch,
+      activeLine,
+      allowedPointersMode,
+      const DeepCollectionEquality().hash(activePointerIds),
+      pointerPosition,
+      selectedColor,
+      selectedWidth,
+      scaleFactor);
 
   @JsonKey(ignore: true)
   @override
@@ -620,39 +613,38 @@ abstract class Drawing extends ScribbleState {
   @override
 
   /// The current state of the sketch
-  Sketch get sketch => throw _privateConstructorUsedError;
+  Sketch get sketch;
 
   /// The line that is currently being drawn
-  SketchLine? get activeLine => throw _privateConstructorUsedError;
+  SketchLine? get activeLine;
   @override
 
   /// Which pointers are allowed for drawing and will be captured by the
   /// scribble widget.
-  ScribblePointerMode get allowedPointersMode =>
-      throw _privateConstructorUsedError;
+  ScribblePointerMode get allowedPointersMode;
   @override
 
   /// The ids of all supported pointers that are currently interacting with
   /// the widget.
-  List<int> get activePointerIds => throw _privateConstructorUsedError;
+  List<int> get activePointerIds;
   @override
 
   /// The current position of the pointer
-  Point? get pointerPosition => throw _privateConstructorUsedError;
+  Point? get pointerPosition;
 
   /// The color that is currently being drawn with
-  int get selectedColor => throw _privateConstructorUsedError;
+  int get selectedColor;
   @override
 
   /// The current width of the pen
-  double get selectedWidth => throw _privateConstructorUsedError;
+  double get selectedWidth;
   @override
 
   /// How much the widget is scaled at the moment.
   ///
   /// Can be used if zoom functionality is needed
   /// (e.g. through InteractiveViewer) so that the pen width remains the same.
-  double get scaleFactor => throw _privateConstructorUsedError;
+  double get scaleFactor;
   @override
   @JsonKey(ignore: true)
   $DrawingCopyWith<Drawing> get copyWith => throw _privateConstructorUsedError;
@@ -781,35 +773,30 @@ class _$Erasing extends Erasing {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is Erasing &&
-            (identical(other.sketch, sketch) ||
-                const DeepCollectionEquality().equals(other.sketch, sketch)) &&
+        (other.runtimeType == runtimeType &&
+            other is Erasing &&
+            (identical(other.sketch, sketch) || other.sketch == sketch) &&
             (identical(other.allowedPointersMode, allowedPointersMode) ||
-                const DeepCollectionEquality()
-                    .equals(other.allowedPointersMode, allowedPointersMode)) &&
-            (identical(other.activePointerIds, activePointerIds) ||
-                const DeepCollectionEquality()
-                    .equals(other.activePointerIds, activePointerIds)) &&
+                other.allowedPointersMode == allowedPointersMode) &&
+            const DeepCollectionEquality()
+                .equals(other.activePointerIds, activePointerIds) &&
             (identical(other.pointerPosition, pointerPosition) ||
-                const DeepCollectionEquality()
-                    .equals(other.pointerPosition, pointerPosition)) &&
+                other.pointerPosition == pointerPosition) &&
             (identical(other.selectedWidth, selectedWidth) ||
-                const DeepCollectionEquality()
-                    .equals(other.selectedWidth, selectedWidth)) &&
+                other.selectedWidth == selectedWidth) &&
             (identical(other.scaleFactor, scaleFactor) ||
-                const DeepCollectionEquality()
-                    .equals(other.scaleFactor, scaleFactor)));
+                other.scaleFactor == scaleFactor));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(sketch) ^
-      const DeepCollectionEquality().hash(allowedPointersMode) ^
-      const DeepCollectionEquality().hash(activePointerIds) ^
-      const DeepCollectionEquality().hash(pointerPosition) ^
-      const DeepCollectionEquality().hash(selectedWidth) ^
-      const DeepCollectionEquality().hash(scaleFactor);
+  int get hashCode => Object.hash(
+      runtimeType,
+      sketch,
+      allowedPointersMode,
+      const DeepCollectionEquality().hash(activePointerIds),
+      pointerPosition,
+      selectedWidth,
+      scaleFactor);
 
   @JsonKey(ignore: true)
   @override
@@ -950,33 +937,32 @@ abstract class Erasing extends ScribbleState {
   @override
 
   /// The current state of the sketch
-  Sketch get sketch => throw _privateConstructorUsedError;
+  Sketch get sketch;
   @override
 
   /// Which pointers are allowed for drawing and will be captured by the
   /// scribble widget.
-  ScribblePointerMode get allowedPointersMode =>
-      throw _privateConstructorUsedError;
+  ScribblePointerMode get allowedPointersMode;
   @override
 
   /// The ids of all supported pointers that are currently interacting with
   /// the widget.
-  List<int> get activePointerIds => throw _privateConstructorUsedError;
+  List<int> get activePointerIds;
   @override
 
   /// The current position of the pointer
-  Point? get pointerPosition => throw _privateConstructorUsedError;
+  Point? get pointerPosition;
   @override
 
   /// The current width of the pen
-  double get selectedWidth => throw _privateConstructorUsedError;
+  double get selectedWidth;
   @override
 
   /// How much the widget is scaled at the moment.
   ///
   /// Can be used if zoom functionality is needed
   /// (e.g. through InteractiveViewer) so that the pen width remains the same.
-  double get scaleFactor => throw _privateConstructorUsedError;
+  double get scaleFactor;
   @override
   @JsonKey(ignore: true)
   $ErasingCopyWith<Erasing> get copyWith => throw _privateConstructorUsedError;
