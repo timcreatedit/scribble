@@ -1,3 +1,16 @@
+## 0.2.0
+#### BREAKING:
+- Custom ScribbleNotifiers now need to provide a GlobalKey which is used in the renderImage() method to access Scribble's
+  RepaintBoundary
+- Updated example to demonstrate image export.
+
+#### Image Export:
+- You can now export the Scribble to an Image ```ByteData``` using the ScribbleNotifiers ``renderImage()`` method!
+
+#### Other Changes:
+- The pressure on web is overridden so the cursor matches the selected pen width!
+- ``ScribbleNotifier`` now extends ``ScribbleNotifierBase`` instead of implementing it as an interface.
+
 ## 0.1.3
 #### Filter for Pointers:
 You can now switch between different ``ScribblePointerMode``s, even at runtime.
