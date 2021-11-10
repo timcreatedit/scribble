@@ -1,7 +1,9 @@
-import 'dart:math';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:history_state_notifier/history_state_notifier.dart';
 import 'package:scribble/src/model/sketch/sketch.dart';
@@ -10,6 +12,10 @@ import 'package:state_notifier/state_notifier.dart';
 
 abstract class ScribbleNotifierBase extends StateNotifier<ScribbleState> {
   ScribbleNotifierBase(ScribbleState state) : super(state);
+
+  /// You need to provide a key that the [RepointBoundary] can use so you can
+  /// access it from the [renderImage] method.
+  GlobalKey get repaintBoundaryKey;
 
   void onPointerHover(PointerHoverEvent event);
 
@@ -22,12 +28,32 @@ abstract class ScribbleNotifierBase extends StateNotifier<ScribbleState> {
   void onPointerCancel(PointerCancelEvent event);
 
   void onPointerExit(PointerExitEvent event);
+
+  /// Used to render the image to ByteData which can then be stored or reused
+  /// for example in an [Image.memory] widget.
+  ///
+  /// Use [pixelRatio] to increase the resolution of the resulting image.
+  /// You can specify a different [format], by default this method
+  /// generates pngs.
+  Future<ByteData> renderImage({
+    double pixelRatio = 1.0,
+    ui.ImageByteFormat format = ui.ImageByteFormat.png,
+  }) async {
+    final RenderRepaintBoundary? renderObject =
+        repaintBoundaryKey.currentContext?.findRenderObject()
+            as RenderRepaintBoundary?;
+    if (renderObject == null) {
+      throw StateError(
+          "Tried to convert Scribble to Image, but no valid RenderObject was found!");
+    }
+    final img = await renderObject.toImage(pixelRatio: pixelRatio);
+    return (await img.toByteData(format: format))!;
+  }
 }
 
 /// This class controls the state and behavior for a [Scribble] widget.
-class ScribbleNotifier extends StateNotifier<ScribbleState>
-    with HistoryStateNotifierMixin<ScribbleState>
-    implements ScribbleNotifierBase {
+class ScribbleNotifier extends ScribbleNotifierBase
+    with HistoryStateNotifierMixin<ScribbleState> {
   ScribbleNotifier({
     /// If you pass a sketch here, the notifier will use that sketch as a
     /// starting point.
@@ -75,6 +101,11 @@ class ScribbleNotifier extends StateNotifier<ScribbleState>
   /// If you want to store it somewhere you can call ``.toJson()`` on it to
   /// receive a map.
   Sketch get currentSketch => state.sketch;
+
+  final GlobalKey _repaintBoundaryKey = GlobalKey();
+
+  @override
+  GlobalKey get repaintBoundaryKey => _repaintBoundaryKey;
 
   /// Only apply the sketch from the undo history, otherwise keep current state
   @override
@@ -298,14 +329,15 @@ class ScribbleNotifier extends StateNotifier<ScribbleState>
       lines: state.sketch.lines
           .where((l) => l.points.every((p) =>
               (event.localPosition - p.asOffset).distance >
-              state.selectedWidth))
+              l.width + state.selectedWidth))
           .toList(),
     );
   }
 
   /// Converts a pointer event to the [Point] on the canvas.
   Point _getPointFromEvent(PointerEvent event) {
-    final p = event.pressureMin == event.pressureMax
+    final overridePressureOnWeb = event is PointerHoverEvent && kIsWeb;
+    final p = overridePressureOnWeb || event.pressureMin == event.pressureMax
         ? 0.5
         : (event.pressure - event.pressureMin) /
             (event.pressureMax - event.pressureMin);

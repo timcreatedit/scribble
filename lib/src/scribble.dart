@@ -85,6 +85,7 @@ class _ScribbleState extends State<Scribble> {
             widget.drawEraser && state is Erasing;
         final child = SizedBox.expand(
           child: RepaintBoundary(
+            key: widget.notifier.repaintBoundaryKey,
             child: CustomPaint(
               painter: ScribblePainter(
                 state: state,
