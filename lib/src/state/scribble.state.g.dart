@@ -17,14 +17,14 @@ _$Drawing _$$DrawingFromJson(Map<String, dynamic> json) => _$Drawing(
       activePointerIds: (json['activePointerIds'] as List<dynamic>?)
               ?.map((e) => e as int)
               .toList() ??
-          [],
+          const [],
       pointerPosition: json['pointerPosition'] == null
           ? null
           : Point.fromJson(json['pointerPosition'] as Map<String, dynamic>),
-      selectedColor: json['selectedColor'] as int? ?? 4278190080,
+      selectedColor: json['selectedColor'] as int? ?? 0xFF000000,
       selectedWidth: (json['selectedWidth'] as num?)?.toDouble() ?? 5,
       scaleFactor: (json['scaleFactor'] as num?)?.toDouble() ?? 1,
-      $type: json['type'] as String?,
+      $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$$DrawingToJson(_$Drawing instance) => <String, dynamic>{
@@ -37,7 +37,7 @@ Map<String, dynamic> _$$DrawingToJson(_$Drawing instance) => <String, dynamic>{
       'selectedColor': instance.selectedColor,
       'selectedWidth': instance.selectedWidth,
       'scaleFactor': instance.scaleFactor,
-      'type': instance.$type,
+      'runtimeType': instance.$type,
     };
 
 const _$ScribblePointerModeEnumMap = {
@@ -55,13 +55,13 @@ _$Erasing _$$ErasingFromJson(Map<String, dynamic> json) => _$Erasing(
       activePointerIds: (json['activePointerIds'] as List<dynamic>?)
               ?.map((e) => e as int)
               .toList() ??
-          [],
+          const [],
       pointerPosition: json['pointerPosition'] == null
           ? null
           : Point.fromJson(json['pointerPosition'] as Map<String, dynamic>),
       selectedWidth: (json['selectedWidth'] as num?)?.toDouble() ?? 5,
       scaleFactor: (json['scaleFactor'] as num?)?.toDouble() ?? 1,
-      $type: json['type'] as String?,
+      $type: json['runtimeType'] as String?,
     );
 
 Map<String, dynamic> _$$ErasingToJson(_$Erasing instance) => <String, dynamic>{
@@ -72,5 +72,5 @@ Map<String, dynamic> _$$ErasingToJson(_$Erasing instance) => <String, dynamic>{
       'pointerPosition': instance.pointerPosition?.toJson(),
       'selectedWidth': instance.selectedWidth,
       'scaleFactor': instance.scaleFactor,
-      'type': instance.$type,
+      'runtimeType': instance.$type,
     };

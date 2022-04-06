@@ -1,3 +1,13 @@
+## 0.3.0
+- Upgraded dependencies
+- Added ``ScribbleSketch`` widget for just displaying a sketch without input functionality, no notifier needed!
+## 0.2.2
+- Upgraded dependencies
+
+## 0.2.1
+- Updated README to include the newest features
+- Downgraded json_serializable due to a bug with freezed
+
 ## 0.2.0
 #### BREAKING:
 - Custom ScribbleNotifiers now need to provide a GlobalKey which is used in the renderImage() method to access Scribble's

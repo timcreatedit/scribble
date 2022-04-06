@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'point.dart';
@@ -138,7 +139,7 @@ class _$_Point extends _Point {
   final double x;
   @override
   final double y;
-  @JsonKey(defaultValue: 1)
+  @JsonKey()
   @override
   final double pressure;
 
@@ -152,14 +153,17 @@ class _$_Point extends _Point {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Point &&
-            (identical(other.x, x) || other.x == x) &&
-            (identical(other.y, y) || other.y == y) &&
-            (identical(other.pressure, pressure) ||
-                other.pressure == pressure));
+            const DeepCollectionEquality().equals(other.x, x) &&
+            const DeepCollectionEquality().equals(other.y, y) &&
+            const DeepCollectionEquality().equals(other.pressure, pressure));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, x, y, pressure);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(x),
+      const DeepCollectionEquality().hash(y),
+      const DeepCollectionEquality().hash(pressure));
 
   @JsonKey(ignore: true)
   @override
