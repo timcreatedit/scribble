@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'scribble.state.dart';
@@ -14,15 +15,15 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 ScribbleState _$ScribbleStateFromJson(Map<String, dynamic> json) {
-  switch (json['type']) {
+  switch (json['runtimeType']) {
     case 'drawing':
       return Drawing.fromJson(json);
     case 'erasing':
       return Erasing.fromJson(json);
 
     default:
-      throw CheckedFromJsonException(json, 'type', 'ScribbleState',
-          'Invalid union type "${json['type']}"!');
+      throw CheckedFromJsonException(json, 'runtimeType', 'ScribbleState',
+          'Invalid union type "${json['runtimeType']}"!');
   }
 }
 
@@ -393,13 +394,13 @@ class _$Drawing extends Drawing {
 
   /// The line that is currently being drawn
   final SketchLine? activeLine;
-  @JsonKey(defaultValue: ScribblePointerMode.all)
+  @JsonKey()
   @override
 
   /// Which pointers are allowed for drawing and will be captured by the
   /// scribble widget.
   final ScribblePointerMode allowedPointersMode;
-  @JsonKey(defaultValue: const [])
+  @JsonKey()
   @override
 
   /// The ids of all supported pointers that are currently interacting with
@@ -409,17 +410,17 @@ class _$Drawing extends Drawing {
 
   /// The current position of the pointer
   final Point? pointerPosition;
-  @JsonKey(defaultValue: 0xFF000000)
+  @JsonKey()
   @override
 
   /// The color that is currently being drawn with
   final int selectedColor;
-  @JsonKey(defaultValue: 5)
+  @JsonKey()
   @override
 
   /// The current width of the pen
   final double selectedWidth;
-  @JsonKey(defaultValue: 1)
+  @JsonKey()
   @override
 
   /// How much the widget is scaled at the moment.
@@ -428,7 +429,7 @@ class _$Drawing extends Drawing {
   /// (e.g. through InteractiveViewer) so that the pen width remains the same.
   final double scaleFactor;
 
-  @JsonKey(name: 'type')
+  @JsonKey(name: 'runtimeType')
   final String $type;
 
   @override
@@ -441,34 +442,34 @@ class _$Drawing extends Drawing {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is Drawing &&
-            (identical(other.sketch, sketch) || other.sketch == sketch) &&
-            (identical(other.activeLine, activeLine) ||
-                other.activeLine == activeLine) &&
-            (identical(other.allowedPointersMode, allowedPointersMode) ||
-                other.allowedPointersMode == allowedPointersMode) &&
+            const DeepCollectionEquality().equals(other.sketch, sketch) &&
+            const DeepCollectionEquality()
+                .equals(other.activeLine, activeLine) &&
+            const DeepCollectionEquality()
+                .equals(other.allowedPointersMode, allowedPointersMode) &&
             const DeepCollectionEquality()
                 .equals(other.activePointerIds, activePointerIds) &&
-            (identical(other.pointerPosition, pointerPosition) ||
-                other.pointerPosition == pointerPosition) &&
-            (identical(other.selectedColor, selectedColor) ||
-                other.selectedColor == selectedColor) &&
-            (identical(other.selectedWidth, selectedWidth) ||
-                other.selectedWidth == selectedWidth) &&
-            (identical(other.scaleFactor, scaleFactor) ||
-                other.scaleFactor == scaleFactor));
+            const DeepCollectionEquality()
+                .equals(other.pointerPosition, pointerPosition) &&
+            const DeepCollectionEquality()
+                .equals(other.selectedColor, selectedColor) &&
+            const DeepCollectionEquality()
+                .equals(other.selectedWidth, selectedWidth) &&
+            const DeepCollectionEquality()
+                .equals(other.scaleFactor, scaleFactor));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      sketch,
-      activeLine,
-      allowedPointersMode,
+      const DeepCollectionEquality().hash(sketch),
+      const DeepCollectionEquality().hash(activeLine),
+      const DeepCollectionEquality().hash(allowedPointersMode),
       const DeepCollectionEquality().hash(activePointerIds),
-      pointerPosition,
-      selectedColor,
-      selectedWidth,
-      scaleFactor);
+      const DeepCollectionEquality().hash(pointerPosition),
+      const DeepCollectionEquality().hash(selectedColor),
+      const DeepCollectionEquality().hash(selectedWidth),
+      const DeepCollectionEquality().hash(scaleFactor));
 
   @JsonKey(ignore: true)
   @override
@@ -742,13 +743,13 @@ class _$Erasing extends Erasing {
 
   /// The current state of the sketch
   final Sketch sketch;
-  @JsonKey(defaultValue: ScribblePointerMode.all)
+  @JsonKey()
   @override
 
   /// Which pointers are allowed for drawing and will be captured by the
   /// scribble widget.
   final ScribblePointerMode allowedPointersMode;
-  @JsonKey(defaultValue: const [])
+  @JsonKey()
   @override
 
   /// The ids of all supported pointers that are currently interacting with
@@ -758,12 +759,12 @@ class _$Erasing extends Erasing {
 
   /// The current position of the pointer
   final Point? pointerPosition;
-  @JsonKey(defaultValue: 5)
+  @JsonKey()
   @override
 
   /// The current width of the pen
   final double selectedWidth;
-  @JsonKey(defaultValue: 1)
+  @JsonKey()
   @override
 
   /// How much the widget is scaled at the moment.
@@ -772,7 +773,7 @@ class _$Erasing extends Erasing {
   /// (e.g. through InteractiveViewer) so that the pen width remains the same.
   final double scaleFactor;
 
-  @JsonKey(name: 'type')
+  @JsonKey(name: 'runtimeType')
   final String $type;
 
   @override
@@ -785,28 +786,28 @@ class _$Erasing extends Erasing {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is Erasing &&
-            (identical(other.sketch, sketch) || other.sketch == sketch) &&
-            (identical(other.allowedPointersMode, allowedPointersMode) ||
-                other.allowedPointersMode == allowedPointersMode) &&
+            const DeepCollectionEquality().equals(other.sketch, sketch) &&
+            const DeepCollectionEquality()
+                .equals(other.allowedPointersMode, allowedPointersMode) &&
             const DeepCollectionEquality()
                 .equals(other.activePointerIds, activePointerIds) &&
-            (identical(other.pointerPosition, pointerPosition) ||
-                other.pointerPosition == pointerPosition) &&
-            (identical(other.selectedWidth, selectedWidth) ||
-                other.selectedWidth == selectedWidth) &&
-            (identical(other.scaleFactor, scaleFactor) ||
-                other.scaleFactor == scaleFactor));
+            const DeepCollectionEquality()
+                .equals(other.pointerPosition, pointerPosition) &&
+            const DeepCollectionEquality()
+                .equals(other.selectedWidth, selectedWidth) &&
+            const DeepCollectionEquality()
+                .equals(other.scaleFactor, scaleFactor));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      sketch,
-      allowedPointersMode,
+      const DeepCollectionEquality().hash(sketch),
+      const DeepCollectionEquality().hash(allowedPointersMode),
       const DeepCollectionEquality().hash(activePointerIds),
-      pointerPosition,
-      selectedWidth,
-      scaleFactor);
+      const DeepCollectionEquality().hash(pointerPosition),
+      const DeepCollectionEquality().hash(selectedWidth),
+      const DeepCollectionEquality().hash(scaleFactor));
 
   @JsonKey(ignore: true)
   @override

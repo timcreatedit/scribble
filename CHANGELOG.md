@@ -1,3 +1,6 @@
+## 0.2.2
+- Upgraded dependencies
+
 ## 0.2.1
 - Updated README to include the newest features
 - Downgraded json_serializable due to a bug with freezed
