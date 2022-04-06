@@ -1,3 +1,6 @@
+## 0.3.0
+- Upgraded dependencies
+- Added ``ScribbleSketch`` widget for just displaying a sketch without input functionality, no notifier needed!
 ## 0.2.2
 - Upgraded dependencies
 
