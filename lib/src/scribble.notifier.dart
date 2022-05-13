@@ -135,8 +135,24 @@ class ScribbleNotifier extends ScribbleNotifierBase
 
   /// Clear the entire drawing.
   void clear() {
-    state = const ScribbleState.drawing(
-      sketch: Sketch(lines: []),
+    state = state.map(
+      drawing: (s) => ScribbleState.drawing(
+        sketch: const Sketch(lines: []),
+        selectedColor: s.selectedColor,
+        selectedWidth: s.selectedWidth,
+        allowedPointersMode: s.allowedPointersMode,
+        activePointerIds: s.activePointerIds,
+        scaleFactor: s.scaleFactor,
+        pointerPosition: s.pointerPosition,
+      ),
+      erasing: (s) => ScribbleState.erasing(
+        sketch: const Sketch(lines: []),
+        selectedWidth: s.selectedWidth,
+        allowedPointersMode: s.allowedPointersMode,
+        activePointerIds: s.activePointerIds,
+        scaleFactor: s.scaleFactor,
+        pointerPosition: s.pointerPosition,
+      ),
     );
   }
 

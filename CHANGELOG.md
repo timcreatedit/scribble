@@ -1,3 +1,7 @@
+## 0.4.0
+- Upgraded dependencies (thanks to @wxxedu)
+- ``ScribbleNotifier.clear()`` clears the drawing without resetting anything else (color, width e.t.c)
+
 ## 0.3.0
 - Upgraded dependencies
 - Added ``ScribbleSketch`` widget for just displaying a sketch without input functionality, no notifier needed!
