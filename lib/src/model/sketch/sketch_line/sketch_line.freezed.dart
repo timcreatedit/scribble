@@ -12,34 +12,11 @@ part of 'sketch_line.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 SketchLine _$SketchLineFromJson(Map<String, dynamic> json) {
   return _SketchLine.fromJson(json);
 }
-
-/// @nodoc
-class _$SketchLineTearOff {
-  const _$SketchLineTearOff();
-
-  _SketchLine call(
-      {required List<Point> points,
-      required int color,
-      required double width}) {
-    return _SketchLine(
-      points: points,
-      color: color,
-      width: width,
-    );
-  }
-
-  SketchLine fromJson(Map<String, Object?> json) {
-    return SketchLine.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $SketchLine = _$SketchLineTearOff();
 
 /// @nodoc
 mixin _$SketchLine {
@@ -93,23 +70,24 @@ class _$SketchLineCopyWithImpl<$Res> implements $SketchLineCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$SketchLineCopyWith<$Res> implements $SketchLineCopyWith<$Res> {
-  factory _$SketchLineCopyWith(
-          _SketchLine value, $Res Function(_SketchLine) then) =
-      __$SketchLineCopyWithImpl<$Res>;
+abstract class _$$_SketchLineCopyWith<$Res>
+    implements $SketchLineCopyWith<$Res> {
+  factory _$$_SketchLineCopyWith(
+          _$_SketchLine value, $Res Function(_$_SketchLine) then) =
+      __$$_SketchLineCopyWithImpl<$Res>;
   @override
   $Res call({List<Point> points, int color, double width});
 }
 
 /// @nodoc
-class __$SketchLineCopyWithImpl<$Res> extends _$SketchLineCopyWithImpl<$Res>
-    implements _$SketchLineCopyWith<$Res> {
-  __$SketchLineCopyWithImpl(
-      _SketchLine _value, $Res Function(_SketchLine) _then)
-      : super(_value, (v) => _then(v as _SketchLine));
+class __$$_SketchLineCopyWithImpl<$Res> extends _$SketchLineCopyWithImpl<$Res>
+    implements _$$_SketchLineCopyWith<$Res> {
+  __$$_SketchLineCopyWithImpl(
+      _$_SketchLine _value, $Res Function(_$_SketchLine) _then)
+      : super(_value, (v) => _then(v as _$_SketchLine));
 
   @override
-  _SketchLine get _value => super._value as _SketchLine;
+  _$_SketchLine get _value => super._value as _$_SketchLine;
 
   @override
   $Res call({
@@ -117,9 +95,9 @@ class __$SketchLineCopyWithImpl<$Res> extends _$SketchLineCopyWithImpl<$Res>
     Object? color = freezed,
     Object? width = freezed,
   }) {
-    return _then(_SketchLine(
+    return _then(_$_SketchLine(
       points: points == freezed
-          ? _value.points
+          ? _value._points
           : points // ignore: cast_nullable_to_non_nullable
               as List<Point>,
       color: color == freezed
@@ -138,13 +116,21 @@ class __$SketchLineCopyWithImpl<$Res> extends _$SketchLineCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_SketchLine implements _SketchLine {
   const _$_SketchLine(
-      {required this.points, required this.color, required this.width});
+      {required final List<Point> points,
+      required this.color,
+      required this.width})
+      : _points = points;
 
   factory _$_SketchLine.fromJson(Map<String, dynamic> json) =>
       _$$_SketchLineFromJson(json);
 
+  final List<Point> _points;
   @override
-  final List<Point> points;
+  List<Point> get points {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_points);
+  }
+
   @override
   final int color;
   @override
@@ -159,23 +145,24 @@ class _$_SketchLine implements _SketchLine {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _SketchLine &&
-            const DeepCollectionEquality().equals(other.points, points) &&
+            other is _$_SketchLine &&
+            const DeepCollectionEquality().equals(other._points, _points) &&
             const DeepCollectionEquality().equals(other.color, color) &&
             const DeepCollectionEquality().equals(other.width, width));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(points),
+      const DeepCollectionEquality().hash(_points),
       const DeepCollectionEquality().hash(color),
       const DeepCollectionEquality().hash(width));
 
   @JsonKey(ignore: true)
   @override
-  _$SketchLineCopyWith<_SketchLine> get copyWith =>
-      __$SketchLineCopyWithImpl<_SketchLine>(this, _$identity);
+  _$$_SketchLineCopyWith<_$_SketchLine> get copyWith =>
+      __$$_SketchLineCopyWithImpl<_$_SketchLine>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -185,21 +172,21 @@ class _$_SketchLine implements _SketchLine {
 
 abstract class _SketchLine implements SketchLine {
   const factory _SketchLine(
-      {required List<Point> points,
-      required int color,
-      required double width}) = _$_SketchLine;
+      {required final List<Point> points,
+      required final int color,
+      required final double width}) = _$_SketchLine;
 
   factory _SketchLine.fromJson(Map<String, dynamic> json) =
       _$_SketchLine.fromJson;
 
   @override
-  List<Point> get points;
+  List<Point> get points => throw _privateConstructorUsedError;
   @override
-  int get color;
+  int get color => throw _privateConstructorUsedError;
   @override
-  double get width;
+  double get width => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
-  _$SketchLineCopyWith<_SketchLine> get copyWith =>
+  _$$_SketchLineCopyWith<_$_SketchLine> get copyWith =>
       throw _privateConstructorUsedError;
 }
