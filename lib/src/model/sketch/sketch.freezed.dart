@@ -12,11 +12,29 @@ part of 'sketch.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 Sketch _$SketchFromJson(Map<String, dynamic> json) {
   return _Sketch.fromJson(json);
 }
+
+/// @nodoc
+class _$SketchTearOff {
+  const _$SketchTearOff();
+
+  _Sketch call({required List<SketchLine> lines}) {
+    return _Sketch(
+      lines: lines,
+    );
+  }
+
+  Sketch fromJson(Map<String, Object?> json) {
+    return Sketch.fromJson(json);
+  }
+}
+
+/// @nodoc
+const $Sketch = _$SketchTearOff();
 
 /// @nodoc
 mixin _$Sketch {
@@ -56,29 +74,29 @@ class _$SketchCopyWithImpl<$Res> implements $SketchCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$$_SketchCopyWith<$Res> implements $SketchCopyWith<$Res> {
-  factory _$$_SketchCopyWith(_$_Sketch value, $Res Function(_$_Sketch) then) =
-      __$$_SketchCopyWithImpl<$Res>;
+abstract class _$SketchCopyWith<$Res> implements $SketchCopyWith<$Res> {
+  factory _$SketchCopyWith(_Sketch value, $Res Function(_Sketch) then) =
+      __$SketchCopyWithImpl<$Res>;
   @override
   $Res call({List<SketchLine> lines});
 }
 
 /// @nodoc
-class __$$_SketchCopyWithImpl<$Res> extends _$SketchCopyWithImpl<$Res>
-    implements _$$_SketchCopyWith<$Res> {
-  __$$_SketchCopyWithImpl(_$_Sketch _value, $Res Function(_$_Sketch) _then)
-      : super(_value, (v) => _then(v as _$_Sketch));
+class __$SketchCopyWithImpl<$Res> extends _$SketchCopyWithImpl<$Res>
+    implements _$SketchCopyWith<$Res> {
+  __$SketchCopyWithImpl(_Sketch _value, $Res Function(_Sketch) _then)
+      : super(_value, (v) => _then(v as _Sketch));
 
   @override
-  _$_Sketch get _value => super._value as _$_Sketch;
+  _Sketch get _value => super._value as _Sketch;
 
   @override
   $Res call({
     Object? lines = freezed,
   }) {
-    return _then(_$_Sketch(
+    return _then(_Sketch(
       lines: lines == freezed
-          ? _value._lines
+          ? _value.lines
           : lines // ignore: cast_nullable_to_non_nullable
               as List<SketchLine>,
     ));
@@ -88,17 +106,13 @@ class __$$_SketchCopyWithImpl<$Res> extends _$SketchCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_Sketch implements _Sketch {
-  const _$_Sketch({required final List<SketchLine> lines}) : _lines = lines;
+  const _$_Sketch({required this.lines});
 
   factory _$_Sketch.fromJson(Map<String, dynamic> json) =>
       _$$_SketchFromJson(json);
 
-  final List<SketchLine> _lines;
   @override
-  List<SketchLine> get lines {
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_lines);
-  }
+  final List<SketchLine> lines;
 
   @override
   String toString() {
@@ -109,19 +123,18 @@ class _$_Sketch implements _Sketch {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Sketch &&
-            const DeepCollectionEquality().equals(other._lines, _lines));
+            other is _Sketch &&
+            const DeepCollectionEquality().equals(other.lines, lines));
   }
 
-  @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_lines));
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(lines));
 
   @JsonKey(ignore: true)
   @override
-  _$$_SketchCopyWith<_$_Sketch> get copyWith =>
-      __$$_SketchCopyWithImpl<_$_Sketch>(this, _$identity);
+  _$SketchCopyWith<_Sketch> get copyWith =>
+      __$SketchCopyWithImpl<_Sketch>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -130,14 +143,13 @@ class _$_Sketch implements _Sketch {
 }
 
 abstract class _Sketch implements Sketch {
-  const factory _Sketch({required final List<SketchLine> lines}) = _$_Sketch;
+  const factory _Sketch({required List<SketchLine> lines}) = _$_Sketch;
 
   factory _Sketch.fromJson(Map<String, dynamic> json) = _$_Sketch.fromJson;
 
   @override
-  List<SketchLine> get lines => throw _privateConstructorUsedError;
+  List<SketchLine> get lines;
   @override
   @JsonKey(ignore: true)
-  _$$_SketchCopyWith<_$_Sketch> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$SketchCopyWith<_Sketch> get copyWith => throw _privateConstructorUsedError;
 }
