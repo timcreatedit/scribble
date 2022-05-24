@@ -16,6 +16,7 @@ dependencies:
   history_state_notifier: ^0.0.5
   state_notifier: ^0.7.2+1
   vector_math: ^2.1.1
+  perfect_freehand: ^1.0.4
 
 dev_dependencies:
   build_runner: ^2.1.8
