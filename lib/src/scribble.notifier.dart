@@ -352,8 +352,7 @@ class ScribbleNotifier extends ScribbleNotifierBase
 
   /// Converts a pointer event to the [Point] on the canvas.
   Point _getPointFromEvent(PointerEvent event) {
-    final overridePressureOnWeb = event is PointerHoverEvent && kIsWeb;
-    final p = overridePressureOnWeb || event.pressureMin == event.pressureMax
+    final p = kIsWeb || event.pressureMin == event.pressureMax
         ? 0.5
         : (event.pressure - event.pressureMin) /
             (event.pressureMax - event.pressureMin);

@@ -1,7 +1,5 @@
-import 'dart:math';
 import 'dart:ui';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:perfect_freehand/perfect_freehand.dart' as pf;
 import 'package:scribble/scribble.dart';
@@ -11,14 +9,7 @@ class ScribblePainter extends CustomPainter {
     required this.state,
     required this.drawPointer,
     required this.drawEraser,
-    required this.pressureFactor,
-    required this.speedFactor,
-    required this.minWidthFactor,
   });
-
-  final double pressureFactor;
-  final double speedFactor;
-  final double minWidthFactor;
 
   final ScribbleState state;
   final bool drawPointer;
@@ -32,17 +23,23 @@ class ScribblePainter extends CustomPainter {
 
     for (int i = 0; i < lines.length; ++i) {
       final line = lines[i];
+      final simulatePressure = line.points.isNotEmpty &&
+          line.points.every((p) => p.pressure == line.points.first.pressure);
       paint.color = Color(lines[i].color);
-      final points = line.points.map((point) =>
-          pf.Point(point.x, point.y, point.pressure)).toList();
-      final outlinePoints = pf.getStroke(points, size: line.width * 2);
+      final points = line.points
+          .map((point) => pf.Point(point.x, point.y, point.pressure))
+          .toList();
+      final outlinePoints = pf.getStroke(
+        points,
+        size: line.width * 2 * state.scaleFactor,
+        simulatePressure: simulatePressure,
+      );
       final path = Path();
       if (outlinePoints.isEmpty) {
         continue;
       } else if (outlinePoints.length < 2) {
         path.addOval(Rect.fromCircle(
-            center: Offset(outlinePoints[0].x, outlinePoints[0].y),
-            radius: 1));
+            center: Offset(outlinePoints[0].x, outlinePoints[0].y), radius: 1));
       } else {
         path.moveTo(outlinePoints[0].x, outlinePoints[0].y);
         for (int i = 1; i < outlinePoints.length - 1; ++i) {
@@ -67,23 +64,11 @@ class ScribblePainter extends CustomPainter {
       );
       paint.strokeWidth = 1;
       canvas.drawCircle(
-          state.pointerPosition!.asOffset,
-          _getWidth(
-            state.selectedWidth / state.scaleFactor,
-            state.pointerPosition!.pressure,
-            0,
-          ),
-          paint);
+        state.pointerPosition!.asOffset,
+        state.selectedWidth / state.scaleFactor,
+        paint,
+      );
     }
-  }
-
-  double _getWidth(double baseWidth, double pressure, double distance) {
-    final speed = distance / (1000 / 60);
-    final pressureInfluence = pressure * baseWidth * 2 * pressureFactor -
-        baseWidth * pressureFactor;
-
-    final speedInfluence = -baseWidth * speed * speedFactor;
-    return max(baseWidth + pressureInfluence + speedInfluence, baseWidth * minWidthFactor);
   }
 
   @override
