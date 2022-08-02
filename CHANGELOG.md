@@ -1,3 +1,5 @@
+## 0.9.1
+- removed erroneous `simulatePressure`
 ## 0.9.0
 - Use `perfect_freehand` for much smoother lines (thanks to @mattrussell-sonocent)
 - BREAKING: Removed line customization parameters from widgets
