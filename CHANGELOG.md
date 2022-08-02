@@ -1,3 +1,7 @@
+## 0.9.0
+- Use `perfect_freehand` for much smoother lines (thanks to @mattrussell-sonocent)
+- BREAKING: Removed line customization parameters from widgets
+
 ## 0.4.0
 - Upgraded dependencies (thanks to @wxxedu)
 - ``ScribbleNotifier.clear()`` clears the drawing without resetting anything else (color, width e.t.c)
