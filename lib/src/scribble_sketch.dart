@@ -7,13 +7,10 @@ class ScribbleSketch extends StatelessWidget {
   const ScribbleSketch({
     Key? key,
     required this.sketch,
-    required this.simulatePressure,
   }) : super(key: key);
 
   /// The sketch to display
   final Sketch sketch;
-
-  final bool? simulatePressure;
 
   @override
   Widget build(BuildContext context) {
