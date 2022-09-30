@@ -169,6 +169,7 @@ class ScribbleNotifier extends ScribbleNotifierBase
       sketch: state.sketch,
       selectedWidth: state.selectedWidth,
       scaleFactor: state.scaleFactor,
+      allowedPointersMode: state.allowedPointersMode,
       activePointerIds: state.activePointerIds,
     );
   }
@@ -198,11 +199,13 @@ class ScribbleNotifier extends ScribbleNotifierBase
         sketch: s.sketch,
         selectedColor: color.value,
         selectedWidth: s.selectedWidth,
+        allowedPointersMode: s.allowedPointersMode,
       ),
       erasing: (s) => ScribbleState.drawing(
         sketch: s.sketch,
         selectedColor: color.value,
         selectedWidth: s.selectedWidth,
+        allowedPointersMode: s.allowedPointersMode,
         scaleFactor: state.scaleFactor,
         activePointerIds: state.activePointerIds,
       ),
