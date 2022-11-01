@@ -7,18 +7,24 @@ class ScribbleSketch extends StatelessWidget {
   const ScribbleSketch({
     Key? key,
     required this.sketch,
+    this.scaleFactor = 1,
   }) : super(key: key);
 
   /// The sketch to display
   final Sketch sketch;
 
+  /// How much the widget is scaled at the moment.
+  ///
+  /// Can be used if zoom functionality is needed
+  /// (e.g. through InteractiveViewer) so that the pen width remains the same.
+  final double scaleFactor;
+
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: ScribblePainter(
-        state: ScribbleState.drawing(sketch: sketch),
-        drawPointer: false,
-        drawEraser: false,
+        sketch: sketch,
+        scaleFactor: 1.0,
       ),
     );
   }
