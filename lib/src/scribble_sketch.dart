@@ -24,7 +24,7 @@ class ScribbleSketch extends StatelessWidget {
     return CustomPaint(
       painter: ScribblePainter(
         sketch: sketch,
-        scaleFactor: 1.0,
+        scaleFactor: scaleFactor,
       ),
     );
   }
