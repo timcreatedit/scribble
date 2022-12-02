@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:scribble/src/scribble.notifier.dart';
+import 'package:scribble/src/scribble_editing_painter.dart';
 import 'package:scribble/src/scribble_painter.dart';
 import 'package:scribble/src/state/scribble.state.dart';
 
@@ -48,13 +49,19 @@ class _ScribbleState extends State<Scribble> {
         final drawCurrentTool = widget.drawPen && state is Drawing ||
             widget.drawEraser && state is Erasing;
         final child = SizedBox.expand(
-          child: RepaintBoundary(
-            key: widget.notifier.repaintBoundaryKey,
-            child: CustomPaint(
-              painter: ScribblePainter(
-                state: state,
-                drawPointer: widget.drawPen,
-                drawEraser: widget.drawEraser,
+          child: CustomPaint(
+            foregroundPainter: ScribbleEditingPainter(
+              state: state,
+              drawPointer: widget.drawPen,
+              drawEraser: widget.drawEraser,
+            ),
+            child: RepaintBoundary(
+              key: widget.notifier.repaintBoundaryKey,
+              child: CustomPaint(
+                painter: ScribblePainter(
+                  sketch: state.sketch,
+                  scaleFactor: state.scaleFactor,
+                ),
               ),
             ),
           ),
