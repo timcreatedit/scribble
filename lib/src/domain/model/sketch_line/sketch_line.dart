@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:scribble/src/model/sketch/point/point.dart';
+import 'package:scribble/src/domain/model/point/point.dart';
 
 part 'sketch_line.freezed.dart';
 part 'sketch_line.g.dart';
@@ -14,5 +14,4 @@ class SketchLine with _$SketchLine {
 
   factory SketchLine.fromJson(Map<String, dynamic> json) =>
       _$SketchLineFromJson(json);
-
 }

@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:scribble/src/model/sketch/sketch.dart';
+import 'package:scribble/src/domain/model/sketch/sketch.dart';
 
 part 'scribble.state.freezed.dart';
 
@@ -14,13 +14,10 @@ enum ScribblePointerMode {
   mouseAndPen,
 }
 
+/// Represents the state of the scribble widget.
 @freezed
-class ScribbleState with _$ScribbleState {
-  /// Constructs a [ScribbleState] from a JSON object.
-  factory ScribbleState.fromJson(Map<String, dynamic> json) =>
-      _$ScribbleStateFromJson(json);
-  const ScribbleState._();
-
+sealed class ScribbleState with _$ScribbleState {
+  /// The state of the scribble widget when it is being drawn on.
   const factory ScribbleState.drawing({
     /// The current state of the sketch
     required Sketch sketch,
@@ -52,6 +49,7 @@ class ScribbleState with _$ScribbleState {
     @Default(1) double scaleFactor,
   }) = Drawing;
 
+  /// The state of the scribble widget when the user is currently erasing.
   const factory ScribbleState.erasing({
     /// The current state of the sketch
     required Sketch sketch,
@@ -76,6 +74,11 @@ class ScribbleState with _$ScribbleState {
     /// (e.g. through InteractiveViewer) so that the pen width remains the same.
     @Default(1) double scaleFactor,
   }) = Erasing;
+
+  /// Constructs a [ScribbleState] from a JSON object.
+  factory ScribbleState.fromJson(Map<String, dynamic> json) =>
+      _$ScribbleStateFromJson(json);
+  const ScribbleState._();
 
   /// Returns whether the widget is currently active, meaning that only one
   /// pointer is interacting with the widget.

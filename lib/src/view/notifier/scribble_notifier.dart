@@ -5,26 +5,48 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:history_value_notifier/history_value_notifier.dart';
-import 'package:scribble/src/model/sketch/sketch.dart';
-import 'package:scribble/src/state/scribble.state.dart';
+import 'package:scribble/scribble.dart';
+import 'package:scribble/src/view/painting/point_to_offset_x.dart';
 
+/// {@template scribble_notifier_base}
+/// The base class for a notifier that controls the state of a [Scribble]
+/// widget.
+///
+/// This class is meant to be extended by a concrete implementation that
+/// provides the actual behavior.
+///
+/// See [ScribbleNotifier] for the default implementation.
+/// {@endtemplate}
 abstract class ScribbleNotifierBase extends ValueNotifier<ScribbleState> {
+  /// {@macro scribble_notifier_base}
   ScribbleNotifierBase(super.state);
 
-  /// You need to provide a key that the [RepointBoundary] can use so you can
+  /// You need to provide a key that the [RepaintBoundary] can use so you can
   /// access it from the [renderImage] method.
   GlobalKey get repaintBoundaryKey;
 
+  /// Should be called when the pointer hovers over the canvas with the
+  /// corresponding [event].
   void onPointerHover(PointerHoverEvent event);
 
+  /// Should be called when the pointer is pressed down on the canvas with the
+  /// corresponding [event].
   void onPointerDown(PointerDownEvent event);
 
+  /// Should be called when the pointer is moved on the canvas with the
+  /// corresponding [event].
   void onPointerUpdate(PointerMoveEvent event);
 
+  /// Should be called when the pointer is lifted from the canvas with the
+  /// corresponding [event].
   void onPointerUp(PointerUpEvent event);
 
+  /// Should be called when the pointer is canceled with the corresponding
+  /// [event].
   void onPointerCancel(PointerCancelEvent event);
 
+  /// Should be called when the pointer exits the canvas with the corresponding
+  /// [event].
   void onPointerExit(PointerExitEvent event);
 
   /// Used to render the image to ByteData which can then be stored or reused
@@ -37,21 +59,27 @@ abstract class ScribbleNotifierBase extends ValueNotifier<ScribbleState> {
     double pixelRatio = 1.0,
     ui.ImageByteFormat format = ui.ImageByteFormat.png,
   }) async {
-    final RenderRepaintBoundary? renderObject =
-        repaintBoundaryKey.currentContext?.findRenderObject()
-            as RenderRepaintBoundary?;
+    final renderObject = repaintBoundaryKey.currentContext?.findRenderObject()
+        as RenderRepaintBoundary?;
     if (renderObject == null) {
       throw StateError(
-          "Tried to convert Scribble to Image, but no valid RenderObject was found!");
+        "Tried to convert Scribble to Image, but no valid RenderObject was "
+        "found!",
+      );
     }
     final img = await renderObject.toImage(pixelRatio: pixelRatio);
     return (await img.toByteData(format: format))!;
   }
 }
 
+/// {@template scribble_notifier}
+/// The default implementation of a [ScribbleNotifierBase].
+///
 /// This class controls the state and behavior for a [Scribble] widget.
+/// {@endtemplate}
 class ScribbleNotifier extends ScribbleNotifierBase
     with HistoryValueNotifierMixin<ScribbleState> {
+  /// {@macro scribble_notifier}
   ScribbleNotifier({
     /// If you pass a sketch here, the notifier will use that sketch as a
     /// starting point.
@@ -109,7 +137,9 @@ class ScribbleNotifier extends ScribbleNotifierBase
   @override
   @protected
   ScribbleState transformHistoryValue(
-      ScribbleState historyValue, ScribbleState currentState) {
+    ScribbleState historyValue,
+    ScribbleState currentState,
+  ) {
     return currentState.copyWith(
       sketch: historyValue.sketch,
     );
@@ -172,7 +202,8 @@ class ScribbleNotifier extends ScribbleNotifierBase
     );
   }
 
-  /// Sets the current mode of allowed pointers to the given [ScribblePointerMode]
+  /// Sets the current mode of allowed pointers to the given
+  /// [ScribblePointerMode]
   void setAllowedPointersMode(ScribblePointerMode allowedPointersMode) {
     temporaryValue = value.copyWith(
       allowedPointersMode: allowedPointersMode,
@@ -182,9 +213,9 @@ class ScribbleNotifier extends ScribbleNotifierBase
   /// Sets the zoom factor to allow for adjusting line width.
   ///
   /// If the factor is 2 for example, lines will be drawn half as thick as
-  /// actually selected to allow for drawing details.
+  /// actually selected to allow for drawing details. Has to be greater than 0.
   void setScaleFactor(double factor) {
-    assert(factor >= 0);
+    assert(factor > 0, "The scale factor must be greater than 0.");
     temporaryValue = value.copyWith(
       scaleFactor: factor,
     );
@@ -224,19 +255,20 @@ class ScribbleNotifier extends ScribbleNotifierBase
   @override
   void onPointerDown(PointerDownEvent event) {
     if (!value.supportedPointerKinds.contains(event.kind)) return;
-    ScribbleState s = value;
+    var s = value;
 
     // Are there already pointers on the screen?
     if (value.activePointerIds.isNotEmpty) {
       s = value.map(
-          drawing: (s) =>
-              // If the current line already contains something
-              (s.activeLine != null && s.activeLine!.points.length > 2)
-                  ? _finishLineForState(s)
-                  : s.copyWith(
-                      activeLine: null,
-                    ),
-          erasing: (s) => s);
+        drawing: (s) =>
+            // If the current line already contains something
+            (s.activeLine != null && s.activeLine!.points.length > 2)
+                ? _finishLineForState(s)
+                : s.copyWith(
+                    activeLine: null,
+                  ),
+        erasing: (s) => s,
+      );
     } else if (value is Drawing) {
       s = (value as Drawing).copyWith(
         pointerPosition: _getPointFromEvent(event),
@@ -344,9 +376,13 @@ class ScribbleNotifier extends ScribbleNotifierBase
   ScribbleState _erasePoint(PointerEvent event) {
     return value.copyWith.sketch(
       lines: value.sketch.lines
-          .where((l) => l.points.every((p) =>
-              (event.localPosition - p.asOffset).distance >
-              l.width + value.selectedWidth))
+          .where(
+            (l) => l.points.every(
+              (p) =>
+                  (event.localPosition - p.asOffset).distance >
+                  l.width + value.selectedWidth,
+            ),
+          )
           .toList(),
     );
   }

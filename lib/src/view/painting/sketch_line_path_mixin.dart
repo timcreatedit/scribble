@@ -1,9 +1,12 @@
 import 'dart:ui';
 
 import 'package:perfect_freehand/perfect_freehand.dart' as pf;
-import 'package:scribble/src/model/sketch/sketch.dart';
+import 'package:scribble/src/domain/model/sketch/sketch.dart';
 
 /// A mixin for generating a [Path] from a [SketchLine].
+///
+/// Provides the method [getPathForLine] which generates a smooth [Path] from a
+/// [SketchLine].
 mixin SketchLinePathMixin {
   /// Generates a [Path] from a [SketchLine].
   ///
@@ -28,10 +31,12 @@ mixin SketchLinePathMixin {
       return null;
     } else if (outlinePoints.length < 2) {
       return Path()
-        ..addOval(Rect.fromCircle(
-          center: Offset(outlinePoints[0].dx, outlinePoints[0].dy),
-          radius: 1,
-        ));
+        ..addOval(
+          Rect.fromCircle(
+            center: Offset(outlinePoints[0].dx, outlinePoints[0].dy),
+            radius: 1,
+          ),
+        );
     } else {
       final path = Path()..moveTo(outlinePoints[0].dx, outlinePoints[0].dy);
 

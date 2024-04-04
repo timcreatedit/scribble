@@ -1,6 +1,6 @@
 import 'package:flutter/rendering.dart';
 import 'package:scribble/scribble.dart';
-import 'package:scribble/src/sketch_line_path_mixin.dart';
+import 'package:scribble/src/view/painting/sketch_line_path_mixin.dart';
 
 class ScribblePainter extends CustomPainter with SketchLinePathMixin {
   ScribblePainter({
@@ -15,9 +15,9 @@ class ScribblePainter extends CustomPainter with SketchLinePathMixin {
 
   @override
   void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()..style = PaintingStyle.fill;
+    final paint = Paint()..style = PaintingStyle.fill;
 
-    for (int i = 0; i < lines.length; ++i) {
+    for (var i = 0; i < lines.length; ++i) {
       final path = getPathForLine(lines[i]);
       if (path == null) {
         continue;

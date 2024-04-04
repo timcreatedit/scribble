@@ -3,10 +3,8 @@ import 'package:flutter/widgets.dart';
 
 class GestureCatcher extends StatelessWidget {
   const GestureCatcher({
-    Key? key,
-    required this.pointerKindsToCatch,
-    required this.child,
-  }) : super(key: key);
+    required this.pointerKindsToCatch, required this.child, super.key,
+  });
 
   final Set<PointerDeviceKind> pointerKindsToCatch;
   final Widget child;
@@ -45,8 +43,8 @@ class GestureCatcherRecognizer extends OneSequenceGestureRecognizer {
   /// Create a gesture recognizer for tracking movement on a plane.
   GestureCatcherRecognizer({
     required Set<PointerDeviceKind> pointerKindsToCatch,
-    Object? debugOwner,
-  }) : super(debugOwner: debugOwner, supportedDevices: pointerKindsToCatch);
+    super.debugOwner,
+  }) : super(supportedDevices: pointerKindsToCatch);
 
   @override
   String get debugDescription => 'pan catcher';

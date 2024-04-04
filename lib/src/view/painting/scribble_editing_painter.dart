@@ -1,16 +1,31 @@
 import 'package:flutter/rendering.dart';
 import 'package:scribble/scribble.dart';
-import 'package:scribble/src/sketch_line_path_mixin.dart';
+import 'package:scribble/src/view/painting/point_to_offset_x.dart';
+import 'package:scribble/src/view/painting/sketch_line_path_mixin.dart';
 
+/// {@template scribble_editing_painter}
+/// A painter for drawing the current state of a scribble sketch.
+/// {@endtemplate}
 class ScribbleEditingPainter extends CustomPainter with SketchLinePathMixin {
+  /// {@macro scribble_editing_painter}
   ScribbleEditingPainter({
     required this.state,
     required this.drawPointer,
     required this.drawEraser,
   });
 
+  /// The current state of the scribble sketch
   final ScribbleState state;
+
+  /// Whether to draw the pointer when in drawing mode.
+  ///
+  /// The pointer will be drawn as a filled circle with the currently selected
+  /// color.
   final bool drawPointer;
+
+  /// Whether to draw the pointer when in erasing mode
+  ///
+  /// The pointer will be drawn as a transparent circle with a black border.
   final bool drawEraser;
 
   @override

@@ -2,17 +2,20 @@ import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:scribble/src/core/pan_gesture_catcher.dart';
-import 'package:scribble/src/scribble.notifier.dart';
-import 'package:scribble/src/scribble_editing_painter.dart';
-import 'package:scribble/src/scribble_painter.dart';
-import 'package:scribble/src/state/scribble.state.dart';
+import 'package:scribble/src/view/state/scribble.state.dart';
+import 'package:scribble/src/view/notifier/scribble_notifier.dart';
+import 'package:scribble/src/view/painting/scribble_editing_painter.dart';
+import 'package:scribble/src/view/painting/scribble_painter.dart';
+import 'package:scribble/src/view/pan_gesture_catcher.dart';
 
+/// {@template scribble}
 /// This Widget represents a canvas on which users can draw with any pointer.
 ///
 /// You can control its behavior from code using the [notifier] instance you
 /// pass in.
-class Scribble extends StatefulWidget {
+/// {@endtemplate}
+class Scribble extends StatelessWidget {
+  /// {@macro scribble}
   const Scribble({
     /// The notifier that controls this canvas.
     required this.notifier,
@@ -22,8 +25,8 @@ class Scribble extends StatefulWidget {
 
     /// Whether to draw the pointer when in erasing mode
     this.drawEraser = true,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   /// The notifier that controls this canvas.
   final ScribbleNotifierBase notifier;
@@ -33,28 +36,22 @@ class Scribble extends StatefulWidget {
 
   /// Whether to draw the pointer when in erasing mode
   final bool drawEraser;
-
-  @override
-  State<Scribble> createState() => _ScribbleState();
-}
-
-class _ScribbleState extends State<Scribble> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ScribbleState>(
-      valueListenable: widget.notifier,
+      valueListenable: notifier,
       builder: (context, state, _) {
-        final drawCurrentTool = widget.drawPen && state is Drawing ||
-            widget.drawEraser && state is Erasing;
+        final drawCurrentTool =
+            drawPen && state is Drawing || drawEraser && state is Erasing;
         final child = SizedBox.expand(
           child: CustomPaint(
             foregroundPainter: ScribbleEditingPainter(
               state: state,
-              drawPointer: widget.drawPen,
-              drawEraser: widget.drawEraser,
+              drawPointer: drawPen,
+              drawEraser: drawEraser,
             ),
             child: RepaintBoundary(
-              key: widget.notifier.repaintBoundaryKey,
+              key: notifier.repaintBoundaryKey,
               child: CustomPaint(
                 painter: ScribblePainter(
                   sketch: state.sketch,
@@ -74,13 +71,13 @@ class _ScribbleState extends State<Scribble> {
                               .contains(PointerDeviceKind.mouse)
                       ? SystemMouseCursors.none
                       : MouseCursor.defer,
-                  onExit: widget.notifier.onPointerExit,
+                  onExit: notifier.onPointerExit,
                   child: Listener(
-                    onPointerDown: widget.notifier.onPointerDown,
-                    onPointerMove: widget.notifier.onPointerUpdate,
-                    onPointerUp: widget.notifier.onPointerUp,
-                    onPointerHover: widget.notifier.onPointerHover,
-                    onPointerCancel: widget.notifier.onPointerCancel,
+                    onPointerDown: notifier.onPointerDown,
+                    onPointerMove: notifier.onPointerUpdate,
+                    onPointerUp: notifier.onPointerUp,
+                    onPointerHover: notifier.onPointerHover,
+                    onPointerCancel: notifier.onPointerCancel,
                     child: child,
                   ),
                 ),
