@@ -1,0 +1,41 @@
+name: ci
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  semantic_pull_request:
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@v1
+
+  flutter-check:
+    name: Build Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: 📚 Checkout
+        uses: actions/checkout@v4
+      
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+      
+      - name: Ⓜ️ Set up Melos
+        uses: bluefireteam/melos-action@v2
+
+      - name: 🧪 Run Analyze
+        run: melos run analyze
+
+      - name: 📝 Run Test
+        run: melos run coverage
+  

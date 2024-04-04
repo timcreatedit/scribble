@@ -24,7 +24,7 @@ class GestureCatcher extends StatelessWidget {
           ),
           (GestureCatcherRecognizer instance) {
           },
-        )
+        ),
       },
       child: child,
     );

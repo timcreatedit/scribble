@@ -16,6 +16,9 @@ enum ScribblePointerMode {
 
 @freezed
 class ScribbleState with _$ScribbleState {
+  /// Constructs a [ScribbleState] from a JSON object.
+  factory ScribbleState.fromJson(Map<String, dynamic> json) =>
+      _$ScribbleStateFromJson(json);
   const ScribbleState._();
 
   const factory ScribbleState.drawing({
@@ -74,16 +77,21 @@ class ScribbleState with _$ScribbleState {
     @Default(1) double scaleFactor,
   }) = Erasing;
 
+  /// Returns whether the widget is currently active, meaning that only one
+  /// pointer is interacting with the widget.
   bool get active => activePointerIds.length <= 1;
 
+  /// Returns the list of lines that should be drawn on the canvas by
+  /// combining the sketches lines with the current active line if it exists.
   List<SketchLine> get lines => map(
-      drawing: (d) => d.activeLine == null
-          ? sketch.lines
-          : [...sketch.lines, d.activeLine!],
-      erasing: (d) => d.sketch.lines);
+        drawing: (d) => d.activeLine == null
+            ? sketch.lines
+            : [...sketch.lines, d.activeLine!],
+        erasing: (d) => d.sketch.lines,
+      );
 
   /// Returns a set of [PointerDeviceKind] that represents the currently
-  /// supported devices, depending on [state.allowedPointersMode].
+  /// supported devices, depending on [ScribbleState.allowedPointersMode].
   Set<PointerDeviceKind> get supportedPointerKinds {
     switch (allowedPointersMode) {
       case ScribblePointerMode.all:
@@ -103,7 +111,4 @@ class ScribbleState with _$ScribbleState {
         };
     }
   }
-
-  factory ScribbleState.fromJson(Map<String, dynamic> json) =>
-      _$ScribbleStateFromJson(json);
 }

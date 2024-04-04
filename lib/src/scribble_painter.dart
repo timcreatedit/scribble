@@ -1,6 +1,7 @@
 import 'package:flutter/rendering.dart';
 import 'package:perfect_freehand/perfect_freehand.dart' as pf;
-import 'package:scribble/scribble.dart';
+import 'package:scribble/src/model/sketch/sketch_line/sketch_line.dart';
+import 'package:scribble/src/state/scribble.state.dart';
 
 class ScribblePainter extends CustomPainter with SketchLinePainter {
   ScribblePainter({

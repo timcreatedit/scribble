@@ -2,13 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_state_notifier/flutter_state_notifier.dart';
+import 'package:scribble/src/core/pan_gesture_catcher.dart';
 import 'package:scribble/src/scribble.notifier.dart';
 import 'package:scribble/src/scribble_editing_painter.dart';
 import 'package:scribble/src/scribble_painter.dart';
 import 'package:scribble/src/state/scribble.state.dart';
-
-import 'core/pan_gesture_catcher.dart';
 
 /// This Widget represents a canvas on which users can draw with any pointer.
 ///
@@ -43,8 +41,8 @@ class Scribble extends StatefulWidget {
 class _ScribbleState extends State<Scribble> {
   @override
   Widget build(BuildContext context) {
-    return StateNotifierBuilder<ScribbleState>(
-      stateNotifier: widget.notifier,
+    return ValueListenableBuilder<ScribbleState>(
+      valueListenable: widget.notifier,
       builder: (context, state, _) {
         final drawCurrentTool = widget.drawPen && state is Drawing ||
             widget.drawEraser && state is Erasing;

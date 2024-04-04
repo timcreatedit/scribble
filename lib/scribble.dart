@@ -1,3 +1,4 @@
+/// Scribble is a lightweight library for freehand drawing in Flutter
 library scribble;
 
 export 'package:scribble/src/model/sketch/sketch.dart';
