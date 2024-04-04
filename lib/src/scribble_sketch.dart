@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:scribble/src/model/sketch/sketch.dart';
 import 'package:scribble/src/scribble_painter.dart';
-import 'package:scribble/src/state/scribble.state.dart';
 
 /// {@template scribble_sketch}
 /// A widget for displaying a scribble sketch without any input functionalities.
@@ -11,7 +10,8 @@ class ScribbleSketch extends StatelessWidget {
   const ScribbleSketch({
     required this.sketch,
     this.scaleFactor = 1,
-  }) : super(key: key);
+    super.key,
+  }) ;
 
   /// The sketch to display
   final Sketch sketch;

@@ -163,12 +163,12 @@ class ScribbleNotifier extends ScribbleNotifierBase
 
   /// Switches to eraser mode
   void setEraser() {
-    temporaryState = ScribbleState.erasing(
-      sketch: state.sketch,
-      selectedWidth: state.selectedWidth,
-      scaleFactor: state.scaleFactor,
-      allowedPointersMode: state.allowedPointersMode,
-      activePointerIds: state.activePointerIds,
+    temporaryValue = ScribbleState.erasing(
+      sketch: value.sketch,
+      selectedWidth: value.selectedWidth,
+      scaleFactor: value.scaleFactor,
+      allowedPointersMode: value.allowedPointersMode,
+      activePointerIds: value.activePointerIds,
     );
   }
 
@@ -204,8 +204,8 @@ class ScribbleNotifier extends ScribbleNotifierBase
         selectedColor: color.value,
         selectedWidth: s.selectedWidth,
         allowedPointersMode: s.allowedPointersMode,
-        scaleFactor: state.scaleFactor,
-        activePointerIds: state.activePointerIds,
+        scaleFactor: value.scaleFactor,
+        activePointerIds: value.activePointerIds,
       ),
     );
   }
