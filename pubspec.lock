@@ -654,7 +654,7 @@ packages:
       path: "packages/value_notifier_tools"
       relative: true
     source: path
-    version: "0.1.0+1"
+    version: "0.1.1"
   vector_math:
     dependency: transitive
     description:
