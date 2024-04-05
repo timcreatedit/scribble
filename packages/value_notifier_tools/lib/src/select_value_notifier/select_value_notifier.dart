@@ -46,13 +46,15 @@ class SelectValueNotifier<FromT, ToT> extends ValueNotifier<ToT> {
 
 /// An extension on [ValueNotifier] that provides a `select` method to create a
 /// [SelectValueNotifier] from the notifier.
-extension SelectValueNotifierX<FromT, ToT> on ValueNotifier<FromT> {
+extension SelectValueNotifierX<FromT> on ValueNotifier<FromT> {
   /// Selects updates from this notifier using the provided [selector]
   /// function.
   ///
   /// The [selector] function is called whenever the parent notifier updates and
   /// the result is used as the new value for the [SelectValueNotifier].
-  SelectValueNotifier<FromT, ToT> select(Selector<FromT, ToT> selector) {
+  SelectValueNotifier<FromT, ToT> select<ToT>(
+    ToT Function(FromT value) selector,
+  ) {
     return SelectValueNotifier(
       parentNotifier: this,
       selector: selector,
