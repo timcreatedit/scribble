@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:scribble/scribble.dart';
+import 'package:value_notifier_tools/value_notifier_tools.dart';
 
 void main() {
   runApp(const MyApp());
@@ -218,26 +219,25 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildColorToolbar(BuildContext context) {
-    return ValueListenableBuilder<ScribbleState>(
-      valueListenable: notifier,
-      builder: (context, state, _) => Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          _buildColorButton(context, color: Colors.black, state: state),
-          _buildColorButton(context, color: Colors.red, state: state),
-          _buildColorButton(context, color: Colors.green, state: state),
-          _buildColorButton(context, color: Colors.blue, state: state),
-          _buildColorButton(context, color: Colors.yellow, state: state),
-          _buildEraserButton(context, isSelected: state is Erasing),
-        ],
-      ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        _buildColorButton(context, color: Colors.black),
+        _buildColorButton(context, color: Colors.red),
+        _buildColorButton(context, color: Colors.green),
+        _buildColorButton(context, color: Colors.blue),
+        _buildColorButton(context, color: Colors.yellow),
+        _buildEraserButton(context),
+      ],
     );
   }
 
   Widget _buildPointerModeSwitcher(BuildContext context) {
     return ValueListenableBuilder(
-        valueListenable: notifier,
+        valueListenable: notifier.select(
+          (value) => value.allowedPointersMode,
+        ),
         builder: (context, value, child) {
           return SegmentedButton<ScribblePointerMode>(
             multiSelectionEnabled: false,
@@ -255,33 +255,38 @@ class _HomePageState extends State<HomePage> {
                 label: Text("Pen only"),
               ),
             ],
-            selected: {value.allowedPointersMode},
+            selected: {value},
           );
         });
   }
 
-  Widget _buildEraserButton(BuildContext context, {required bool isSelected}) {
-    return ColorButton(
-      color: Colors.transparent,
-      outlineColor: Colors.black,
-      isActive: isSelected,
-      onPressed: () => notifier.setEraser(),
-      child: const Icon(Icons.cleaning_services),
+  Widget _buildEraserButton(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: notifier.select((value) => value is Erasing),
+      builder: (context, value, child) => ColorButton(
+        color: Colors.transparent,
+        outlineColor: Colors.black,
+        isActive: value,
+        onPressed: () => notifier.setEraser(),
+        child: const Icon(Icons.cleaning_services),
+      ),
     );
   }
 
   Widget _buildColorButton(
     BuildContext context, {
     required Color color,
-    required ScribbleState state,
   }) {
-    final isSelected = state is Drawing && state.selectedColor == color.value;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: ColorButton(
-        color: color,
-        isActive: isSelected,
-        onPressed: () => notifier.setColor(color),
+    return ValueListenableBuilder(
+      valueListenable: notifier.select(
+          (value) => value is Drawing && value.selectedColor == color.value),
+      builder: (context, value, child) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: ColorButton(
+          color: color,
+          isActive: value,
+          onPressed: () => notifier.setColor(color),
+        ),
       ),
     );
   }

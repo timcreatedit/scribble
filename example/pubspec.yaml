@@ -1,5 +1,5 @@
 name: example
-description: "A new Flutter project."
+description: "An example project for scribble."
 publish_to: 'none'
 version: 0.1.0
 
@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   scribble:
     path: ..
+  value_notifier_tools: ^0.1.1
 
 dev_dependencies:
   flutter_test:
