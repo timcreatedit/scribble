@@ -1,0 +1,20 @@
+name: value_notifier_tools
+description: Helpful lightweight tools for working with ValueNotifiers
+version: 0.1.1
+repository: https://github.com/timcreatedit/scribble/tree/main/packages/value_notifier_tools
+homepage: https://whynotmake.it
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  lintervention: ^0.1.1
+  mocktail: ^1.0.3
+  

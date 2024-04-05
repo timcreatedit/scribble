@@ -1,9 +1,22 @@
 # Scribble
+
+[![Powered by Mason](https://img.shields.io/endpoint?url=https%3A%2F%2Ftinyurl.com%2Fmason-badge)](https://github.com/felangel/mason)
+[![melos](https://img.shields.io/badge/maintained%20with-melos-f700ff.svg?style=flat-square)](https://github.com/invertase/melos)
+
+
 Scribble is a lightweight library for freehand drawing in Flutter supporting pressure, variable line width and more!
 
-![scribble_demo](./scribble_demo.gif)
+## Installation 💻
 
-> Note: Scribble is still in development and will receive more features down the line!
+**❗ In order to start using Scribble you must have the [Dart SDK][dart_install_link] installed on your machine.**
+
+Install via `dart pub add`:
+
+```sh
+dart pub add scribble
+```
+
+---
 
 ## Features
 
@@ -13,13 +26,9 @@ Scribble is a lightweight library for freehand drawing in Flutter supporting pre
 * Choose which pointers can draw (touch, pen, mouse, etc.)
 * Lines get slimmer when the pen is moved more quickly
 * Line eraser support
-* Full undo/redo support using [history_state_notifier](https://pub.dev/packages/history_state_notifier)
+* Full undo/redo support using [value_notifier_tools](https://pub.dev/packages/value_notifier_tools)
 * Sketches are fully serializable to JSON
-
-## Pipeline
-
-* [X] Load sketches
-* [X] PNG export
+* Export Sketches to PNG
 
 ## Usage
 
@@ -28,30 +37,16 @@ Scribble is a lightweight library for freehand drawing in Flutter supporting pre
 You can create a drawing surface by adding the ``Scribble`` widget to your widget tree and passing in
 a ``ScribbleNotifier``.
 
-Where you manage this notifier is up to you, but since it is a ``StateNotifier``, it works amazingly
-with [riverpod](https://pub.dev/packages/flutter_riverpod) for example.
-
-```dart
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-final scribbleStateProvider =
-StateNotifierProvider.autoDispose<ScribbleNotifier, ScribbleState>(
-      (ref) => ScribbleNotifier(),
-);
-```
-
-You can then pass the notifier to the scribble widget.
-
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class App extends ConsumerWidget {
+class App extends StatelessWidget {
   @override
-  Widget build(BuildContext context, ScopedReader watch) {
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Scribble(
-        notifier: watch(scribbleStateProvider.notifier),
+        notifier: notifier,
       ),
     );
   }
@@ -82,3 +77,11 @@ As mentioned above, the package is still under development, but we already use i
 developing.
 
 Feel free to contribute, or open issues in our [GitHub repo](https://github.com/timcreatedit/scribble).
+
+
+[dart_install_link]: https://dart.dev/get-dart
+[github_actions_link]: https://docs.github.com/en/actions/learn-github-actions
+[license_badge]: https://img.shields.io/badge/license-MIT-blue.svg
+[license_link]: https://opensource.org/licenses/MIT
+[mason_link]: https://github.com/felangel/mason
+[very_good_ventures_link]: https://verygood.ventures

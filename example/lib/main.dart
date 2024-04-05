@@ -1,29 +1,30 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:scribble/scribble.dart';
+import 'package:value_notifier_tools/value_notifier_tools.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Scribble',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData.from(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple)),
       home: const HomePage(title: 'Scribble'),
     );
   }
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key, required this.title}) : super(key: key);
+  const HomePage({super.key, required this.title});
 
   final String title;
 
@@ -43,58 +44,132 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         title: Text(widget.title),
-        leading: IconButton(
-          icon: const Icon(Icons.save),
-          tooltip: "Save to Image",
-          onPressed: () => _saveImage(context),
-        ),
+        actions: _buildActions(context),
       ),
-      body: SingleChildScrollView(
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height * 2,
-          child: Stack(
-            children: [
-              Scribble(
-                notifier: notifier,
-                drawPen: true,
-              ),
-              Positioned(
-                top: 16,
-                right: 16,
-                child: Column(
-                  children: [
-                    _buildColorToolbar(context),
-                    const Divider(
-                      height: 32,
-                    ),
-                    _buildStrokeToolbar(context),
-                  ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 64),
+        child: Column(
+          children: [
+            Expanded(
+              child: Card(
+                clipBehavior: Clip.hardEdge,
+                margin: EdgeInsets.zero,
+                color: Colors.white,
+                surfaceTintColor: Colors.white,
+                child: Scribble(
+                  notifier: notifier,
+                  drawPen: true,
                 ),
-              )
-            ],
-          ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  _buildColorToolbar(context),
+                  const VerticalDivider(width: 32),
+                  _buildStrokeToolbar(context),
+                  const Expanded(child: SizedBox()),
+                  _buildPointerModeSwitcher(context),
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );
   }
 
-  Future<void> _saveImage(BuildContext context) async {
-    final image = await notifier.renderImage();
+  List<Widget> _buildActions(context) {
+    return [
+      ValueListenableBuilder(
+        valueListenable: notifier,
+        builder: (context, value, child) => IconButton(
+          icon: child as Icon,
+          tooltip: "Undo",
+          onPressed: notifier.canUndo ? notifier.undo : null,
+        ),
+        child: const Icon(Icons.undo),
+      ),
+      ValueListenableBuilder(
+        valueListenable: notifier,
+        builder: (context, value, child) => IconButton(
+          icon: child as Icon,
+          tooltip: "Redo",
+          onPressed: notifier.canRedo ? notifier.redo : null,
+        ),
+        child: const Icon(Icons.redo),
+      ),
+      IconButton(
+        icon: const Icon(Icons.clear),
+        tooltip: "Clear",
+        onPressed: notifier.clear,
+      ),
+      IconButton(
+        icon: const Icon(Icons.image),
+        tooltip: "Show PNG Image",
+        onPressed: () => _showImage(context),
+      ),
+      IconButton(
+        icon: const Icon(Icons.data_object),
+        tooltip: "Show JSON",
+        onPressed: () => _showJson(context),
+      ),
+    ];
+  }
+
+  void _showImage(BuildContext context) async {
+    final image = notifier.renderImage();
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Your Image"),
-        content: Image.memory(image.buffer.asUint8List()),
+        title: const Text("Generated Image"),
+        content: SizedBox.expand(
+          child: FutureBuilder(
+            future: image,
+            builder: (context, snapshot) => snapshot.hasData
+                ? Image.memory(snapshot.data!.buffer.asUint8List())
+                : const Center(child: CircularProgressIndicator()),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: Navigator.of(context).pop,
+            child: const Text("Close"),
+          )
+        ],
+      ),
+    );
+  }
+
+  void _showJson(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Sketch as JSON"),
+        content: SizedBox.expand(
+          child: SelectableText(
+            jsonEncode(notifier.currentSketch.toJson()),
+            autofocus: true,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: Navigator.of(context).pop,
+            child: const Text("Close"),
+          )
+        ],
       ),
     );
   }
 
   Widget _buildStrokeToolbar(BuildContext context) {
-    return StateNotifierBuilder<ScribbleState>(
-      stateNotifier: notifier,
-      builder: (context, state, _) => Column(
+    return ValueListenableBuilder<ScribbleState>(
+      valueListenable: notifier,
+      builder: (context, state, _) => Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -144,78 +219,56 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildColorToolbar(BuildContext context) {
-    return StateNotifierBuilder<ScribbleState>(
-      stateNotifier: notifier,
-      builder: (context, state, _) => Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          _buildUndoButton(context),
-          const Divider(
-            height: 4.0,
-          ),
-          _buildRedoButton(context),
-          const Divider(
-            height: 4.0,
-          ),
-          _buildClearButton(context),
-          const Divider(
-            height: 20.0,
-          ),
-          _buildPointerModeSwitcher(context,
-              penMode:
-                  state.allowedPointersMode == ScribblePointerMode.penOnly),
-          const Divider(
-            height: 20.0,
-          ),
-          _buildEraserButton(context, isSelected: state is Erasing),
-          _buildColorButton(context, color: Colors.black, state: state),
-          _buildColorButton(context, color: Colors.red, state: state),
-          _buildColorButton(context, color: Colors.green, state: state),
-          _buildColorButton(context, color: Colors.blue, state: state),
-          _buildColorButton(context, color: Colors.yellow, state: state),
-        ],
-      ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        _buildColorButton(context, color: Colors.black),
+        _buildColorButton(context, color: Colors.red),
+        _buildColorButton(context, color: Colors.green),
+        _buildColorButton(context, color: Colors.blue),
+        _buildColorButton(context, color: Colors.yellow),
+        _buildEraserButton(context),
+      ],
     );
   }
 
-  Widget _buildPointerModeSwitcher(BuildContext context,
-      {required bool penMode}) {
-    return FloatingActionButton.small(
-      onPressed: () => notifier.setAllowedPointersMode(
-        penMode ? ScribblePointerMode.all : ScribblePointerMode.penOnly,
-      ),
-      tooltip:
-          "Switch drawing mode to " + (penMode ? "all pointers" : "pen only"),
-      child: AnimatedSwitcher(
-        duration: kThemeAnimationDuration,
-        child: !penMode
-            ? const Icon(
-                Icons.touch_app,
-                key: ValueKey(true),
-              )
-            : const Icon(
-                Icons.do_not_touch,
-                key: ValueKey(false),
+  Widget _buildPointerModeSwitcher(BuildContext context) {
+    return ValueListenableBuilder(
+        valueListenable: notifier.select(
+          (value) => value.allowedPointersMode,
+        ),
+        builder: (context, value, child) {
+          return SegmentedButton<ScribblePointerMode>(
+            multiSelectionEnabled: false,
+            emptySelectionAllowed: false,
+            onSelectionChanged: (v) => notifier.setAllowedPointersMode(v.first),
+            segments: const [
+              ButtonSegment(
+                value: ScribblePointerMode.all,
+                icon: Icon(Icons.touch_app),
+                label: Text("All pointers"),
               ),
-      ),
-    );
+              ButtonSegment(
+                value: ScribblePointerMode.penOnly,
+                icon: Icon(Icons.draw),
+                label: Text("Pen only"),
+              ),
+            ],
+            selected: {value},
+          );
+        });
   }
 
-  Widget _buildEraserButton(BuildContext context, {required bool isSelected}) {
-    return Padding(
-      padding: const EdgeInsets.all(4),
-      child: FloatingActionButton.small(
-        tooltip: "Erase",
-        backgroundColor: const Color(0xFFF7FBFF),
-        elevation: isSelected ? 10 : 2,
-        shape: !isSelected
-            ? const CircleBorder()
-            : RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-        child: const Icon(Icons.remove, color: Colors.blueGrey),
-        onPressed: notifier.setEraser,
+  Widget _buildEraserButton(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: notifier.select((value) => value is Erasing),
+      builder: (context, value, child) => ColorButton(
+        color: Colors.transparent,
+        outlineColor: Colors.black,
+        isActive: value,
+        onPressed: () => notifier.setEraser(),
+        child: const Icon(Icons.cleaning_services),
       ),
     );
   }
@@ -223,61 +276,68 @@ class _HomePageState extends State<HomePage> {
   Widget _buildColorButton(
     BuildContext context, {
     required Color color,
-    required ScribbleState state,
   }) {
-    final isSelected = state is Drawing && state.selectedColor == color.value;
-    return Padding(
-      padding: const EdgeInsets.all(4),
-      child: FloatingActionButton.small(
+    return ValueListenableBuilder(
+      valueListenable: notifier.select(
+          (value) => value is Drawing && value.selectedColor == color.value),
+      builder: (context, value, child) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: ColorButton(
+          color: color,
+          isActive: value,
+          onPressed: () => notifier.setColor(color),
+        ),
+      ),
+    );
+  }
+}
+
+class ColorButton extends StatelessWidget {
+  const ColorButton({
+    required this.color,
+    required this.isActive,
+    required this.onPressed,
+    this.outlineColor,
+    this.child,
+    super.key,
+  });
+
+  final Color color;
+
+  final Color? outlineColor;
+
+  final bool isActive;
+
+  final VoidCallback onPressed;
+
+  final Icon? child;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: kThemeAnimationDuration,
+      decoration: ShapeDecoration(
+        shape: CircleBorder(
+          side: BorderSide(
+            color: switch (isActive) {
+              true => outlineColor ?? color,
+              false => Colors.transparent,
+            },
+            width: 2,
+          ),
+        ),
+      ),
+      child: IconButton(
+        style: FilledButton.styleFrom(
           backgroundColor: color,
-          elevation: isSelected ? 10 : 2,
-          shape: !isSelected
-              ? const CircleBorder()
-              : RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-          child: Container(),
-          onPressed: () => notifier.setColor(color)),
-    );
-  }
-
-  Widget _buildUndoButton(
-    BuildContext context,
-  ) {
-    return FloatingActionButton.small(
-      tooltip: "Undo",
-      onPressed: notifier.canUndo ? notifier.undo : null,
-      disabledElevation: 0,
-      backgroundColor: notifier.canUndo ? Colors.blueGrey : Colors.grey,
-      child: const Icon(
-        Icons.undo_rounded,
-        color: Colors.white,
+          shape: const CircleBorder(),
+          side: isActive
+              ? const BorderSide(color: Colors.white, width: 2)
+              : const BorderSide(color: Colors.transparent),
+        ),
+        onPressed: onPressed,
+        icon: child ?? const SizedBox(),
       ),
-    );
-  }
-
-  Widget _buildRedoButton(
-    BuildContext context,
-  ) {
-    return FloatingActionButton.small(
-      tooltip: "Redo",
-      onPressed: notifier.canRedo ? notifier.redo : null,
-      disabledElevation: 0,
-      backgroundColor: notifier.canRedo ? Colors.blueGrey : Colors.grey,
-      child: const Icon(
-        Icons.redo_rounded,
-        color: Colors.white,
-      ),
-    );
-  }
-
-  Widget _buildClearButton(BuildContext context) {
-    return FloatingActionButton.small(
-      tooltip: "Clear",
-      onPressed: notifier.clear,
-      disabledElevation: 0,
-      backgroundColor: Colors.blueGrey,
-      child: const Icon(Icons.clear),
     );
   }
 }
