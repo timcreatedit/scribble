@@ -4,7 +4,8 @@ import 'package:scribble/src/view/painting/point_to_offset_x.dart';
 import 'package:scribble/src/view/painting/sketch_line_path_mixin.dart';
 
 /// {@template scribble_editing_painter}
-/// A painter for drawing the current state of a scribble sketch.
+/// A painter for drawing the currently active line of a scribble sketch, as
+/// well as the pointer when in drawing or erasing mode, if desired.
 /// {@endtemplate}
 class ScribbleEditingPainter extends CustomPainter with SketchLinePathMixin {
   /// {@macro scribble_editing_painter}

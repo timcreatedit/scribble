@@ -4,6 +4,9 @@ import 'package:scribble/src/view/painting/scribble_painter.dart';
 
 /// {@template scribble_sketch}
 /// A widget for displaying a scribble sketch without any input functionalities.
+///
+/// The sketch is expected to not have any active line, i.e. all lines are
+/// considered finished, the sketch is complete.
 /// {@endtemplate}
 class ScribbleSketch extends StatelessWidget {
   /// {@macro scribble_sketch}

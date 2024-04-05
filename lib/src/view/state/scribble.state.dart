@@ -7,10 +7,23 @@ part 'scribble.state.freezed.dart';
 
 part 'scribble.state.g.dart';
 
+/// Which pointers are allowed for drawing and will be captured by the scribble
+/// widget.
 enum ScribblePointerMode {
+  /// Allow drawing with all pointers.
   all,
+
+  /// Allow drawing with mouse only.
   mouseOnly,
+
+  /// Allow drawing with pen only.
+  ///
+  /// This is useful if you want to place the scribble widget in an
+  /// `InteractiveViewer` for example, so that it can be zoomed in and out
+  /// without drawing on it.
   penOnly,
+
+  /// Allow drawing with both mouse and pen.
   mouseAndPen,
 }
 
@@ -42,10 +55,12 @@ sealed class ScribbleState with _$ScribbleState {
     /// The current width of the pen
     @Default(5) double selectedWidth,
 
+    /// {@template view.state.scribble_state.scale_factor}
     /// How much the widget is scaled at the moment.
     ///
     /// Can be used if zoom functionality is needed
     /// (e.g. through InteractiveViewer) so that the pen width remains the same.
+    /// {@endtemplate}
     @Default(1) double scaleFactor,
   }) = Drawing;
 

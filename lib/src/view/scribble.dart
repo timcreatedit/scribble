@@ -2,11 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:scribble/src/view/state/scribble.state.dart';
 import 'package:scribble/src/view/notifier/scribble_notifier.dart';
 import 'package:scribble/src/view/painting/scribble_editing_painter.dart';
 import 'package:scribble/src/view/painting/scribble_painter.dart';
 import 'package:scribble/src/view/pan_gesture_catcher.dart';
+import 'package:scribble/src/view/state/scribble.state.dart';
 
 /// {@template scribble}
 /// This Widget represents a canvas on which users can draw with any pointer.
