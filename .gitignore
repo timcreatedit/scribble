@@ -1,3 +1,12 @@
+# Don't include platform code in example
+/example/android
+/example/ios
+/example/linux
+/example/macos
+/example/web
+/example/windows
+
+
 # Miscellaneous
 *.class
 *.log
