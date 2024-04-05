@@ -1,0 +1,34 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "build_runner build",
+			"type": "shell",
+			"command": "melos run build_runner",
+			"group": "build",			"presentation": {
+				"reveal": "silent",
+				"group": "build"
+			}
+		},
+		{
+			"label": "melos bullshit",
+			"type": "shell",
+			"group": "none",
+			"command": "melos bs",
+			"presentation": {
+				"reveal": "silent"
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "dart fix",
+			"group": "none",
+			"type": "shell",
+			"command": "melos run fix",
+			"presentation": {
+				"reveal": "silent"
+			},
+			"problemMatcher": []
+		}
+	]
+}

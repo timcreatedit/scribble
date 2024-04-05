@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'sketch.dart';
 
@@ -12,7 +12,7 @@ part of 'sketch.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 Sketch _$SketchFromJson(Map<String, dynamic> json) {
   return _Sketch.fromJson(json);
@@ -30,54 +30,60 @@ mixin _$Sketch {
 /// @nodoc
 abstract class $SketchCopyWith<$Res> {
   factory $SketchCopyWith(Sketch value, $Res Function(Sketch) then) =
-      _$SketchCopyWithImpl<$Res>;
+      _$SketchCopyWithImpl<$Res, Sketch>;
+  @useResult
   $Res call({List<SketchLine> lines});
 }
 
 /// @nodoc
-class _$SketchCopyWithImpl<$Res> implements $SketchCopyWith<$Res> {
+class _$SketchCopyWithImpl<$Res, $Val extends Sketch>
+    implements $SketchCopyWith<$Res> {
   _$SketchCopyWithImpl(this._value, this._then);
 
-  final Sketch _value;
   // ignore: unused_field
-  final $Res Function(Sketch) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? lines = freezed,
+    Object? lines = null,
   }) {
     return _then(_value.copyWith(
-      lines: lines == freezed
+      lines: null == lines
           ? _value.lines
           : lines // ignore: cast_nullable_to_non_nullable
               as List<SketchLine>,
-    ));
+    ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$_SketchCopyWith<$Res> implements $SketchCopyWith<$Res> {
-  factory _$$_SketchCopyWith(_$_Sketch value, $Res Function(_$_Sketch) then) =
-      __$$_SketchCopyWithImpl<$Res>;
+abstract class _$$SketchImplCopyWith<$Res> implements $SketchCopyWith<$Res> {
+  factory _$$SketchImplCopyWith(
+          _$SketchImpl value, $Res Function(_$SketchImpl) then) =
+      __$$SketchImplCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({List<SketchLine> lines});
 }
 
 /// @nodoc
-class __$$_SketchCopyWithImpl<$Res> extends _$SketchCopyWithImpl<$Res>
-    implements _$$_SketchCopyWith<$Res> {
-  __$$_SketchCopyWithImpl(_$_Sketch _value, $Res Function(_$_Sketch) _then)
-      : super(_value, (v) => _then(v as _$_Sketch));
+class __$$SketchImplCopyWithImpl<$Res>
+    extends _$SketchCopyWithImpl<$Res, _$SketchImpl>
+    implements _$$SketchImplCopyWith<$Res> {
+  __$$SketchImplCopyWithImpl(
+      _$SketchImpl _value, $Res Function(_$SketchImpl) _then)
+      : super(_value, _then);
 
-  @override
-  _$_Sketch get _value => super._value as _$_Sketch;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? lines = freezed,
+    Object? lines = null,
   }) {
-    return _then(_$_Sketch(
-      lines: lines == freezed
+    return _then(_$SketchImpl(
+      lines: null == lines
           ? _value._lines
           : lines // ignore: cast_nullable_to_non_nullable
               as List<SketchLine>,
@@ -87,15 +93,16 @@ class __$$_SketchCopyWithImpl<$Res> extends _$SketchCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Sketch implements _Sketch {
-  const _$_Sketch({required final List<SketchLine> lines}) : _lines = lines;
+class _$SketchImpl implements _Sketch {
+  const _$SketchImpl({required final List<SketchLine> lines}) : _lines = lines;
 
-  factory _$_Sketch.fromJson(Map<String, dynamic> json) =>
-      _$$_SketchFromJson(json);
+  factory _$SketchImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SketchImplFromJson(json);
 
   final List<SketchLine> _lines;
   @override
   List<SketchLine> get lines {
+    if (_lines is EqualUnmodifiableListView) return _lines;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_lines);
   }
@@ -106,10 +113,10 @@ class _$_Sketch implements _Sketch {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Sketch &&
+            other is _$SketchImpl &&
             const DeepCollectionEquality().equals(other._lines, _lines));
   }
 
@@ -120,24 +127,27 @@ class _$_Sketch implements _Sketch {
 
   @JsonKey(ignore: true)
   @override
-  _$$_SketchCopyWith<_$_Sketch> get copyWith =>
-      __$$_SketchCopyWithImpl<_$_Sketch>(this, _$identity);
+  @pragma('vm:prefer-inline')
+  _$$SketchImplCopyWith<_$SketchImpl> get copyWith =>
+      __$$SketchImplCopyWithImpl<_$SketchImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_SketchToJson(this);
+    return _$$SketchImplToJson(
+      this,
+    );
   }
 }
 
 abstract class _Sketch implements Sketch {
-  const factory _Sketch({required final List<SketchLine> lines}) = _$_Sketch;
+  const factory _Sketch({required final List<SketchLine> lines}) = _$SketchImpl;
 
-  factory _Sketch.fromJson(Map<String, dynamic> json) = _$_Sketch.fromJson;
+  factory _Sketch.fromJson(Map<String, dynamic> json) = _$SketchImpl.fromJson;
 
   @override
-  List<SketchLine> get lines => throw _privateConstructorUsedError;
+  List<SketchLine> get lines;
   @override
   @JsonKey(ignore: true)
-  _$$_SketchCopyWith<_$_Sketch> get copyWith =>
+  _$$SketchImplCopyWith<_$SketchImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

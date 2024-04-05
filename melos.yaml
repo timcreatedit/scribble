@@ -47,3 +47,17 @@ scripts:
   coverage:
     run: melos run coverage:select --no-select
     description: Generate coverage for all packages.
+  
+  build_runner:
+    run: flutter pub run build_runner build --delete-conflicting-outputs
+    exec:
+      failFast: false
+    packageFilters:
+      dependsOn: build_runner
+    description: Run `flutter pub run build_runner build --delete-conflicting-outputs` in all packages.
+
+  fix:
+    run: dart fix --apply
+    exec:
+      failFast: true
+    description: Run `dart fix --apply` in all packages.

@@ -6,8 +6,8 @@ part of 'sketch_line.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_SketchLine _$$_SketchLineFromJson(Map<String, dynamic> json) =>
-    _$_SketchLine(
+_$SketchLineImpl _$$SketchLineImplFromJson(Map<String, dynamic> json) =>
+    _$SketchLineImpl(
       points: (json['points'] as List<dynamic>)
           .map((e) => Point.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -15,7 +15,7 @@ _$_SketchLine _$$_SketchLineFromJson(Map<String, dynamic> json) =>
       width: (json['width'] as num).toDouble(),
     );
 
-Map<String, dynamic> _$$_SketchLineToJson(_$_SketchLine instance) =>
+Map<String, dynamic> _$$SketchLineImplToJson(_$SketchLineImpl instance) =>
     <String, dynamic>{
       'points': instance.points.map((e) => e.toJson()).toList(),
       'color': instance.color,

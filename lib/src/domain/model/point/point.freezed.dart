@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+gi// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'point.dart';
 
@@ -12,7 +12,7 @@ part of 'point.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 Point _$PointFromJson(Map<String, dynamic> json) {
   return _Point.fromJson(json);
@@ -32,74 +32,80 @@ mixin _$Point {
 /// @nodoc
 abstract class $PointCopyWith<$Res> {
   factory $PointCopyWith(Point value, $Res Function(Point) then) =
-      _$PointCopyWithImpl<$Res>;
+      _$PointCopyWithImpl<$Res, Point>;
+  @useResult
   $Res call({double x, double y, double pressure});
 }
 
 /// @nodoc
-class _$PointCopyWithImpl<$Res> implements $PointCopyWith<$Res> {
+class _$PointCopyWithImpl<$Res, $Val extends Point>
+    implements $PointCopyWith<$Res> {
   _$PointCopyWithImpl(this._value, this._then);
 
-  final Point _value;
   // ignore: unused_field
-  final $Res Function(Point) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? x = freezed,
-    Object? y = freezed,
-    Object? pressure = freezed,
+    Object? x = null,
+    Object? y = null,
+    Object? pressure = null,
   }) {
     return _then(_value.copyWith(
-      x: x == freezed
+      x: null == x
           ? _value.x
           : x // ignore: cast_nullable_to_non_nullable
               as double,
-      y: y == freezed
+      y: null == y
           ? _value.y
           : y // ignore: cast_nullable_to_non_nullable
               as double,
-      pressure: pressure == freezed
+      pressure: null == pressure
           ? _value.pressure
           : pressure // ignore: cast_nullable_to_non_nullable
               as double,
-    ));
+    ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$_PointCopyWith<$Res> implements $PointCopyWith<$Res> {
-  factory _$$_PointCopyWith(_$_Point value, $Res Function(_$_Point) then) =
-      __$$_PointCopyWithImpl<$Res>;
+abstract class _$$PointImplCopyWith<$Res> implements $PointCopyWith<$Res> {
+  factory _$$PointImplCopyWith(
+          _$PointImpl value, $Res Function(_$PointImpl) then) =
+      __$$PointImplCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({double x, double y, double pressure});
 }
 
 /// @nodoc
-class __$$_PointCopyWithImpl<$Res> extends _$PointCopyWithImpl<$Res>
-    implements _$$_PointCopyWith<$Res> {
-  __$$_PointCopyWithImpl(_$_Point _value, $Res Function(_$_Point) _then)
-      : super(_value, (v) => _then(v as _$_Point));
+class __$$PointImplCopyWithImpl<$Res>
+    extends _$PointCopyWithImpl<$Res, _$PointImpl>
+    implements _$$PointImplCopyWith<$Res> {
+  __$$PointImplCopyWithImpl(
+      _$PointImpl _value, $Res Function(_$PointImpl) _then)
+      : super(_value, _then);
 
-  @override
-  _$_Point get _value => super._value as _$_Point;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? x = freezed,
-    Object? y = freezed,
-    Object? pressure = freezed,
+    Object? x = null,
+    Object? y = null,
+    Object? pressure = null,
   }) {
-    return _then(_$_Point(
-      x == freezed
+    return _then(_$PointImpl(
+      null == x
           ? _value.x
           : x // ignore: cast_nullable_to_non_nullable
               as double,
-      y == freezed
+      null == y
           ? _value.y
           : y // ignore: cast_nullable_to_non_nullable
               as double,
-      pressure: pressure == freezed
+      pressure: null == pressure
           ? _value.pressure
           : pressure // ignore: cast_nullable_to_non_nullable
               as double,
@@ -109,11 +115,11 @@ class __$$_PointCopyWithImpl<$Res> extends _$PointCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Point extends _Point {
-  const _$_Point(this.x, this.y, {this.pressure = 1}) : super._();
+class _$PointImpl extends _Point {
+  const _$PointImpl(this.x, this.y, {this.pressure = 0.5}) : super._();
 
-  factory _$_Point.fromJson(Map<String, dynamic> json) =>
-      _$$_PointFromJson(json);
+  factory _$PointImpl.fromJson(Map<String, dynamic> json) =>
+      _$$PointImplFromJson(json);
 
   @override
   final double x;
@@ -129,49 +135,49 @@ class _$_Point extends _Point {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Point &&
-            const DeepCollectionEquality().equals(other.x, x) &&
-            const DeepCollectionEquality().equals(other.y, y) &&
-            const DeepCollectionEquality().equals(other.pressure, pressure));
+            other is _$PointImpl &&
+            (identical(other.x, x) || other.x == x) &&
+            (identical(other.y, y) || other.y == y) &&
+            (identical(other.pressure, pressure) ||
+                other.pressure == pressure));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(x),
-      const DeepCollectionEquality().hash(y),
-      const DeepCollectionEquality().hash(pressure));
+  int get hashCode => Object.hash(runtimeType, x, y, pressure);
 
   @JsonKey(ignore: true)
   @override
-  _$$_PointCopyWith<_$_Point> get copyWith =>
-      __$$_PointCopyWithImpl<_$_Point>(this, _$identity);
+  @pragma('vm:prefer-inline')
+  _$$PointImplCopyWith<_$PointImpl> get copyWith =>
+      __$$PointImplCopyWithImpl<_$PointImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_PointToJson(this);
+    return _$$PointImplToJson(
+      this,
+    );
   }
 }
 
 abstract class _Point extends Point {
   const factory _Point(final double x, final double y,
-      {final double pressure}) = _$_Point;
+      {final double pressure}) = _$PointImpl;
   const _Point._() : super._();
 
-  factory _Point.fromJson(Map<String, dynamic> json) = _$_Point.fromJson;
+  factory _Point.fromJson(Map<String, dynamic> json) = _$PointImpl.fromJson;
 
   @override
-  double get x => throw _privateConstructorUsedError;
+  double get x;
   @override
-  double get y => throw _privateConstructorUsedError;
+  double get y;
   @override
-  double get pressure => throw _privateConstructorUsedError;
+  double get pressure;
   @override
   @JsonKey(ignore: true)
-  _$$_PointCopyWith<_$_Point> get copyWith =>
+  _$$PointImplCopyWith<_$PointImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
