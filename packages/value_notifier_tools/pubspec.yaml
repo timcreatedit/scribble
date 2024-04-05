@@ -1,6 +1,6 @@
 name: value_notifier_tools
 description: Helpful lightweight tools for working with ValueNotifiers
-version: 0.1.0+1
+version: 0.1.1
 repository: https://github.com/timcreatedit/scribble/tree/main/packages/value_notifier_tools
 homepage: https://whynotmake.it
 
