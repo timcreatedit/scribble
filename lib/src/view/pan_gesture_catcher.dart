@@ -1,12 +1,24 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
+/// {@template gesture_catcher}
+/// A widget that catches gestures for a given set of pointer kinds.
+///
+/// Any gestures of pointers contained in [pointerKindsToCatch] will be caught
+/// by this widget and not be passed to any other widgets in the widget tree.
+/// {@endtemplate}
 class GestureCatcher extends StatelessWidget {
+  /// {@macro gesture_catcher}
   const GestureCatcher({
-    required this.pointerKindsToCatch, required this.child, super.key,
+    required this.pointerKindsToCatch,
+    required this.child,
+    super.key,
   });
 
+  /// The pointer kinds to catch.
   final Set<PointerDeviceKind> pointerKindsToCatch;
+
+  /// The child widget.
   final Widget child;
 
   @override
@@ -14,14 +26,13 @@ class GestureCatcher extends StatelessWidget {
     return RawGestureDetector(
       key: ValueKey(pointerKindsToCatch),
       gestures: {
-        GestureCatcherRecognizer:
-            GestureRecognizerFactoryWithHandlers<GestureCatcherRecognizer>(
-          () => GestureCatcherRecognizer(
+        _GestureCatcherRecognizer:
+            GestureRecognizerFactoryWithHandlers<_GestureCatcherRecognizer>(
+          () => _GestureCatcherRecognizer(
             debugOwner: this,
             pointerKindsToCatch: pointerKindsToCatch,
           ),
-          (GestureCatcherRecognizer instance) {
-          },
+          (_GestureCatcherRecognizer instance) {},
         ),
       },
       child: child,
@@ -29,19 +40,9 @@ class GestureCatcher extends StatelessWidget {
   }
 }
 
-/// Catches movement both horizontally and vertically for a given set of
-/// pointer kinds..
-///
-/// See also:
-///
-///  * [ImmediateMultiDragGestureRecognizer], for a similar recognizer that
-///    tracks each touch point independently.
-///  * [DelayedMultiDragGestureRecognizer], for a similar recognizer that
-///    tracks each touch point independently, but that doesn't start until
-///    some time has passed.
-class GestureCatcherRecognizer extends OneSequenceGestureRecognizer {
+class _GestureCatcherRecognizer extends OneSequenceGestureRecognizer {
   /// Create a gesture recognizer for tracking movement on a plane.
-  GestureCatcherRecognizer({
+  _GestureCatcherRecognizer({
     required Set<PointerDeviceKind> pointerKindsToCatch,
     super.debugOwner,
   }) : super(supportedDevices: pointerKindsToCatch);
@@ -50,8 +51,7 @@ class GestureCatcherRecognizer extends OneSequenceGestureRecognizer {
   String get debugDescription => 'pan catcher';
 
   @override
-  void didStopTrackingLastPointer(int pointer) {
-  }
+  void didStopTrackingLastPointer(int pointer) {}
 
   @override
   void handleEvent(PointerEvent event) {
