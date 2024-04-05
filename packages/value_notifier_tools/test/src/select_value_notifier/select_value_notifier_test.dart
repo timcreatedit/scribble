@@ -3,22 +3,20 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:value_notifier_tools/src/select_value_notifier/select_value_notifier.dart';
 
-class _MockListener extends Mock {
-  void call();
-}
+import '../../util/mock_listener.dart';
 
 typedef _Model = ({int interesting, int uninteresting});
 
 void main() {
   group('SelectValueNotifier', () {
     late ValueNotifier<_Model> notifier;
-    late _MockListener notifierListener;
+    late MockListener notifierListener;
     late SelectValueNotifier<_Model, int> sut;
-    late _MockListener sutListener;
+    late MockListener sutListener;
 
     setUp(() {
       notifier = ValueNotifier((interesting: 0, uninteresting: 0));
-      notifierListener = _MockListener();
+      notifierListener = MockListener();
       notifier.addListener(notifierListener.call);
       addTearDown(() => notifier.removeListener(notifierListener.call));
 
@@ -26,7 +24,7 @@ void main() {
         parentNotifier: notifier,
         selector: (model) => model.interesting,
       );
-      sutListener = _MockListener();
+      sutListener = MockListener();
 
       sut.addListener(sutListener.call);
       addTearDown(() => sut.removeListener(sutListener.call));
