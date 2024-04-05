@@ -38,4 +38,13 @@ jobs:
 
       - name: 📝 Run Test
         run: melos run coverage
+
+      - name: 📊 Generate Coverage
+        id: coverage-report
+        uses: whynotmake-it/dart-coverage-assistant@efd2d5f7992843c0b42cb6566a7a047bd4970000
+        with:
+          enforce_threshold: 'none'
+          enforce_forbidden_decrease: 'none'
+          lower_threshold: 50
+          upper_threshold: 90
   
