@@ -7,13 +7,13 @@ part 'point.g.dart';
 /// Represents a point in a sketch with an x and y coordinate and an optional
 /// pressure value.
 /// {@endtemplate}
-@freezed
+@Freezed()
 class Point with _$Point {
   /// {@macro point}
   const factory Point(
     double x,
     double y, {
-    @Default(1) double pressure,
+    @Default(0.5) double pressure,
   }) = _Point;
   const Point._();
 
