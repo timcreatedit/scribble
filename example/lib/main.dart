@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:scribble/scribble.dart';
 
@@ -106,21 +108,60 @@ class _HomePageState extends State<HomePage> {
         onPressed: notifier.clear,
       ),
       IconButton(
-        icon: const Icon(Icons.save),
-        tooltip: "Save to Image",
+        icon: const Icon(Icons.image),
+        tooltip: "Show PNG Image",
         onPressed: () => _saveImage(context),
+      ),
+      IconButton(
+        icon: const Icon(Icons.data_object),
+        tooltip: "Show JSON",
+        onPressed: () => _showJson(context),
       ),
     ];
   }
 
-  Future<void> _saveImage(BuildContext context) async {
-    final image = await notifier.renderImage();
+  void _saveImage(BuildContext context) async {
+    final image = notifier.renderImage();
     showDialog(
-      builder: (context) => AlertDialog(
-        title: const Text("Your Image"),
-        content: Image.memory(image.buffer.asUint8List()),
-      ),
       context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Generated Image"),
+        content: SizedBox.expand(
+          child: FutureBuilder(
+            future: image,
+            builder: (context, snapshot) => snapshot.hasData
+                ? Image.memory(snapshot.data!.buffer.asUint8List())
+                : const Center(child: CircularProgressIndicator()),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: Navigator.of(context).pop,
+            child: const Text("Close"),
+          )
+        ],
+      ),
+    );
+  }
+
+  void _showJson(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Generated Image"),
+        content: SizedBox.expand(
+          child: SelectableText(
+            jsonEncode(notifier.currentSketch.toJson()),
+            autofocus: true,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: Navigator.of(context).pop,
+            child: const Text("Close"),
+          )
+        ],
+      ),
     );
   }
 
