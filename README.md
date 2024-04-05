@@ -26,13 +26,9 @@ dart pub add scribble
 * Choose which pointers can draw (touch, pen, mouse, etc.)
 * Lines get slimmer when the pen is moved more quickly
 * Line eraser support
-* Full undo/redo support using [history_value_notifier](https://pub.dev/packages/history_value_notifier)
+* Full undo/redo support using [value_notifier_tools](https://pub.dev/packages/value_notifier_tools)
 * Sketches are fully serializable to JSON
-
-## Pipeline
-
-* [X] Load sketches
-* [X] PNG export
+* Export Sketches to PNG
 
 ## Usage
 
