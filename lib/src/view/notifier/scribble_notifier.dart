@@ -4,9 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:history_value_notifier/history_value_notifier.dart';
 import 'package:scribble/scribble.dart';
 import 'package:scribble/src/view/painting/point_to_offset_x.dart';
+import 'package:value_notifier_tools/value_notifier_tools.dart';
 
 /// {@template scribble_notifier_base}
 /// The base class for a notifier that controls the state of a [Scribble]

@@ -127,6 +127,53 @@ void main() {
         sut.clearRedoQueue();
         expect(sut.canRedo, false);
       });
+
+      group('maxHistoryLength', () {
+        const changeCount = 10;
+        const maxHistoryLength = 5;
+
+        test('drops entries that where there already', () async {
+          const changeCount = 10;
+
+          for (var i = 0; i < changeCount; i++) {
+            sut.value++;
+          }
+
+          expect(sut.canUndo, true);
+          expect(sut.canRedo, false);
+
+          sut.maxHistoryLength = maxHistoryLength;
+
+          expect(sut.canUndo, true);
+          expect(sut.canRedo, false);
+
+          // We should be able to undo maxHistoryLength - 1 times
+          for (var i = 0; i < maxHistoryLength - 1; i++) {
+            expect(sut.canUndo, true, reason: 'iteration $i');
+            expect(sut.value, changeCount - i);
+            sut.undo();
+          }
+          expect(sut.canUndo, false);
+        });
+
+        test('only collects the last entries', () async {
+          sut.maxHistoryLength = maxHistoryLength;
+          for (var i = 0; i < changeCount; i++) {
+            sut.value++;
+          }
+
+          expect(sut.canUndo, true);
+          expect(sut.canRedo, false);
+
+          // We should be able to undo historyLength - 1 times
+          for (var i = 0; i < sut.maxHistoryLength! - 1; i++) {
+            expect(sut.canUndo, true, reason: 'iteration $i');
+            expect(sut.value, changeCount - i);
+            sut.undo();
+          }
+          expect(sut.canUndo, false);
+        });
+      });
     });
   });
 }

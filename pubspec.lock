@@ -283,14 +283,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.1"
-  history_value_notifier:
-    dependency: "direct main"
-    description:
-      name: history_value_notifier
-      sha256: b7910bab4fd8ef33cb708800b559aea4e4cc2d195f842d58ae71be037e71c876
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.1"
   http:
     dependency: transitive
     description:
@@ -656,6 +648,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  value_notifier_tools:
+    dependency: "direct main"
+    description:
+      path: "packages/value_notifier_tools"
+      relative: true
+    source: path
+    version: "0.1.0+1"
   vector_math:
     dependency: transitive
     description:

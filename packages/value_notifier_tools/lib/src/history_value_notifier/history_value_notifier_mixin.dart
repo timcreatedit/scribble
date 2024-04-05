@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:value_notifier_tools/src/history_value_notifier/history_value_notifier.dart';
 
@@ -49,7 +47,6 @@ mixin HistoryValueNotifierMixin<T> on ValueNotifier<T> {
     }
 
     super.value = value;
-    _valueUpdatesController.add(value);
   }
 
   /// Sets the current "value" of this [HistoryValueNotifier] **without** adding
@@ -61,13 +58,6 @@ mixin HistoryValueNotifierMixin<T> on ValueNotifier<T> {
   set temporaryValue(T value) {
     super.value = value;
   }
-
-  final StreamController<T> _valueUpdatesController =
-      StreamController.broadcast();
-
-  /// A stream of all updates to the value that doesn't include updates to the
-  /// temporary value.
-  Stream<T> get valueUpdates => _valueUpdatesController.stream;
 
   /// Whether currently an undo operation is possible.
   bool get canUndo => _undoIndex + 1 < _undoHistory.length;
@@ -144,12 +134,5 @@ mixin HistoryValueNotifierMixin<T> on ValueNotifier<T> {
       _undoHistory = _undoHistory.sublist(_undoIndex, _undoHistory.length);
       _undoIndex = 0;
     }
-  }
-
-  @override
-  @mustCallSuper
-  void dispose() {
-    _valueUpdatesController.close();
-    super.dispose();
   }
 }
