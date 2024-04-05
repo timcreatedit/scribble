@@ -110,7 +110,7 @@ class _HomePageState extends State<HomePage> {
       IconButton(
         icon: const Icon(Icons.image),
         tooltip: "Show PNG Image",
-        onPressed: () => _saveImage(context),
+        onPressed: () => _showImage(context),
       ),
       IconButton(
         icon: const Icon(Icons.data_object),
@@ -120,7 +120,7 @@ class _HomePageState extends State<HomePage> {
     ];
   }
 
-  void _saveImage(BuildContext context) async {
+  void _showImage(BuildContext context) async {
     final image = notifier.renderImage();
     showDialog(
       context: context,
@@ -148,7 +148,7 @@ class _HomePageState extends State<HomePage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Generated Image"),
+        title: const Text("Sketch as JSON"),
         content: SizedBox.expand(
           child: SelectableText(
             jsonEncode(notifier.currentSketch.toJson()),
