@@ -27,7 +27,6 @@ void main() {
       sutListener = MockListener();
 
       sut.addListener(sutListener.call);
-      addTearDown(() => sut.removeListener(sutListener.call));
     });
 
     group('notifyListeners()', () {
@@ -54,6 +53,16 @@ void main() {
       test('should throw an UnsupportedError', () {
         // ignore: invalid_use_of_protected_member
         expect(() => sut.value = 1, throwsUnsupportedError);
+      });
+    });
+
+    group('dispose', () {
+      test('should remove the listener from the parent notifier', () {
+        notifier.value = (interesting: 1, uninteresting: 1);
+        verify(() => sutListener.call());
+        sut.dispose();
+        notifier.value = (interesting: 2, uninteresting: 1);
+        verifyNever(() => sutListener.call());
       });
     });
   });

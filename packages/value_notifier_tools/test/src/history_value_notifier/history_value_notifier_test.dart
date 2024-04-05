@@ -174,6 +174,20 @@ void main() {
           expect(sut.canUndo, false);
         });
       });
+
+      group('clear', () {
+        test('clears history', () {
+          sut
+            ..value = 1
+            ..value = 2
+            ..value = 3;
+          expect(sut.canUndo, true);
+          expect(sut.canRedo, false);
+          sut.clearQueue();
+          expect(sut.canUndo, false);
+          expect(sut.canRedo, false);
+        });
+      });
     });
   });
 }

@@ -30,12 +30,12 @@ class WhereValueNotifierFromParent<T> extends WhereValueNotifier<T> {
   }
 
   void _parentListener() {
-    value = parentNotifier.value;
+    super.value = parentNotifier.value;
   }
 
   @override
   bool updateShouldNotify(T previous, T next) {
-    return updateShouldNotify(previous, next);
+    return filter(previous, next);
   }
 
   @override
