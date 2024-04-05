@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:value_notifier_tools/src/where_value_notifier/where_value_notifier_mixin.dart';
 
 /// {@template where_value_notifier}
 /// A [ValueNotifier] that provides a custom [updateShouldNotify] function to
@@ -21,24 +22,8 @@ import 'package:flutter/foundation.dart';
 /// }
 /// ```
 /// {@endtemplate}
-abstract class WhereValueNotifier<T> extends ValueNotifier<T> {
+abstract class WhereValueNotifier<T> extends ValueNotifier<T>
+    with WhereValueNotifierMixin<T> {
   /// {@macro where_value_notifier}
-  WhereValueNotifier(super.value) : _value = value;
-
-  T _value;
-
-  @override
-  T get value => _value;
-
-  @override
-  set value(T newValue) {
-    final previous = _value;
-    _value = newValue;
-    if (updateShouldNotify(previous, newValue)) notifyListeners();
-  }
-
-  /// The function that determines whether the listeners should be notified.
-  ///
-  /// If this function returns `true`, the listener will be notified.
-  bool updateShouldNotify(T previous, T next);
+  WhereValueNotifier(super.value);
 }
