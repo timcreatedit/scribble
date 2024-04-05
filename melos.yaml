@@ -8,6 +8,7 @@ packages:
 command:
   version:
     updateGitTagRefs: true
+    workspaceChangelog: false
 
 scripts:
   analyze:

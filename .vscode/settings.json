@@ -1,5 +1,6 @@
 {
     "conventionalCommits.scopes": [
-        "value_notifier_tools"
+        "value_notifier_tools",
+        "melos"
     ]
 }
