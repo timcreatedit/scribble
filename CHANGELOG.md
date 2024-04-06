@@ -1,3 +1,7 @@
+## 0.10.0+1
+
+ - **DOCS**: fixed demo image.
+
 ## 0.10.0
 
 > Note: This release has breaking changes.
