@@ -6,6 +6,8 @@
 
 Scribble is a lightweight library for freehand drawing in Flutter supporting pressure, variable line width and more!
 
+![Scribble Demo](./scribble_demo.gif)
+
 ## Installation 💻
 
 **❗ In order to start using Scribble you must have the [Dart SDK][dart_install_link] installed on your machine.**
