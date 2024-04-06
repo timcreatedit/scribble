@@ -1,3 +1,8 @@
+## 0.1.2
+
+ - **FIX**(value_notifier_tools): fixed type parameters in select extension.
+ - **FEAT**(example): updated example to use `SelectValueNotifier`.
+
 ## 0.1.1
 
  - **FIX**(value_notifier_tools): Added all classes to package exports.
