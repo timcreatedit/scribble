@@ -12,6 +12,6 @@
  - **FEAT**(value_notifier_tools): added select value notifier.
  - **DOCS**(value_notifier_tools): added README.
 
-# 0.1.0+1
+## 0.1.0+1
 
 - feat: initial commit 🎉
