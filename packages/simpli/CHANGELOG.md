@@ -1,3 +1,7 @@
+## 0.1.1+1
+
+ - **FIX**: updated meta dependency constraints.
+
 ## 0.1.1
 
  - **FEAT**: added simpli package (#50).

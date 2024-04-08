@@ -5,7 +5,7 @@
 ![coverage](./coverage.svg)
 
 
-Line simplification algorithms, made simple! Sporting Ramer-Douglas-Peucker and Visvalingam
+Polyline simplification algorithms, made simple! Sporting exciting algorithms such as ✨Ramer-Douglas-Peucker✨ and ✨Visvalingam✨.
 
 ## Installation 💻
 
