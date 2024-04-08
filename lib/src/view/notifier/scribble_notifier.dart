@@ -134,10 +134,9 @@ class ScribbleNotifier extends ScribbleNotifierBase
   @override
   GlobalKey get repaintBoundaryKey => _repaintBoundaryKey;
 
-  /// The [Simplifier] that is used to simplify the lines of the sketch when
-  /// finishing.
+  /// The [Simplifier] that is used to simplify the lines of the sketch.
   ///
-  /// Defaults to [VisvalingamSimplifier]
+  /// Defaults to [VisvalingamSimplifier], but you can implement your own.
   final Simplifier simplifier;
 
   /// Only apply the sketch from the undo history, otherwise keep current state
@@ -170,25 +169,15 @@ class ScribbleNotifier extends ScribbleNotifierBase
 
   /// Clear the entire drawing.
   void clear() {
-    value = value.map(
-      drawing: (s) => ScribbleState.drawing(
-        sketch: const Sketch(lines: []),
-        selectedColor: s.selectedColor,
-        selectedWidth: s.selectedWidth,
-        allowedPointersMode: s.allowedPointersMode,
-        activePointerIds: s.activePointerIds,
-        scaleFactor: s.scaleFactor,
-        pointerPosition: s.pointerPosition,
-      ),
-      erasing: (s) => ScribbleState.erasing(
-        sketch: const Sketch(lines: []),
-        selectedWidth: s.selectedWidth,
-        allowedPointersMode: s.allowedPointersMode,
-        activePointerIds: s.activePointerIds,
-        scaleFactor: s.scaleFactor,
-        pointerPosition: s.pointerPosition,
-      ),
-    );
+    value = switch (value) {
+      final Drawing d => d.copyWith(
+          sketch: const Sketch(lines: []),
+          activeLine: null,
+        ),
+      final Erasing e => e.copyWith(
+          sketch: const Sketch(lines: []),
+        ),
+    };
   }
 
   /// Sets the width of the next line
@@ -253,11 +242,29 @@ class ScribbleNotifier extends ScribbleNotifierBase
   /// 0 means no simplification.
   /// The higher the degree, the more the lines will be simplified.
   /// Lines will be simplified when they are
-  /// finished. Changing this value will only affect future lines.
+  /// finished. Changing this value will only affect future lines. If you want
+  /// to simplify existing lines, see [simplify].
   void setSimplificationTolerance(double degree) {
     temporaryValue = value.copyWith(
       simplificationTolerance: degree,
     );
+  }
+
+  /// Simplifies the current sketch to the current simplification degree using
+  /// [simplifier].
+  ///
+  /// This will simplify all lines. If [undoable] is true, this step will be
+  /// added to the undo history
+  void simplify({bool undoable = true}) {
+    final newSketch = simplifier.simplifySketch(
+      value.sketch,
+      pixelTolerance: value.simplificationTolerance,
+    );
+    if (undoable) {
+      value = value.copyWith(sketch: newSketch);
+    } else {
+      temporaryValue = value.copyWith(sketch: newSketch);
+    }
   }
 
   /// Used by the Listener callback to display the pen if desired

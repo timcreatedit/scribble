@@ -12,6 +12,18 @@ abstract class Simplifier {
 
   /// Simplifies the given list of points.
   List<Point> simplify(List<Point> points, {required double pixelTolerance});
+
+  /// Simplifies an entire sketch by simplifying each line in the sketch.
+  Sketch simplifySketch(Sketch sketch, {required double pixelTolerance}) {
+    return sketch.copyWith(
+      lines: [
+        for (final l in sketch.lines)
+          l.copyWith(
+            points: simplify(l.points, pixelTolerance: pixelTolerance),
+          ),
+      ],
+    );
+  }
 }
 
 /// {@template visvalingam_simplifier}

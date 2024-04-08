@@ -6,13 +6,12 @@ void main() {
   setUp(() {});
 
   group('VisvalingamSimplifier', () {
+    late VisvalingamSimplifier sut;
+
+    setUp(() {
+      sut = const VisvalingamSimplifier();
+    });
     group('simplify', () {
-      late VisvalingamSimplifier sut;
-
-      setUp(() {
-        sut = const VisvalingamSimplifier();
-      });
-
       const points = [
         Point(0, 0),
         Point(1, 1),
@@ -29,6 +28,65 @@ void main() {
           points[3],
           points[4],
         ]);
+      });
+    });
+
+    group('simplifySketch', () {
+      const sketch = Sketch(
+        lines: [
+          SketchLine(
+            points: [
+              Point(0, 0),
+              Point(1, 1),
+              Point(2, 0),
+              Point(3, 3),
+              Point(4, 0),
+            ],
+            color: 0xFF000000,
+            width: 10,
+          ),
+          SketchLine(
+            points: [
+              Point(0, 0),
+              Point(1, 1),
+              Point(2, 0),
+              Point(3, 3),
+              Point(4, 0),
+            ],
+            color: 0xFF000000,
+            width: 10,
+          ),
+        ],
+      );
+      test('simplifies the given sketch', () async {
+        final simplified = sut.simplifySketch(sketch, pixelTolerance: 2);
+
+        expect(
+            simplified,
+            const Sketch(
+              lines: [
+                SketchLine(
+                  points: [
+                    Point(0, 0),
+                    Point(2, 0),
+                    Point(3, 3),
+                    Point(4, 0),
+                  ],
+                  color: 0xFF000000,
+                  width: 10,
+                ),
+                SketchLine(
+                  points: [
+                    Point(0, 0),
+                    Point(2, 0),
+                    Point(3, 3),
+                    Point(4, 0),
+                  ],
+                  color: 0xFF000000,
+                  width: 10,
+                ),
+              ],
+            ));
       });
     });
   });

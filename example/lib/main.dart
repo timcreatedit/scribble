@@ -89,6 +89,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
+                  const Divider(),
                   Row(
                     children: [
                       const Text("Simplification:"),
@@ -98,12 +99,16 @@ class _HomePageState extends State<HomePage> {
                               .select((value) => value.simplificationTolerance),
                           builder: (context, value, child) => Slider(
                             value: value,
-                            max: 5,
+                            max: 10,
                             onChanged: notifier.setSimplificationTolerance,
                             label: "${value.toStringAsFixed(2)} px",
                             divisions: 100,
                           ),
                         ),
+                      ),
+                      TextButton(
+                        onPressed: notifier.simplify,
+                        child: const Text("Simplify"),
                       ),
                     ],
                   ),
