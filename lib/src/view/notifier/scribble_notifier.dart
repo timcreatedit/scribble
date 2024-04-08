@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:scribble/scribble.dart';
 import 'package:scribble/src/view/painting/point_to_offset_x.dart';
-import 'package:scribble/src/view/simplification/simplifier.dart';
+import 'package:scribble/src/view/simplification/sketch_simplifier.dart';
 import 'package:value_notifier_tools/value_notifier_tools.dart';
 
 /// {@template scribble_notifier_base}
@@ -135,10 +135,10 @@ class ScribbleNotifier extends ScribbleNotifierBase
   @override
   GlobalKey get repaintBoundaryKey => _repaintBoundaryKey;
 
-  /// The [Simplifier] that is used to simplify the lines of the sketch.
+  /// The [SketchSimplifier] that is used to simplify the lines of the sketch.
   ///
   /// Defaults to [VisvalingamSimplifier], but you can implement your own.
-  final Simplifier simplifier;
+  final SketchSimplifier simplifier;
 
   /// Only apply the sketch from the undo history, otherwise keep current state
   @override
@@ -436,19 +436,14 @@ class ScribbleNotifier extends ScribbleNotifierBase
 
   ScribbleState _finishLineForState(ScribbleState s) {
     if (s case Drawing(activeLine: final activeLine?)) {
-      final simplifiedPoints = simplifier.simplify(
-        activeLine.points,
-        pixelTolerance: s.simplificationTolerance,
-      );
       return s.copyWith(
         activeLine: null,
         sketch: s.sketch.copyWith(
           lines: [
             ...s.sketch.lines,
-            SketchLine(
-              color: activeLine.color,
-              width: activeLine.width,
-              points: simplifiedPoints,
+            simplifier.simplify(
+              activeLine,
+              pixelTolerance: s.simplificationTolerance,
             ),
           ],
         ),
