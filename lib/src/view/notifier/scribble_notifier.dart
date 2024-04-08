@@ -155,9 +155,16 @@ class ScribbleNotifier extends ScribbleNotifierBase
   /// Can be used to update the state of the Sketch externally (e.g. when
   /// fetching from a server) to what is passed in as [sketch];
   ///
-  /// Per default, this state of the sketch gets added to the undo history. If
-  /// this is not desired, set [addToUndoHistory] to ``false``.
-  void setSketch({required Sketch sketch, bool addToUndoHistory = true}) {
+  /// By default, this state of the sketch gets added to the undo history. If
+  /// this is not desired, set [addToUndoHistory] to `false`.
+  ///
+  /// The sketch will be simplified using the currently set simplification
+  /// tolerance. If you don't want simplification, call
+  /// [setSimplificationTolerance] to set it to 0.
+  void setSketch({
+    required Sketch sketch,
+    bool addToUndoHistory = true,
+  }) {
     final newState = value.copyWith(
       sketch: sketch,
     );
@@ -254,14 +261,14 @@ class ScribbleNotifier extends ScribbleNotifierBase
   /// Simplifies the current sketch to the current simplification degree using
   /// [simplifier].
   ///
-  /// This will simplify all lines. If [undoable] is true, this step will be
-  /// added to the undo history
-  void simplify({bool undoable = true}) {
+  /// This will simplify all lines. If [addToUndoHistory] is true, this step
+  /// will be added to the undo history
+  void simplify({bool addToUndoHistory = true}) {
     final newSketch = simplifier.simplifySketch(
       value.sketch,
       pixelTolerance: value.simplificationTolerance,
     );
-    if (undoable) {
+    if (addToUndoHistory) {
       value = value.copyWith(sketch: newSketch);
     } else {
       temporaryValue = value.copyWith(sketch: newSketch);
