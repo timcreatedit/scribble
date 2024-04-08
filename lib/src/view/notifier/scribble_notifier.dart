@@ -245,7 +245,7 @@ class ScribbleNotifier extends ScribbleNotifierBase
   ///
   /// The degree should be between 0 and 1, where 0 means no simplification.
   /// The higher the degree, the more the lines will be simplified.
-  /// Lines will be simplified using [simplificationRepository] when they are
+  /// Lines will be simplified when they are
   /// finished. Changing this value will only affect future lines.
   void setSimplificationDegree(double degree) {
     temporaryValue = value.copyWith(
