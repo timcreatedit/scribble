@@ -16,7 +16,7 @@ class RdpSimplifier implements Simplifier {
     List<Point<num>> points, {
     double pixelTolerance = 50.0,
   }) {
-    if (points.length < 3 || pixelTolerance <= 0) {
+    if (points.length < 3) {
       return points;
     }
     var maxDistance = 0.0;
@@ -33,11 +33,21 @@ class RdpSimplifier implements Simplifier {
       }
     }
 
-    if (maxDistance <= pixelTolerance) return points;
+    if (maxDistance <= pixelTolerance) return [points.first, points.last];
+
+    final firstPart = simplify(
+      points.sublist(0, index + 1),
+      pixelTolerance: pixelTolerance,
+    );
+    final secondPart = simplify(
+      points.sublist(index),
+      pixelTolerance: pixelTolerance,
+    );
 
     return [
-      ...simplify(points.sublist(0, index), pixelTolerance: pixelTolerance),
-      ...simplify(points.sublist(index + 1), pixelTolerance: pixelTolerance),
+      ...firstPart.sublist(0, firstPart.length - 1),
+      points[index],
+      ...secondPart.sublist(1),
     ];
   }
 }

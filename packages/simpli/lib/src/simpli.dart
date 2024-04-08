@@ -1,6 +1,7 @@
 import 'dart:math';
 
-import 'package:simpli/src/domain/simplifier.dart';
+import 'package:simpli/src/data/rdp_simplifier.dart';
+import 'package:simpli/src/data/visvalingam_simplifier.dart';
 
 /// {@template simpli}
 /// Line simplification algorithms, made simple! Sporting Ramer-Douglas-Peucker
@@ -16,7 +17,7 @@ abstract class Simpli {
     List<Point> points, {
     double pixelTolerance = 50.0,
   }) {
-    return const Simplifier.ramerDouglasPeucker()
+    return const RdpSimplifier()
         .simplify(points, pixelTolerance: pixelTolerance);
   }
 
@@ -26,6 +27,7 @@ abstract class Simpli {
     List<Point<num>> points, {
     double pixelTolerance = 50.0,
   }) {
-    return const Simplifier.visvalingam().simplify(points);
+    return const VisvalingamSimplifier()
+        .simplify(points, pixelTolerance: pixelTolerance);
   }
 }
