@@ -1,8 +1,5 @@
 import 'dart:math';
 
-import 'package:simpli/src/data/rdp_simplifier.dart';
-import 'package:simpli/src/data/utils.dart';
-import 'package:simpli/src/data/visvalingam_simplifier.dart';
 import 'package:simpli/src/domain/simplifier.dart';
 
 /// {@template simpli}

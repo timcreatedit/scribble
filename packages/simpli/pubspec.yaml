@@ -1,5 +1,5 @@
 name: simpli
-description: Line simplification algorithms, made simple! Sporting Ramer-Douglas-Peucker and Visvalingam
+description: Polyline simplification algorithms, made simple! Sporting Ramer-Douglas-Peucker and Visvalingam
 version: 0.1.0+1
 
 
@@ -7,6 +7,7 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
+  collection: ^1.18.0
   meta: ^1.14.0
   
 dev_dependencies:

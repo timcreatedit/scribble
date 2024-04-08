@@ -19,4 +19,15 @@ abstract class Utils {
         sqrt(pow(lineEnd.x - lineStart.x, 2) + pow(lineEnd.y - lineStart.y, 2));
     return numerator / denominator;
   }
+
+  /// Calculates the are of a triangle given its three points.
+  static double triangleArea({
+    required Point<num> a,
+    required Point<num> b,
+    required Point<num> c,
+  }) {
+    return (a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y))
+        .toDouble()
+        .abs();
+  }
 }
