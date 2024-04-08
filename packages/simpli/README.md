@@ -1,7 +1,8 @@
 # Simpli
 
 [![Powered by Mason](https://img.shields.io/endpoint?url=https%3A%2F%2Ftinyurl.com%2Fmason-badge)](https://github.com/felangel/mason)
-[![melos](https://img.shields.io/badge/maintained%20with-melos-f700ff.svg?style=flat-square)](https://github.com/invertase/melos)
+[![melos](https://img.shields.io/badge/maintained%20with-melos-f700ff.svg)](https://github.com/invertase/melos)
+![coverage](./coverage.svg)
 
 
 Line simplification algorithms, made simple! Sporting Ramer-Douglas-Peucker and Visvalingam
@@ -16,12 +17,28 @@ Install via `dart pub add`:
 dart pub add simpli
 ```
 
----
 
-## Continuous Integration 🤖
+## Usage 🚀
 
-Simpli comes with a built-in [GitHub Actions workflow][github_actions_link] but you can also add your preferred CI/CD solution.
+```dart
+import 'package:simpli/simpli.dart';
 
+void main() {
+  final points = [
+    Point(0, 0),
+    Point(1, 1),
+    Point(2, 0),
+    Point(3, 3),
+    Point(4, 0),
+  ];
+
+  final rdpSimplified = Simpli.ramerDouglasPeucker(points, pixelTolerance: 50.0);
+  final visvalingamSimplified = Simpli.visvalingam(points, pixelTolerance: 50.0);
+
+  print(simplifiedPoints);
+  print(visvalingamSimplified);
+}
+```
 
 ---
 
