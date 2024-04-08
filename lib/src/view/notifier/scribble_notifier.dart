@@ -247,7 +247,7 @@ class ScribbleNotifier extends ScribbleNotifierBase
 
   /// Sets the simplification degree for the sketch in logical pixels.
   ///
-  /// 0 means no simplification, 4px is a good starting point for most sketches.
+  /// 0 means no simplification, 1px is a good starting point for most sketches.
   /// The higher the degree, the more the details will be eroded.
   ///
   /// Changing this value will only affect future lines. If you want
