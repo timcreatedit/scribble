@@ -9,8 +9,8 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
-  collection: ^1.18.0
-  meta: ^1.14.0
+  collection: ">=1.0.0 <2.0.0"
+  meta: ">= 1.0.0 <2.0.0"
   
 dev_dependencies:
   lintervention: ^0.1.1
