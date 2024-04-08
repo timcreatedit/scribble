@@ -1,5 +1,5 @@
 name: simpli
-description: Polyline simplification algorithms, made simple! Sporting exciting algorithms such as ✨Ramer-Douglas-Peucker✨ and ✨Visvalingam✨.
+description: Polyline simplification algorithms, made simple! Sporting exciting algorithms such as Ramer-Douglas-Peucker and Visvalingam.
 version: 0.1.1+1
 repository: https://github.com/timcreatedit/scribble/tree/main/packages/simpli
 homepage: https://whynotmake.it
