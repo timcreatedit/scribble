@@ -67,11 +67,11 @@ class _HomePageState extends State<HomePage> {
             ),
             Padding(
               padding: const EdgeInsets.all(16),
-              child: SizedBox(
-                width: double.infinity,
-                child: Column(
-                  children: [
-                    Wrap(
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       alignment: WrapAlignment.spaceBetween,
                       spacing: 16,
@@ -88,16 +88,26 @@ class _HomePageState extends State<HomePage> {
                         _buildPointerModeSwitcher(context),
                       ],
                     ),
-                    ValueListenableBuilder(
-                      valueListenable: notifier
-                          .select((value) => value.simplificationTolerance),
-                      builder: (context, value, child) => Slider(
-                        value: value,
-                        onChanged: notifier.setSimplificationDegree,
+                  ),
+                  Row(
+                    children: [
+                      const Text("Simplification:"),
+                      Expanded(
+                        child: ValueListenableBuilder(
+                          valueListenable: notifier
+                              .select((value) => value.simplificationTolerance),
+                          builder: (context, value, child) => Slider(
+                            value: value,
+                            max: 5,
+                            onChanged: notifier.setSimplificationTolerance,
+                            label: "${value.toStringAsFixed(2)} px",
+                            divisions: 100,
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
+                ],
               ),
             )
           ],

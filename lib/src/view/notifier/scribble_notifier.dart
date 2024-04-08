@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:scribble/scribble.dart';
 import 'package:scribble/src/view/painting/point_to_offset_x.dart';
+import 'package:scribble/src/view/simplification/simplifier.dart';
 import 'package:value_notifier_tools/value_notifier_tools.dart';
 
 /// {@template scribble_notifier_base}
@@ -90,20 +91,18 @@ class ScribbleNotifier extends ScribbleNotifierBase
 
     /// How many states you want stored in the undo history, 30 by default.
     int maxHistoryLength = 30,
-
-    /// The supported widths, mainly useful for rendering UI, you can still set
-    /// the width to any arbitrary value from code. The first entry in this list
-    /// will be the starting width.
     this.widths = const [5, 10, 15],
-
-    /// The curve that's used to map pen pressure to the pressure value when
-    /// recording, by default it's linear.
     this.pressureCurve = Curves.linear,
+    this.simplifier = const VisvalingamSimplifier(),
+
+    /// {@macro view.state.scribble_state.simplification_tolerance}
+    double simplificationTolerance = 0,
   }) : super(
           ScribbleState.drawing(
             sketch: sketch ?? const Sketch(lines: []),
             selectedWidth: widths[0],
             allowedPointersMode: allowedPointersMode,
+            simplificationTolerance: simplificationTolerance,
           ),
         ) {
     value = ScribbleState.drawing(
@@ -116,10 +115,12 @@ class ScribbleNotifier extends ScribbleNotifierBase
 
   /// The supported widths, mainly useful for rendering UI, you can still set
   /// the width to any arbitrary value from code.
+  ///
+  /// The first entry in this list will be the starting width.
   final List<double> widths;
 
   /// The curve that's used to map pen pressure to the pressure value when
-  /// recording.
+  /// recording, by default it's linear.
   final Curve pressureCurve;
 
   /// The state of the sketch at this moment.
@@ -132,6 +133,12 @@ class ScribbleNotifier extends ScribbleNotifierBase
 
   @override
   GlobalKey get repaintBoundaryKey => _repaintBoundaryKey;
+
+  /// The [Simplifier] that is used to simplify the lines of the sketch when
+  /// finishing.
+  ///
+  /// Defaults to [VisvalingamSimplifier]
+  final Simplifier simplifier;
 
   /// Only apply the sketch from the undo history, otherwise keep current state
   @override
@@ -241,13 +248,13 @@ class ScribbleNotifier extends ScribbleNotifierBase
     );
   }
 
-  /// Sets the simplification degree for the sketch.
+  /// Sets the simplification degree for the sketch in pixels.
   ///
-  /// The degree should be between 0 and 1, where 0 means no simplification.
+  /// 0 means no simplification.
   /// The higher the degree, the more the lines will be simplified.
   /// Lines will be simplified when they are
   /// finished. Changing this value will only affect future lines.
-  void setSimplificationDegree(double degree) {
+  void setSimplificationTolerance(double degree) {
     temporaryValue = value.copyWith(
       simplificationTolerance: degree,
     );
@@ -414,8 +421,10 @@ class ScribbleNotifier extends ScribbleNotifierBase
 
   ScribbleState _finishLineForState(ScribbleState s) {
     if (s case Drawing(activeLine: final activeLine?)) {
-      // TODO(tim): simplify
-      final simplifiedPoints = activeLine.points;
+      final simplifiedPoints = simplifier.simplify(
+        activeLine.points,
+        pixelTolerance: s.simplificationTolerance,
+      );
       return s.copyWith(
         activeLine: null,
         sketch: s.sketch.copyWith(

@@ -63,10 +63,12 @@ sealed class ScribbleState with _$ScribbleState {
     /// {@endtemplate}
     @Default(1) double scaleFactor,
 
+    /// {@template view.state.scribble_state.simplification_tolerance}
     /// The current tolerance of simplification, in pixels.
     ///
     /// Lines will be simplified when they are finished. A value of 0 (default)
     /// will mean no simplification.
+    /// {@endtemplate}
     @Default(0) double simplificationTolerance,
   }) = Drawing;
 
