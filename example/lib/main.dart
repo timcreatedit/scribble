@@ -67,14 +67,37 @@ class _HomePageState extends State<HomePage> {
             ),
             Padding(
               padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  _buildColorToolbar(context),
-                  const VerticalDivider(width: 32),
-                  _buildStrokeToolbar(context),
-                  const Expanded(child: SizedBox()),
-                  _buildPointerModeSwitcher(context),
-                ],
+              child: SizedBox(
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      alignment: WrapAlignment.spaceBetween,
+                      spacing: 16,
+                      runSpacing: 16,
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            _buildColorToolbar(context),
+                            const VerticalDivider(width: 32),
+                            _buildStrokeToolbar(context),
+                          ],
+                        ),
+                        _buildPointerModeSwitcher(context),
+                      ],
+                    ),
+                    ValueListenableBuilder(
+                      valueListenable: notifier
+                          .select((value) => value.simplificationTolerance),
+                      builder: (context, value, child) => Slider(
+                        value: value,
+                        onChanged: notifier.setSimplificationDegree,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             )
           ],

@@ -241,6 +241,18 @@ class ScribbleNotifier extends ScribbleNotifierBase
     );
   }
 
+  /// Sets the simplification degree for the sketch.
+  ///
+  /// The degree should be between 0 and 1, where 0 means no simplification.
+  /// The higher the degree, the more the lines will be simplified.
+  /// Lines will be simplified when they are
+  /// finished. Changing this value will only affect future lines.
+  void setSimplificationDegree(double degree) {
+    temporaryValue = value.copyWith(
+      simplificationTolerance: degree,
+    );
+  }
+
   /// Used by the Listener callback to display the pen if desired
   @override
   void onPointerHover(PointerHoverEvent event) {
@@ -401,14 +413,23 @@ class ScribbleNotifier extends ScribbleNotifierBase
   }
 
   ScribbleState _finishLineForState(ScribbleState s) {
-    if (s is Erasing || (s as Drawing).activeLine == null) {
-      return s;
+    if (s case Drawing(activeLine: final activeLine?)) {
+      // TODO(tim): simplify
+      final simplifiedPoints = activeLine.points;
+      return s.copyWith(
+        activeLine: null,
+        sketch: s.sketch.copyWith(
+          lines: [
+            ...s.sketch.lines,
+            SketchLine(
+              color: activeLine.color,
+              width: activeLine.width,
+              points: simplifiedPoints,
+            ),
+          ],
+        ),
+      );
     }
-    return s.copyWith(
-      activeLine: null,
-      sketch: s.sketch.copyWith(
-        lines: [...s.sketch.lines, s.activeLine!],
-      ),
-    );
+    return s;
   }
 }
