@@ -15,6 +15,7 @@ abstract class Simplifier {
 
   /// Simplifies an entire sketch by simplifying each line in the sketch.
   Sketch simplifySketch(Sketch sketch, {required double pixelTolerance}) {
+    if (pixelTolerance == 0) return sketch;
     return sketch.copyWith(
       lines: [
         for (final l in sketch.lines)
@@ -36,6 +37,8 @@ class VisvalingamSimplifier extends Simplifier {
 
   @override
   List<Point> simplify(List<Point> points, {required double pixelTolerance}) {
+    if (pixelTolerance == 0) return points;
+
     final mathPoints = points.map((e) => math.Point(e.x, e.y)).toList();
 
     final simplified = Simpli.visvalingam(

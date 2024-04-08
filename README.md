@@ -25,6 +25,7 @@ dart pub add scribble
 * Variable line width
 * Image Export
 * Pen and touch pressure support
+* Line simplification for smaller sketches
 * Choose which pointers can draw (touch, pen, mouse, etc.)
 * Lines get slimmer when the pen is moved more quickly
 * Line eraser support
@@ -55,9 +56,12 @@ class App extends StatelessWidget {
 }
 ```
 
-Use the public methods on ``ScribbleNotifier`` to control the behavior (for example from a button in the UI:
+Use the public methods on ``ScribbleNotifier`` to control the behavior (for example from a button in the UI):
 
 ```dart
+notifier = ScribbleNotifier();
+
+
 // Set color
 notifier.setColor(Colors.black);
 
@@ -69,6 +73,12 @@ notifier.undo();
 
 // Export to Image
 notifier.renderImage(pixelRatio: 2.0);
+
+// Line details will be simplified to save space from now on
+notifier.setSimplificationFactor(2);
+
+// Simplify the entire existing sketch
+notifier.simplify();
 
 // And more ... 
 ```

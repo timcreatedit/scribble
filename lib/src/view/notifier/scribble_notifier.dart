@@ -99,17 +99,18 @@ class ScribbleNotifier extends ScribbleNotifierBase
     double simplificationTolerance = 0,
   }) : super(
           ScribbleState.drawing(
-            sketch: sketch ?? const Sketch(lines: []),
+            sketch: switch (sketch) {
+              Sketch() => simplifier.simplifySketch(
+                  sketch,
+                  pixelTolerance: simplificationTolerance,
+                ),
+              null => const Sketch(lines: []),
+            },
             selectedWidth: widths[0],
             allowedPointersMode: allowedPointersMode,
             simplificationTolerance: simplificationTolerance,
           ),
         ) {
-    value = ScribbleState.drawing(
-      sketch: sketch ?? const Sketch(lines: []),
-      selectedWidth: widths[0],
-      allowedPointersMode: allowedPointersMode,
-    );
     this.maxHistoryLength = maxHistoryLength;
   }
 
@@ -237,12 +238,12 @@ class ScribbleNotifier extends ScribbleNotifierBase
     );
   }
 
-  /// Sets the simplification degree for the sketch in pixels.
+  /// Sets the simplification degree for the sketch in logical pixels.
   ///
-  /// 0 means no simplification.
-  /// The higher the degree, the more the lines will be simplified.
-  /// Lines will be simplified when they are
-  /// finished. Changing this value will only affect future lines. If you want
+  /// 0 means no simplification, 4px is a good starting point for most sketches.
+  /// The higher the degree, the more the details will be eroded.
+  ///
+  /// Changing this value will only affect future lines. If you want
   /// to simplify existing lines, see [simplify].
   void setSimplificationTolerance(double degree) {
     temporaryValue = value.copyWith(
