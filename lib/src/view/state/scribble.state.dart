@@ -62,6 +62,11 @@ sealed class ScribbleState with _$ScribbleState {
     /// (e.g. through InteractiveViewer) so that the pen width remains the same.
     /// {@endtemplate}
     @Default(1) double scaleFactor,
+
+    /// The current degree of simplification, roughly scaled from 0 to 1.
+    ///
+    /// Lines will be simplified when they are finished.
+    @Default(0) double simplificationDegree,
   }) = Drawing;
 
   /// The state of the scribble widget when the user is currently erasing.
@@ -88,6 +93,11 @@ sealed class ScribbleState with _$ScribbleState {
     /// Can be used if zoom functionality is needed
     /// (e.g. through InteractiveViewer) so that the pen width remains the same.
     @Default(1) double scaleFactor,
+
+    /// The current degree of simplification, roughly scaled from 0 to 1.
+    ///
+    /// Lines will be simplified when they are finished.
+    @Default(0) double simplificationDegree,
   }) = Erasing;
 
   /// Constructs a [ScribbleState] from a JSON object.
