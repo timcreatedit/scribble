@@ -2,6 +2,7 @@
     "conventionalCommits.scopes": [
         "value_notifier_tools",
         "melos",
-        "example"
+        "example",
+        "simpli"
     ]
 }

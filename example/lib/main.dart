@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     ValueListenableBuilder(
                       valueListenable: notifier
-                          .select((value) => value.simplificationDegree),
+                          .select((value) => value.simplificationTolerance),
                       builder: (context, value, child) => Slider(
                         value: value,
                         onChanged: notifier.setSimplificationDegree,

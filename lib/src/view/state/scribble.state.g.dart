@@ -25,8 +25,8 @@ _$DrawingImpl _$$DrawingImplFromJson(Map<String, dynamic> json) =>
       selectedColor: json['selectedColor'] as int? ?? 0xFF000000,
       selectedWidth: (json['selectedWidth'] as num?)?.toDouble() ?? 5,
       scaleFactor: (json['scaleFactor'] as num?)?.toDouble() ?? 1,
-      simplificationDegree:
-          (json['simplificationDegree'] as num?)?.toDouble() ?? 0,
+      simplificationTolerance:
+          (json['simplificationTolerance'] as num?)?.toDouble() ?? 0,
       $type: json['runtimeType'] as String?,
     );
 
@@ -41,7 +41,7 @@ Map<String, dynamic> _$$DrawingImplToJson(_$DrawingImpl instance) =>
       'selectedColor': instance.selectedColor,
       'selectedWidth': instance.selectedWidth,
       'scaleFactor': instance.scaleFactor,
-      'simplificationDegree': instance.simplificationDegree,
+      'simplificationTolerance': instance.simplificationTolerance,
       'runtimeType': instance.$type,
     };
 
@@ -67,8 +67,8 @@ _$ErasingImpl _$$ErasingImplFromJson(Map<String, dynamic> json) =>
           : Point.fromJson(json['pointerPosition'] as Map<String, dynamic>),
       selectedWidth: (json['selectedWidth'] as num?)?.toDouble() ?? 5,
       scaleFactor: (json['scaleFactor'] as num?)?.toDouble() ?? 1,
-      simplificationDegree:
-          (json['simplificationDegree'] as num?)?.toDouble() ?? 0,
+      simplificationTolerance:
+          (json['simplificationTolerance'] as num?)?.toDouble() ?? 0,
       $type: json['runtimeType'] as String?,
     );
 
@@ -81,6 +81,6 @@ Map<String, dynamic> _$$ErasingImplToJson(_$ErasingImpl instance) =>
       'pointerPosition': instance.pointerPosition?.toJson(),
       'selectedWidth': instance.selectedWidth,
       'scaleFactor': instance.scaleFactor,
-      'simplificationDegree': instance.simplificationDegree,
+      'simplificationTolerance': instance.simplificationTolerance,
       'runtimeType': instance.$type,
     };

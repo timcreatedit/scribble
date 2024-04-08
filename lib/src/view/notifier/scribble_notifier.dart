@@ -5,8 +5,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:scribble/scribble.dart';
-import 'package:scribble/src/data/dp_simplification_repository.dart';
-import 'package:scribble/src/domain/simplification_repository.dart';
 import 'package:scribble/src/view/painting/point_to_offset_x.dart';
 import 'package:value_notifier_tools/value_notifier_tools.dart';
 
@@ -101,7 +99,6 @@ class ScribbleNotifier extends ScribbleNotifierBase
     /// The curve that's used to map pen pressure to the pressure value when
     /// recording, by default it's linear.
     this.pressureCurve = Curves.linear,
-    this.simplificationRepository = const DpSimplificationRepository(),
   }) : super(
           ScribbleState.drawing(
             sketch: sketch ?? const Sketch(lines: []),
@@ -124,11 +121,6 @@ class ScribbleNotifier extends ScribbleNotifierBase
   /// The curve that's used to map pen pressure to the pressure value when
   /// recording.
   final Curve pressureCurve;
-
-  /// The repository that's used to simplify the lines while drawing.
-  ///
-  /// By default it uses the [DpSimplificationRepository].
-  final SimplificationRepository simplificationRepository;
 
   /// The state of the sketch at this moment.
   ///
@@ -257,7 +249,7 @@ class ScribbleNotifier extends ScribbleNotifierBase
   /// finished. Changing this value will only affect future lines.
   void setSimplificationDegree(double degree) {
     temporaryValue = value.copyWith(
-      simplificationDegree: degree,
+      simplificationTolerance: degree,
     );
   }
 
@@ -422,11 +414,8 @@ class ScribbleNotifier extends ScribbleNotifierBase
 
   ScribbleState _finishLineForState(ScribbleState s) {
     if (s case Drawing(activeLine: final activeLine?)) {
-      final simplifiedPoints = simplificationRepository.simplifyPoints(
-        activeLine.points,
-        degree: s.simplificationDegree,
-      );
-
+      // TODO(tim): simplify
+      final simplifiedPoints = activeLine.points;
       return s.copyWith(
         activeLine: null,
         sketch: s.sketch.copyWith(
