@@ -1,6 +1,6 @@
 name: simpli
 description: Polyline simplification algorithms, made simple! Sporting Ramer-Douglas-Peucker and Visvalingam
-version: 0.1.0+1
+version: 0.1.1
 
 
 environment:
