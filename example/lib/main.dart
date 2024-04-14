@@ -89,10 +89,18 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  const Divider(),
+                  const Divider(
+                    height: 32,
+                  ),
                   Row(
                     children: [
-                      const Text("Simplification:"),
+                      ValueListenableBuilder(
+                        valueListenable: notifier.select((value) => value.lines
+                            .expand((element) => element.points)
+                            .length),
+                        builder: (context, value, child) =>
+                            Text("Simplification:\n($value points)"),
+                      ),
                       Expanded(
                         child: ValueListenableBuilder(
                           valueListenable: notifier
