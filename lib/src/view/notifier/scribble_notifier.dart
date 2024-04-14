@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:scribble/scribble.dart';
 import 'package:scribble/src/view/painting/point_to_offset_x.dart';
+import 'package:scribble/src/view/simplification/sketch_simplifier.dart';
 import 'package:value_notifier_tools/value_notifier_tools.dart';
 
 /// {@template scribble_notifier_base}
@@ -90,36 +91,37 @@ class ScribbleNotifier extends ScribbleNotifierBase
 
     /// How many states you want stored in the undo history, 30 by default.
     int maxHistoryLength = 30,
-
-    /// The supported widths, mainly useful for rendering UI, you can still set
-    /// the width to any arbitrary value from code. The first entry in this list
-    /// will be the starting width.
     this.widths = const [5, 10, 15],
-
-    /// The curve that's used to map pen pressure to the pressure value when
-    /// recording, by default it's linear.
     this.pressureCurve = Curves.linear,
+    this.simplifier = const VisvalingamSimplifier(),
+
+    /// {@macro view.state.scribble_state.simplification_tolerance}
+    double simplificationTolerance = 0,
   }) : super(
           ScribbleState.drawing(
-            sketch: sketch ?? const Sketch(lines: []),
+            sketch: switch (sketch) {
+              Sketch() => simplifier.simplifySketch(
+                  sketch,
+                  pixelTolerance: simplificationTolerance,
+                ),
+              null => const Sketch(lines: []),
+            },
             selectedWidth: widths[0],
             allowedPointersMode: allowedPointersMode,
+            simplificationTolerance: simplificationTolerance,
           ),
         ) {
-    value = ScribbleState.drawing(
-      sketch: sketch ?? const Sketch(lines: []),
-      selectedWidth: widths[0],
-      allowedPointersMode: allowedPointersMode,
-    );
     this.maxHistoryLength = maxHistoryLength;
   }
 
   /// The supported widths, mainly useful for rendering UI, you can still set
   /// the width to any arbitrary value from code.
+  ///
+  /// The first entry in this list will be the starting width.
   final List<double> widths;
 
   /// The curve that's used to map pen pressure to the pressure value when
-  /// recording.
+  /// recording, by default it's linear.
   final Curve pressureCurve;
 
   /// The state of the sketch at this moment.
@@ -132,6 +134,11 @@ class ScribbleNotifier extends ScribbleNotifierBase
 
   @override
   GlobalKey get repaintBoundaryKey => _repaintBoundaryKey;
+
+  /// The [SketchSimplifier] that is used to simplify the lines of the sketch.
+  ///
+  /// Defaults to [VisvalingamSimplifier], but you can implement your own.
+  final SketchSimplifier simplifier;
 
   /// Only apply the sketch from the undo history, otherwise keep current state
   @override
@@ -148,9 +155,16 @@ class ScribbleNotifier extends ScribbleNotifierBase
   /// Can be used to update the state of the Sketch externally (e.g. when
   /// fetching from a server) to what is passed in as [sketch];
   ///
-  /// Per default, this state of the sketch gets added to the undo history. If
-  /// this is not desired, set [addToUndoHistory] to ``false``.
-  void setSketch({required Sketch sketch, bool addToUndoHistory = true}) {
+  /// By default, this state of the sketch gets added to the undo history. If
+  /// this is not desired, set [addToUndoHistory] to `false`.
+  ///
+  /// The sketch will be simplified using the currently set simplification
+  /// tolerance. If you don't want simplification, call
+  /// [setSimplificationTolerance] to set it to 0.
+  void setSketch({
+    required Sketch sketch,
+    bool addToUndoHistory = true,
+  }) {
     final newState = value.copyWith(
       sketch: sketch,
     );
@@ -163,25 +177,15 @@ class ScribbleNotifier extends ScribbleNotifierBase
 
   /// Clear the entire drawing.
   void clear() {
-    value = value.map(
-      drawing: (s) => ScribbleState.drawing(
-        sketch: const Sketch(lines: []),
-        selectedColor: s.selectedColor,
-        selectedWidth: s.selectedWidth,
-        allowedPointersMode: s.allowedPointersMode,
-        activePointerIds: s.activePointerIds,
-        scaleFactor: s.scaleFactor,
-        pointerPosition: s.pointerPosition,
-      ),
-      erasing: (s) => ScribbleState.erasing(
-        sketch: const Sketch(lines: []),
-        selectedWidth: s.selectedWidth,
-        allowedPointersMode: s.allowedPointersMode,
-        activePointerIds: s.activePointerIds,
-        scaleFactor: s.scaleFactor,
-        pointerPosition: s.pointerPosition,
-      ),
-    );
+    value = switch (value) {
+      final Drawing d => d.copyWith(
+          sketch: const Sketch(lines: []),
+          activeLine: null,
+        ),
+      final Erasing e => e.copyWith(
+          sketch: const Sketch(lines: []),
+        ),
+    };
   }
 
   /// Sets the width of the next line
@@ -241,16 +245,34 @@ class ScribbleNotifier extends ScribbleNotifierBase
     );
   }
 
-  /// Sets the simplification degree for the sketch.
+  /// Sets the simplification degree for the sketch in logical pixels.
   ///
-  /// The degree should be between 0 and 1, where 0 means no simplification.
-  /// The higher the degree, the more the lines will be simplified.
-  /// Lines will be simplified when they are
-  /// finished. Changing this value will only affect future lines.
-  void setSimplificationDegree(double degree) {
+  /// 0 means no simplification, 1px is a good starting point for most sketches.
+  /// The higher the degree, the more the details will be eroded.
+  ///
+  /// Changing this value will only affect future lines. If you want
+  /// to simplify existing lines, see [simplify].
+  void setSimplificationTolerance(double degree) {
     temporaryValue = value.copyWith(
       simplificationTolerance: degree,
     );
+  }
+
+  /// Simplifies the current sketch to the current simplification degree using
+  /// [simplifier].
+  ///
+  /// This will simplify all lines. If [addToUndoHistory] is true, this step
+  /// will be added to the undo history
+  void simplify({bool addToUndoHistory = true}) {
+    final newSketch = simplifier.simplifySketch(
+      value.sketch,
+      pixelTolerance: value.simplificationTolerance,
+    );
+    if (addToUndoHistory) {
+      value = value.copyWith(sketch: newSketch);
+    } else {
+      temporaryValue = value.copyWith(sketch: newSketch);
+    }
   }
 
   /// Used by the Listener callback to display the pen if desired
@@ -414,17 +436,14 @@ class ScribbleNotifier extends ScribbleNotifierBase
 
   ScribbleState _finishLineForState(ScribbleState s) {
     if (s case Drawing(activeLine: final activeLine?)) {
-      // TODO(tim): simplify
-      final simplifiedPoints = activeLine.points;
       return s.copyWith(
         activeLine: null,
         sketch: s.sketch.copyWith(
           lines: [
             ...s.sketch.lines,
-            SketchLine(
-              color: activeLine.color,
-              width: activeLine.width,
-              points: simplifiedPoints,
+            simplifier.simplify(
+              activeLine,
+              pixelTolerance: s.simplificationTolerance,
             ),
           ],
         ),

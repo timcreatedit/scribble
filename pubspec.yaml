@@ -14,6 +14,7 @@ dependencies:
     sdk: flutter
   freezed_annotation: ^2.4.1
   perfect_freehand: ^2.3.2
+  simpli: ^0.1.1
   value_notifier_tools: ^0.1.2
 
 dev_dependencies:

@@ -67,11 +67,11 @@ class _HomePageState extends State<HomePage> {
             ),
             Padding(
               padding: const EdgeInsets.all(16),
-              child: SizedBox(
-                width: double.infinity,
-                child: Column(
-                  children: [
-                    Wrap(
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       alignment: WrapAlignment.spaceBetween,
                       spacing: 16,
@@ -88,16 +88,39 @@ class _HomePageState extends State<HomePage> {
                         _buildPointerModeSwitcher(context),
                       ],
                     ),
-                    ValueListenableBuilder(
-                      valueListenable: notifier
-                          .select((value) => value.simplificationTolerance),
-                      builder: (context, value, child) => Slider(
-                        value: value,
-                        onChanged: notifier.setSimplificationDegree,
+                  ),
+                  const Divider(
+                    height: 32,
+                  ),
+                  Row(
+                    children: [
+                      ValueListenableBuilder(
+                        valueListenable: notifier.select((value) => value.lines
+                            .expand((element) => element.points)
+                            .length),
+                        builder: (context, value, child) =>
+                            Text("Simplification:\n($value points)"),
                       ),
-                    ),
-                  ],
-                ),
+                      Expanded(
+                        child: ValueListenableBuilder(
+                          valueListenable: notifier
+                              .select((value) => value.simplificationTolerance),
+                          builder: (context, value, child) => Slider(
+                            value: value,
+                            max: 10,
+                            onChanged: notifier.setSimplificationTolerance,
+                            label: "${value.toStringAsFixed(2)} px",
+                            divisions: 100,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: notifier.simplify,
+                        child: const Text("Simplify"),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             )
           ],
