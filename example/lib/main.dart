@@ -35,7 +35,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late ScribbleNotifier notifier;
 
-  bool _simulatePressure = false;
+  bool _simulatePressure = true;
 
   @override
   void initState() {
