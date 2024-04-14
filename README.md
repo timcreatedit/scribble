@@ -25,7 +25,7 @@ dart pub add scribble
 * Variable line width
 * Image Export
 * Pen and touch pressure support
-* Line simplification for smaller sketches
+* Line simplification for making sketch files smaller
 * Choose which pointers can draw (touch, pen, mouse, etc.)
 * Lines get slimmer when the pen is moved more quickly
 * Line eraser support
@@ -37,8 +37,8 @@ dart pub add scribble
 
 > You can find a full working example in the [example](./example) directory
 
-You can create a drawing surface by adding the ``Scribble`` widget to your widget tree and passing in
-a ``ScribbleNotifier``.
+You can create a drawing surface by adding the `Scribble` widget to your widget tree and passing in
+a `ScribbleNotifier`.
 
 ```dart
 import 'package:flutter/material.dart';
@@ -56,7 +56,7 @@ class App extends StatelessWidget {
 }
 ```
 
-Use the public methods on ``ScribbleNotifier`` to control the behavior (for example from a button in the UI):
+Use the public methods on `ScribbleNotifier` to control the behavior (for example from a button in the UI):
 
 ```dart
 notifier = ScribbleNotifier();
