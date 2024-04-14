@@ -13,6 +13,7 @@ class ScribbleSketch extends StatelessWidget {
   const ScribbleSketch({
     required this.sketch,
     this.scaleFactor = 1,
+    this.simulatePressure = true,
     super.key,
   });
 
@@ -25,12 +26,16 @@ class ScribbleSketch extends StatelessWidget {
   /// (e.g. through InteractiveViewer) so that the pen width remains the same.
   final double scaleFactor;
 
+  /// {@macro scribble.simulate_pressure}
+  final bool simulatePressure;
+
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: ScribblePainter(
         sketch: sketch,
         scaleFactor: scaleFactor,
+        simulatePressure: simulatePressure,
       ),
     );
   }

@@ -25,6 +25,7 @@ class Scribble extends StatelessWidget {
 
     /// Whether to draw the pointer when in erasing mode
     this.drawEraser = true,
+    this.simulatePressure = true,
     super.key,
   });
 
@@ -36,6 +37,15 @@ class Scribble extends StatelessWidget {
 
   /// Whether to draw the pointer when in erasing mode
   final bool drawEraser;
+
+  /// {@template scribble.simulate_pressure}
+  /// Whether to simulate pressure when drawing lines that don't have pressure
+  /// information (all points have the same pressure).
+  ///
+  /// Defaults to `true`.
+  /// {@endtemplate}
+  final bool simulatePressure;
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ScribbleState>(
@@ -49,6 +59,7 @@ class Scribble extends StatelessWidget {
               state: state,
               drawPointer: drawPen,
               drawEraser: drawEraser,
+              simulatePressure: simulatePressure,
             ),
             child: RepaintBoundary(
               key: notifier.repaintBoundaryKey,
@@ -56,6 +67,7 @@ class Scribble extends StatelessWidget {
                 painter: ScribblePainter(
                   sketch: state.sketch,
                   scaleFactor: state.scaleFactor,
+                  simulatePressure: simulatePressure,
                 ),
               ),
             ),
