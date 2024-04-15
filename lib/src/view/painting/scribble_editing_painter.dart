@@ -13,6 +13,7 @@ class ScribbleEditingPainter extends CustomPainter with SketchLinePathMixin {
     required this.state,
     required this.drawPointer,
     required this.drawEraser,
+    required this.simulatePressure,
   });
 
   /// The current state of the scribble sketch
@@ -30,6 +31,9 @@ class ScribbleEditingPainter extends CustomPainter with SketchLinePathMixin {
   final bool drawEraser;
 
   @override
+  final bool simulatePressure;
+
+  @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..style = PaintingStyle.fill;
 
@@ -38,7 +42,10 @@ class ScribbleEditingPainter extends CustomPainter with SketchLinePathMixin {
       erasing: (_) => null,
     );
     if (activeLine != null) {
-      final path = getPathForLine(activeLine, scaleFactor: state.scaleFactor);
+      final path = getPathForLine(
+        activeLine,
+        scaleFactor: state.scaleFactor,
+      );
       if (path != null) {
         paint.color = Color(activeLine.color);
         canvas.drawPath(path, paint);
@@ -67,6 +74,7 @@ class ScribbleEditingPainter extends CustomPainter with SketchLinePathMixin {
 
   @override
   bool shouldRepaint(ScribbleEditingPainter oldDelegate) {
-    return oldDelegate.state != state;
+    return oldDelegate.state != state ||
+        oldDelegate.simulatePressure != simulatePressure;
   }
 }

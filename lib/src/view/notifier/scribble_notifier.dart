@@ -250,7 +250,11 @@ class ScribbleNotifier extends ScribbleNotifierBase
   /// 0 means no simplification, 1px is a good starting point for most sketches.
   /// The higher the degree, the more the details will be eroded.
   ///
-  /// Changing this value will only affect future lines. If you want
+  /// **Info:** Simplification quickly breaks simulated pressure, since it
+  /// removes points that are close together first, so pressure simulation
+  /// assumes a more even speed of the pen.
+  ///
+  /// Changing this value by itself will only affect future lines. If you want
   /// to simplify existing lines, see [simplify].
   void setSimplificationTolerance(double degree) {
     temporaryValue = value.copyWith(

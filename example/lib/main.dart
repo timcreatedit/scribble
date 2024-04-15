@@ -35,6 +35,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late ScribbleNotifier notifier;
 
+  bool _simulatePressure = true;
+
   @override
   void initState() {
     notifier = ScribbleNotifier();
@@ -62,6 +64,7 @@ class _HomePageState extends State<HomePage> {
                 child: Scribble(
                   notifier: notifier,
                   drawPen: true,
+                  simulatePressure: _simulatePressure,
                 ),
               ),
             ),
@@ -83,6 +86,18 @@ class _HomePageState extends State<HomePage> {
                             _buildColorToolbar(context),
                             const VerticalDivider(width: 32),
                             _buildStrokeToolbar(context),
+                          ],
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Switch.adaptive(
+                              value: _simulatePressure,
+                              onChanged: (v) =>
+                                  setState(() => _simulatePressure = v),
+                            ),
+                            const SizedBox(width: 8),
+                            const Text("Simulate Pressure")
                           ],
                         ),
                         _buildPointerModeSwitcher(context),

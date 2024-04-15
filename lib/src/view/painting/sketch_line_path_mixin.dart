@@ -8,14 +8,21 @@ import 'package:scribble/src/domain/model/sketch/sketch.dart';
 /// Provides the method [getPathForLine] which generates a smooth [Path] from a
 /// [SketchLine].
 mixin SketchLinePathMixin {
+  /// {@macro scribble.simulate_pressure}
+  bool get simulatePressure;
+
   /// Generates a [Path] from a [SketchLine].
   ///
   /// The [scaleFactor] is used to scale the line width.
+  ///
+  /// If [simulatePressure] is true, the line will be drawn as if it had
+  /// pressure information, if all its points have the same pressure.
   Path? getPathForLine(
     SketchLine line, {
     double scaleFactor = 1.0,
   }) {
-    final simulatePressure = line.points.isNotEmpty &&
+    final needSimulate = simulatePressure &&
+        line.points.length > 1 &&
         line.points.every((p) => p.pressure == line.points.first.pressure);
     final points = line.points
         .map((point) => pf.PointVector(point.x, point.y, point.pressure))
@@ -24,7 +31,7 @@ mixin SketchLinePathMixin {
       points,
       options: pf.StrokeOptions(
         size: line.width * 2 * scaleFactor,
-        simulatePressure: simulatePressure,
+        simulatePressure: needSimulate,
       ),
     );
     if (outlinePoints.isEmpty) {

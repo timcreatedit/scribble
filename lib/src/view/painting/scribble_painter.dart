@@ -8,6 +8,7 @@ class ScribblePainter extends CustomPainter with SketchLinePathMixin {
   ScribblePainter({
     required this.sketch,
     required this.scaleFactor,
+    required this.simulatePressure,
   });
 
   /// The [Sketch] to draw.
@@ -17,11 +18,17 @@ class ScribblePainter extends CustomPainter with SketchLinePathMixin {
   final double scaleFactor;
 
   @override
+  final bool simulatePressure;
+
+  @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..style = PaintingStyle.fill;
 
     for (var i = 0; i < sketch.lines.length; ++i) {
-      final path = getPathForLine(sketch.lines[i], scaleFactor: scaleFactor);
+      final path = getPathForLine(
+        sketch.lines[i],
+        scaleFactor: scaleFactor,
+      );
       if (path == null) {
         continue;
       }
@@ -33,6 +40,7 @@ class ScribblePainter extends CustomPainter with SketchLinePathMixin {
   @override
   bool shouldRepaint(ScribblePainter oldDelegate) {
     return oldDelegate.sketch != sketch ||
+        oldDelegate.simulatePressure != simulatePressure ||
         oldDelegate.scaleFactor != scaleFactor;
   }
 }
