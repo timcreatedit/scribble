@@ -8,6 +8,9 @@ import 'package:scribble/src/domain/model/sketch/sketch.dart';
 /// Provides the method [getPathForLine] which generates a smooth [Path] from a
 /// [SketchLine].
 mixin SketchLinePathMixin {
+  /// {@macro scribble.simulate_pressure}
+  bool get simulatePressure;
+
   /// Generates a [Path] from a [SketchLine].
   ///
   /// The [scaleFactor] is used to scale the line width.
@@ -17,7 +20,6 @@ mixin SketchLinePathMixin {
   Path? getPathForLine(
     SketchLine line, {
     double scaleFactor = 1.0,
-    bool simulatePressure = true,
   }) {
     final needSimulate = simulatePressure &&
         line.points.length > 1 &&

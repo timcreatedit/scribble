@@ -17,7 +17,7 @@ class ScribblePainter extends CustomPainter with SketchLinePathMixin {
   /// {@macro view.state.scribble_state.scale_factor}
   final double scaleFactor;
 
-  /// {@macro scribble.simulate_pressure}
+  @override
   final bool simulatePressure;
 
   @override
@@ -28,7 +28,6 @@ class ScribblePainter extends CustomPainter with SketchLinePathMixin {
       final path = getPathForLine(
         sketch.lines[i],
         scaleFactor: scaleFactor,
-        simulatePressure: simulatePressure,
       );
       if (path == null) {
         continue;

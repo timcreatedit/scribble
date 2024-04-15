@@ -30,7 +30,7 @@ class ScribbleEditingPainter extends CustomPainter with SketchLinePathMixin {
   /// The pointer will be drawn as a transparent circle with a black border.
   final bool drawEraser;
 
-  /// {@macro scribble.simulate_pressure}
+  @override
   final bool simulatePressure;
 
   @override
@@ -45,7 +45,6 @@ class ScribbleEditingPainter extends CustomPainter with SketchLinePathMixin {
       final path = getPathForLine(
         activeLine,
         scaleFactor: state.scaleFactor,
-        simulatePressure: simulatePressure,
       );
       if (path != null) {
         paint.color = Color(activeLine.color);
