@@ -24,7 +24,7 @@ dev_dependencies:
   freezed: ^2.4.7
   json_serializable: ^6.7.1
   lintervention: ^0.1.1
-  melos: ^5.2.1
+  melos: ">=5.2.1 <7.0.0"
   mocktail: ^1.0.3
 
 flutter:
