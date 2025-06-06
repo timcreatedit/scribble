@@ -1,3 +1,22 @@
+## 0.10.1
+
+ - **REFACTOR**: changed `SketchSimplifier` methods to better match data structure.
+ - **FIX**: eraser doesn't affect undo history if it didn't actually erase anything (#80).
+ - **FIX**: disable setting pressure to default value on web (#72).
+ - **FIX**: remove emoji from pubspec.
+ - **FIX**: updated meta dependency constraints.
+ - **FEAT**(example): added pressure simulation toggle.
+ - **FEAT**: added parameter for pressure simulation to widgets.
+ - **FEAT**(example): made UI a little bit prettier.
+ - **FEAT**: simplify sketches in `setSketch` if the `simplificationTolerance` is not 0.
+ - **FEAT**: simplify sketch on load if simplificationTolerance is not 0.
+ - **FEAT**: added ability to simplify entire sketches.
+ - **FEAT**: implemented simplification.
+ - **FEAT**: added simpli package (#50).
+ - **DOCS**: simplification comment mentions how pressure simulation is affected.
+ - **DOCS**: fix readme.
+ - **DOCS**: updated recommended starting point.
+
 ## 0.10.0+1
 
  - **DOCS**: fixed demo image.
