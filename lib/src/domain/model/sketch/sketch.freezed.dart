@@ -22,8 +22,12 @@ Sketch _$SketchFromJson(Map<String, dynamic> json) {
 mixin _$Sketch {
   List<SketchLine> get lines => throw _privateConstructorUsedError;
 
+  /// Serializes this Sketch to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Sketch
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SketchCopyWith<Sketch> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -45,6 +49,8 @@ class _$SketchCopyWithImpl<$Res, $Val extends Sketch>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Sketch
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -77,6 +83,8 @@ class __$$SketchImplCopyWithImpl<$Res>
       _$SketchImpl _value, $Res Function(_$SketchImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Sketch
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -120,12 +128,14 @@ class _$SketchImpl implements _Sketch {
             const DeepCollectionEquality().equals(other._lines, _lines));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_lines));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Sketch
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SketchImplCopyWith<_$SketchImpl> get copyWith =>
@@ -146,8 +156,11 @@ abstract class _Sketch implements Sketch {
 
   @override
   List<SketchLine> get lines;
+
+  /// Create a copy of Sketch
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SketchImplCopyWith<_$SketchImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -11,15 +11,21 @@ void main() {
       final sketch = Sketch.fromJson(json);
       expect(sketch.lines.length, 14);
       expect(sketch.lines.where((l) => l.color == 0xFF000000).length, 10);
-      expect(sketch.lines.where((l) => l.color == Colors.red.value).length, 1);
       expect(
-        sketch.lines.where((l) => l.color == Colors.green.value).length,
-        1,
+        sketch.lines.where((l) => l.color == Colors.red.toARGB32()),
+        hasLength(1),
       );
-      expect(sketch.lines.where((l) => l.color == Colors.blue.value).length, 1);
       expect(
-        sketch.lines.where((l) => l.color == Colors.yellow.value).length,
-        1,
+        sketch.lines.where((l) => l.color == Colors.green.toARGB32()),
+        hasLength(1),
+      );
+      expect(
+        sketch.lines.where((l) => l.color == Colors.blue.toARGB32()),
+        hasLength(1),
+      );
+      expect(
+        sketch.lines.where((l) => l.color == Colors.yellow.toARGB32()),
+        hasLength(1),
       );
     });
   });

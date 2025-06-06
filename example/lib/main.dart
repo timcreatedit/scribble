@@ -339,8 +339,8 @@ class _HomePageState extends State<HomePage> {
     required Color color,
   }) {
     return ValueListenableBuilder(
-      valueListenable: notifier.select(
-          (value) => value is Drawing && value.selectedColor == color.value),
+      valueListenable: notifier.select((value) =>
+          value is Drawing && value.selectedColor == color.toARGB32()),
       builder: (context, value, child) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4),
         child: ColorButton(

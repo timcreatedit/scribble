@@ -230,13 +230,13 @@ class ScribbleNotifier extends ScribbleNotifierBase
     temporaryValue = value.map(
       drawing: (s) => ScribbleState.drawing(
         sketch: s.sketch,
-        selectedColor: color.value,
+        selectedColor: color.toARGB32(),
         selectedWidth: s.selectedWidth,
         allowedPointersMode: s.allowedPointersMode,
       ),
       erasing: (s) => ScribbleState.drawing(
         sketch: s.sketch,
-        selectedColor: color.value,
+        selectedColor: color.toARGB32(),
         selectedWidth: s.selectedWidth,
         allowedPointersMode: s.allowedPointersMode,
         scaleFactor: value.scaleFactor,

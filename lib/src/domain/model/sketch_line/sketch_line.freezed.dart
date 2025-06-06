@@ -29,8 +29,12 @@ mixin _$SketchLine {
   /// The width of the line
   double get width => throw _privateConstructorUsedError;
 
+  /// Serializes this SketchLine to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of SketchLine
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SketchLineCopyWith<SketchLine> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -54,6 +58,8 @@ class _$SketchLineCopyWithImpl<$Res, $Val extends SketchLine>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of SketchLine
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -97,6 +103,8 @@ class __$$SketchLineImplCopyWithImpl<$Res>
       _$SketchLineImpl _value, $Res Function(_$SketchLineImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SketchLine
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -167,12 +175,14 @@ class _$SketchLineImpl implements _SketchLine {
             (identical(other.width, width) || other.width == width));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, const DeepCollectionEquality().hash(_points), color, width);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SketchLine
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SketchLineImplCopyWith<_$SketchLineImpl> get copyWith =>
@@ -195,20 +205,22 @@ abstract class _SketchLine implements SketchLine {
   factory _SketchLine.fromJson(Map<String, dynamic> json) =
       _$SketchLineImpl.fromJson;
 
-  @override
-
   /// The points that make up the line
-  List<Point> get points;
   @override
+  List<Point> get points;
 
   /// The color of the line in hexadecimal format (ARGB)
-  int get color;
   @override
+  int get color;
 
   /// The width of the line
-  double get width;
   @override
-  @JsonKey(ignore: true)
+  double get width;
+
+  /// Create a copy of SketchLine
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SketchLineImplCopyWith<_$SketchLineImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

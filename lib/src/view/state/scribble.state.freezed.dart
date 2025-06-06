@@ -55,10 +55,12 @@ mixin _$ScribbleState {
   /// {@endtemplate}
   double get scaleFactor => throw _privateConstructorUsedError;
 
+  /// {@template view.state.scribble_state.simplification_tolerance}
   /// The current tolerance of simplification, in pixels.
   ///
   /// Lines will be simplified when they are finished. A value of 0 (default)
   /// will mean no simplification.
+  /// {@endtemplate}
   double get simplificationTolerance => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
@@ -152,8 +154,13 @@ mixin _$ScribbleState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+
+  /// Serializes this ScribbleState to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ScribbleState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ScribbleStateCopyWith<ScribbleState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -187,6 +194,8 @@ class _$ScribbleStateCopyWithImpl<$Res, $Val extends ScribbleState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ScribbleState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -230,6 +239,8 @@ class _$ScribbleStateCopyWithImpl<$Res, $Val extends ScribbleState>
     ) as $Val);
   }
 
+  /// Create a copy of ScribbleState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $SketchCopyWith<$Res> get sketch {
@@ -238,6 +249,8 @@ class _$ScribbleStateCopyWithImpl<$Res, $Val extends ScribbleState>
     });
   }
 
+  /// Create a copy of ScribbleState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $PointCopyWith<$Res>? get pointerPosition {
@@ -285,6 +298,8 @@ class __$$DrawingImplCopyWithImpl<$Res>
       _$DrawingImpl _value, $Res Function(_$DrawingImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ScribbleState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -338,6 +353,8 @@ class __$$DrawingImplCopyWithImpl<$Res>
     ));
   }
 
+  /// Create a copy of ScribbleState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $SketchLineCopyWith<$Res>? get activeLine {
@@ -425,10 +442,12 @@ class _$DrawingImpl extends Drawing {
   @JsonKey()
   final double scaleFactor;
 
+  /// {@template view.state.scribble_state.simplification_tolerance}
   /// The current tolerance of simplification, in pixels.
   ///
   /// Lines will be simplified when they are finished. A value of 0 (default)
   /// will mean no simplification.
+  /// {@endtemplate}
   @override
   @JsonKey()
   final double simplificationTolerance;
@@ -466,7 +485,7 @@ class _$DrawingImpl extends Drawing {
                 other.simplificationTolerance == simplificationTolerance));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -480,7 +499,9 @@ class _$DrawingImpl extends Drawing {
       scaleFactor,
       simplificationTolerance);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ScribbleState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DrawingImplCopyWith<_$DrawingImpl> get copyWith =>
@@ -652,35 +673,33 @@ abstract class Drawing extends ScribbleState {
 
   factory Drawing.fromJson(Map<String, dynamic> json) = _$DrawingImpl.fromJson;
 
-  @override
-
   /// The current state of the sketch
+  @override
   Sketch get sketch;
 
   /// The line that is currently being drawn
   SketchLine? get activeLine;
-  @override
 
   /// Which pointers are allowed for drawing and will be captured by the
   /// scribble widget.
-  ScribblePointerMode get allowedPointersMode;
   @override
+  ScribblePointerMode get allowedPointersMode;
 
   /// The ids of all supported pointers that are currently interacting with
   /// the widget.
-  List<int> get activePointerIds;
   @override
+  List<int> get activePointerIds;
 
   /// The current position of the pointer
+  @override
   Point? get pointerPosition;
 
   /// The color that is currently being drawn with
   int get selectedColor;
-  @override
 
   /// The current width of the pen
-  double get selectedWidth;
   @override
+  double get selectedWidth;
 
   /// {@template view.state.scribble_state.scale_factor}
   /// How much the widget is scaled at the moment.
@@ -688,16 +707,22 @@ abstract class Drawing extends ScribbleState {
   /// Can be used if zoom functionality is needed
   /// (e.g. through InteractiveViewer) so that the pen width remains the same.
   /// {@endtemplate}
-  double get scaleFactor;
   @override
+  double get scaleFactor;
 
+  /// {@template view.state.scribble_state.simplification_tolerance}
   /// The current tolerance of simplification, in pixels.
   ///
   /// Lines will be simplified when they are finished. A value of 0 (default)
   /// will mean no simplification.
-  double get simplificationTolerance;
+  /// {@endtemplate}
   @override
-  @JsonKey(ignore: true)
+  double get simplificationTolerance;
+
+  /// Create a copy of ScribbleState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DrawingImplCopyWith<_$DrawingImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -733,6 +758,8 @@ class __$$ErasingImplCopyWithImpl<$Res>
       _$ErasingImpl _value, $Res Function(_$ErasingImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ScribbleState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -875,7 +902,7 @@ class _$ErasingImpl extends Erasing {
                 other.simplificationTolerance == simplificationTolerance));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -887,7 +914,9 @@ class _$ErasingImpl extends Erasing {
       scaleFactor,
       simplificationTolerance);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ScribbleState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ErasingImplCopyWith<_$ErasingImpl> get copyWith =>
@@ -1033,44 +1062,46 @@ abstract class Erasing extends ScribbleState {
 
   factory Erasing.fromJson(Map<String, dynamic> json) = _$ErasingImpl.fromJson;
 
-  @override
-
   /// The current state of the sketch
-  Sketch get sketch;
   @override
+  Sketch get sketch;
 
   /// Which pointers are allowed for drawing and will be captured by the
   /// scribble widget.
-  ScribblePointerMode get allowedPointersMode;
   @override
+  ScribblePointerMode get allowedPointersMode;
 
   /// The ids of all supported pointers that are currently interacting with
   /// the widget.
-  List<int> get activePointerIds;
   @override
+  List<int> get activePointerIds;
 
   /// The current position of the pointer
-  Point? get pointerPosition;
   @override
+  Point? get pointerPosition;
 
   /// The current width of the pen
-  double get selectedWidth;
   @override
+  double get selectedWidth;
 
   /// How much the widget is scaled at the moment.
   ///
   /// Can be used if zoom functionality is needed
   /// (e.g. through InteractiveViewer) so that the pen width remains the same.
-  double get scaleFactor;
   @override
+  double get scaleFactor;
 
   /// The current tolerance of simplification, in pixels.
   ///
   /// Lines will be simplified when they are finished. A value of 0 (default)
   /// will mean no simplification.
-  double get simplificationTolerance;
   @override
-  @JsonKey(ignore: true)
+  double get simplificationTolerance;
+
+  /// Create a copy of ScribbleState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ErasingImplCopyWith<_$ErasingImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
