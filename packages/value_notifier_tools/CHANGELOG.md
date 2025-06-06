@@ -1,3 +1,7 @@
+## 0.1.3
+
+ - **FEAT**: implemented simplification.
+
 ## 0.1.2
 
  - **FIX**(value_notifier_tools): fixed type parameters in select extension.
