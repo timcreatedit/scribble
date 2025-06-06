@@ -1,4 +1,4 @@
-name: ci
+name: CI
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -45,4 +45,27 @@ jobs:
         with:
           generate_badges: pr
           upper_threshold: 30
+  
+  check_generation:
+    name: Check Code Generation
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📚 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Ⓜ️ Set up Melos
+        uses: bluefireteam/melos-action@v3
+
+      - name: 🔨 Generate
+        run: melos run generate
+
+      - name: 🔎 Check there are no uncommitted changes
+        run: git add . && git diff --cached --exit-code
   

@@ -11,7 +11,7 @@ _$SketchLineImpl _$$SketchLineImplFromJson(Map<String, dynamic> json) =>
       points: (json['points'] as List<dynamic>)
           .map((e) => Point.fromJson(e as Map<String, dynamic>))
           .toList(),
-      color: json['color'] as int,
+      color: (json['color'] as num).toInt(),
       width: (json['width'] as num).toDouble(),
     );
 

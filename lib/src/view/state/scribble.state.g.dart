@@ -16,13 +16,13 @@ _$DrawingImpl _$$DrawingImplFromJson(Map<String, dynamic> json) =>
               _$ScribblePointerModeEnumMap, json['allowedPointersMode']) ??
           ScribblePointerMode.all,
       activePointerIds: (json['activePointerIds'] as List<dynamic>?)
-              ?.map((e) => e as int)
+              ?.map((e) => (e as num).toInt())
               .toList() ??
           const [],
       pointerPosition: json['pointerPosition'] == null
           ? null
           : Point.fromJson(json['pointerPosition'] as Map<String, dynamic>),
-      selectedColor: json['selectedColor'] as int? ?? 0xFF000000,
+      selectedColor: (json['selectedColor'] as num?)?.toInt() ?? 0xFF000000,
       selectedWidth: (json['selectedWidth'] as num?)?.toDouble() ?? 5,
       scaleFactor: (json['scaleFactor'] as num?)?.toDouble() ?? 1,
       simplificationTolerance:
@@ -59,7 +59,7 @@ _$ErasingImpl _$$ErasingImplFromJson(Map<String, dynamic> json) =>
               _$ScribblePointerModeEnumMap, json['allowedPointersMode']) ??
           ScribblePointerMode.all,
       activePointerIds: (json['activePointerIds'] as List<dynamic>?)
-              ?.map((e) => e as int)
+              ?.map((e) => (e as num).toInt())
               .toList() ??
           const [],
       pointerPosition: json['pointerPosition'] == null
