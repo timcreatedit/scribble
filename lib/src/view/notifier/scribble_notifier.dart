@@ -26,6 +26,19 @@ abstract class ScribbleNotifierBase extends ValueNotifier<ScribbleState> {
   /// access it from the [renderImage] method.
   GlobalKey get repaintBoundaryKey;
 
+  /// Attaches a [GlobalKey] representing a [RepaintBoundary] used by a
+  /// [Scribble] widget instance.
+  ///
+  /// Default implementation is a no-op so external implementations of the
+  /// notifier don't need to override this method.
+  void attachRepaintBoundaryKey(GlobalKey key) {}
+
+  /// Detaches a previously attached [GlobalKey].
+  ///
+  /// Default implementation is a no-op so external implementations of the
+  /// notifier don't need to override this method.
+  void detachRepaintBoundaryKey(GlobalKey key) {}
+
   /// Should be called when the pointer hovers over the canvas with the
   /// corresponding [event].
   void onPointerHover(PointerHoverEvent event);
@@ -130,10 +143,50 @@ class ScribbleNotifier extends ScribbleNotifierBase
   /// receive a map.
   Sketch get currentSketch => value.sketch;
 
+  // Fallback key for backward compatibility when no widget-attached key exists.
   final GlobalKey _repaintBoundaryKey = GlobalKey();
 
+  // Tracks keys of mounted Scribble widgets using this notifier.
+  // The last attached key is preferred for image rendering to avoid collisions
+  // when the same notifier is used by multiple widgets concurrently.
+  final List<GlobalKey> _attachedRepaintBoundaryKeys = <GlobalKey>[];
+
   @override
-  GlobalKey get repaintBoundaryKey => _repaintBoundaryKey;
+  GlobalKey get repaintBoundaryKey => _attachedRepaintBoundaryKeys.isNotEmpty
+      ? _attachedRepaintBoundaryKeys.last
+      : _repaintBoundaryKey;
+
+  @override
+  void attachRepaintBoundaryKey(GlobalKey key) {
+    // Avoid duplicates while preserving order semantics
+    if (!_attachedRepaintBoundaryKeys.contains(key)) {
+      _attachedRepaintBoundaryKeys.add(key);
+    }
+  }
+
+  @override
+  void detachRepaintBoundaryKey(GlobalKey key) {
+    _attachedRepaintBoundaryKeys.remove(key);
+  }
+
+  @override
+  Future<ByteData> renderImage({
+    double pixelRatio = 1.0,
+    ui.ImageByteFormat format = ui.ImageByteFormat.png,
+  }) {
+    assert(() {
+      if (_attachedRepaintBoundaryKeys.isEmpty) {
+        debugPrint(
+          '[scribble] renderImage() is falling back to an internal GlobalKey. '
+          'If you implement ScribbleNotifierBase yourself, override '
+          'attachRepaintBoundaryKey/detachRepaintBoundaryKey so Scribble widgets '
+          'can register their RepaintBoundary. This fallback will be removed in a future release.',
+        );
+      }
+      return true;
+    }());
+    return super.renderImage(pixelRatio: pixelRatio, format: format);
+  }
 
   /// The [SketchSimplifier] that is used to simplify the lines of the sketch.
   ///

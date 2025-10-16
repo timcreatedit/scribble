@@ -14,7 +14,7 @@ import 'package:scribble/src/view/state/scribble.state.dart';
 /// You can control its behavior from code using the [notifier] instance you
 /// pass in.
 /// {@endtemplate}
-class Scribble extends StatelessWidget {
+class Scribble extends StatefulWidget {
   /// {@macro scribble}
   const Scribble({
     /// The notifier that controls this canvas.
@@ -47,27 +47,58 @@ class Scribble extends StatelessWidget {
   final bool simulatePressure;
 
   @override
+  State<Scribble> createState() => _ScribbleState();
+}
+
+class _ScribbleState extends State<Scribble> {
+  late final GlobalKey _localRepaintBoundaryKey;
+
+  @override
+  void initState() {
+    super.initState();
+    _localRepaintBoundaryKey = GlobalKey(
+      debugLabel: 'scribble_${identityHashCode(this)}',
+    );
+    widget.notifier.attachRepaintBoundaryKey(_localRepaintBoundaryKey);
+  }
+
+  @override
+  void didUpdateWidget(covariant Scribble oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!identical(oldWidget.notifier, widget.notifier)) {
+      oldWidget.notifier.detachRepaintBoundaryKey(_localRepaintBoundaryKey);
+      widget.notifier.attachRepaintBoundaryKey(_localRepaintBoundaryKey);
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.notifier.detachRepaintBoundaryKey(_localRepaintBoundaryKey);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ScribbleState>(
-      valueListenable: notifier,
+      valueListenable: widget.notifier,
       builder: (context, state, _) {
         final drawCurrentTool =
-            drawPen && state is Drawing || drawEraser && state is Erasing;
+            widget.drawPen && state is Drawing || widget.drawEraser && state is Erasing;
         final child = SizedBox.expand(
           child: CustomPaint(
             foregroundPainter: ScribbleEditingPainter(
               state: state,
-              drawPointer: drawPen,
-              drawEraser: drawEraser,
-              simulatePressure: simulatePressure,
+              drawPointer: widget.drawPen,
+              drawEraser: widget.drawEraser,
+              simulatePressure: widget.simulatePressure,
             ),
             child: RepaintBoundary(
-              key: notifier.repaintBoundaryKey,
+              key: _localRepaintBoundaryKey,
               child: CustomPaint(
                 painter: ScribblePainter(
                   sketch: state.sketch,
                   scaleFactor: state.scaleFactor,
-                  simulatePressure: simulatePressure,
+                  simulatePressure: widget.simulatePressure,
                 ),
               ),
             ),
@@ -83,13 +114,13 @@ class Scribble extends StatelessWidget {
                               .contains(PointerDeviceKind.mouse)
                       ? SystemMouseCursors.none
                       : MouseCursor.defer,
-                  onExit: notifier.onPointerExit,
+                  onExit: widget.notifier.onPointerExit,
                   child: Listener(
-                    onPointerDown: notifier.onPointerDown,
-                    onPointerMove: notifier.onPointerUpdate,
-                    onPointerUp: notifier.onPointerUp,
-                    onPointerHover: notifier.onPointerHover,
-                    onPointerCancel: notifier.onPointerCancel,
+                    onPointerDown: widget.notifier.onPointerDown,
+                    onPointerMove: widget.notifier.onPointerUpdate,
+                    onPointerUp: widget.notifier.onPointerUp,
+                    onPointerHover: widget.notifier.onPointerHover,
+                    onPointerCancel: widget.notifier.onPointerCancel,
                     child: child,
                   ),
                 ),

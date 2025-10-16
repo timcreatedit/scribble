@@ -44,5 +44,30 @@ void main() {
         },
       );
     });
+
+    testWidgets(
+      'does not throw when sharing a notifier across multiple instances',
+      (WidgetTester tester) async {
+        final notifier = ScribbleNotifier();
+        addTearDown(notifier.dispose);
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: Column(
+                children: [
+                  Expanded(child: Scribble(notifier: notifier)),
+                  Expanded(child: Scribble(notifier: notifier)),
+                ],
+              ),
+            ),
+          ),
+        );
+
+        await tester.pumpAndSettle();
+
+        expect(tester.takeException(), isNull);
+      },
+    );
   });
 }
