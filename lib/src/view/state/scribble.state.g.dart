@@ -50,6 +50,7 @@ const _$ScribblePointerModeEnumMap = {
   ScribblePointerMode.mouseOnly: 'mouseOnly',
   ScribblePointerMode.penOnly: 'penOnly',
   ScribblePointerMode.mouseAndPen: 'mouseAndPen',
+  ScribblePointerMode.singleTouchOnly: 'singleTouchOnly',
 };
 
 _$ErasingImpl _$$ErasingImplFromJson(Map<String, dynamic> json) =>

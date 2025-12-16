@@ -8,6 +8,7 @@ import 'package:scribble/scribble.dart';
 import 'package:scribble/src/view/painting/point_to_offset_x.dart';
 import 'package:scribble/src/view/simplification/sketch_simplifier.dart';
 import 'package:value_notifier_tools/value_notifier_tools.dart';
+import 'package:vector_math/vector_math_64.dart' show Vector3;
 
 /// {@template scribble_notifier_base}
 /// The base class for a notifier that controls the state of a [Scribble]
@@ -225,6 +226,20 @@ class ScribbleNotifier extends ScribbleNotifierBase
     );
   }
 
+  /// Sets the view transform matrix for pan/zoom functionality.
+  ///
+  /// When set, pointer coordinates are transformed using the inverse of this
+  /// matrix before being stored, and the sketch is rendered using this
+  /// transform. This allows Scribble to work seamlessly with external pan/zoom
+  /// controllers like InteractiveViewer without hit-testing issues.
+  ///
+  /// Set to `null` to disable view transformation.
+  void setViewTransform(Matrix4? transform) {
+    temporaryValue = value.copyWith(
+      viewTransform: transform,
+    );
+  }
+
   /// Sets the color of the pen to the given color.
   void setColor(Color color) {
     temporaryValue = value.map(
@@ -293,6 +308,17 @@ class ScribbleNotifier extends ScribbleNotifierBase
   @override
   void onPointerDown(PointerDownEvent event) {
     if (!value.supportedPointerKinds.contains(event.kind)) return;
+
+    // For singleTouchOnly mode, ignore additional touch pointers but allow
+    // mouse and stylus to work regardless
+    if (value.allowedPointersMode == ScribblePointerMode.singleTouchOnly &&
+        value.activePointerIds.isNotEmpty &&
+        event.kind == PointerDeviceKind.touch) {
+      // Don't capture this pointer - let it pass through to parent widgets
+      // (e.g., InteractiveViewer for pan/zoom)
+      return;
+    }
+
     var s = value;
 
     // Are there already pointers on the screen?
@@ -308,12 +334,18 @@ class ScribbleNotifier extends ScribbleNotifierBase
         erasing: (s) => s,
       );
     } else if (value is Drawing) {
+      // When viewTransform is used, store the intended visual width so lines
+      // maintain constant thickness regardless of zoom level.
+      // Otherwise use canvas-coordinate width for backwards compatibility.
+      final lineWidth = value.viewTransform != null
+          ? value.selectedWidth
+          : value.selectedWidth / value.scaleFactor;
       s = (value as Drawing).copyWith(
         pointerPosition: _getPointFromEvent(event),
         activeLine: SketchLine(
           points: [_getPointFromEvent(event)],
           color: (value as Drawing).selectedColor,
-          width: value.selectedWidth / value.scaleFactor,
+          width: lineWidth,
         ),
       );
     }
@@ -326,6 +358,13 @@ class ScribbleNotifier extends ScribbleNotifierBase
   @override
   void onPointerUpdate(PointerMoveEvent event) {
     if (!value.supportedPointerKinds.contains(event.kind)) return;
+
+    // For singleTouchOnly, ignore updates for pointers we didn't track
+    if (value.allowedPointersMode == ScribblePointerMode.singleTouchOnly &&
+        !value.activePointerIds.contains(event.pointer)) {
+      return;
+    }
+
     if (!value.active) {
       temporaryValue = value.copyWith(
         pointerPosition: null,
@@ -357,6 +396,13 @@ class ScribbleNotifier extends ScribbleNotifierBase
   @override
   void onPointerUp(PointerUpEvent event) {
     if (!value.supportedPointerKinds.contains(event.kind)) return;
+
+    // For singleTouchOnly, ignore events for pointers we didn't track
+    if (value.allowedPointersMode == ScribblePointerMode.singleTouchOnly &&
+        !value.activePointerIds.contains(event.pointer)) {
+      return;
+    }
+
     final pos =
         event.kind == PointerDeviceKind.mouse ? value.pointerPosition : null;
     if (value is Drawing) {
@@ -391,6 +437,13 @@ class ScribbleNotifier extends ScribbleNotifierBase
   @override
   void onPointerCancel(PointerCancelEvent event) {
     if (!value.supportedPointerKinds.contains(event.kind)) return;
+
+    // For singleTouchOnly, ignore events for pointers we didn't track
+    if (value.allowedPointersMode == ScribblePointerMode.singleTouchOnly &&
+        !value.activePointerIds.contains(event.pointer)) {
+      return;
+    }
+
     if (value is Drawing) {
       value = _finishLineForState(_addPoint(event, value)).copyWith(
         pointerPosition: null,
@@ -448,11 +501,21 @@ class ScribbleNotifier extends ScribbleNotifierBase
   }
 
   ScribbleState? _erasePoint(PointerEvent event) {
+    // Get transformed position for erasing
+    var position = event.localPosition;
+    final viewTransform = value.viewTransform;
+    if (viewTransform != null) {
+      final inverse = Matrix4.inverted(viewTransform);
+      final transformed =
+          inverse.transform3(Vector3(position.dx, position.dy, 0));
+      position = Offset(transformed.x, transformed.y);
+    }
+
     final filteredLines = value.sketch.lines
         .where(
           (l) => l.points.every(
             (p) =>
-                (event.localPosition - p.asOffset).distance >
+                (position - p.asOffset).distance >
                 l.width + value.selectedWidth,
           ),
         )
@@ -470,14 +533,29 @@ class ScribbleNotifier extends ScribbleNotifierBase
   }
 
   /// Converts a pointer event to the [Point] on the canvas.
+  ///
+  /// When a viewTransform is set, the coordinates are transformed using the
+  /// inverse of that matrix to convert screen coordinates to canvas
+  /// coordinates.
   Point _getPointFromEvent(PointerEvent event) {
+    var position = event.localPosition;
+
+    // Apply inverse view transform to get canvas coordinates
+    final viewTransform = value.viewTransform;
+    if (viewTransform != null) {
+      final inverse = Matrix4.inverted(viewTransform);
+      final transformed =
+          inverse.transform3(Vector3(position.dx, position.dy, 0));
+      position = Offset(transformed.x, transformed.y);
+    }
+
     final p = event.pressureMin == event.pressureMax
         ? 0.5
         : (event.pressure - event.pressureMin) /
             (event.pressureMax - event.pressureMin);
     return Point(
-      event.localPosition.dx,
-      event.localPosition.dy,
+      position.dx,
+      position.dy,
       pressure: pressureCurve.transform(p),
     );
   }
