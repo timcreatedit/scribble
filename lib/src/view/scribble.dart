@@ -68,32 +68,52 @@ class Scribble extends StatelessWidget {
                   sketch: state.sketch,
                   scaleFactor: state.scaleFactor,
                   simulatePressure: simulatePressure,
+                  viewTransform: state.viewTransform,
                 ),
               ),
             ),
           ),
         );
-        return !state.active
-            ? child
-            : GestureCatcher(
-                pointerKindsToCatch: state.supportedPointerKinds,
-                child: MouseRegion(
-                  cursor: drawCurrentTool &&
-                          state.supportedPointerKinds
-                              .contains(PointerDeviceKind.mouse)
-                      ? SystemMouseCursors.none
-                      : MouseCursor.defer,
-                  onExit: notifier.onPointerExit,
-                  child: Listener(
-                    onPointerDown: notifier.onPointerDown,
-                    onPointerMove: notifier.onPointerUpdate,
-                    onPointerUp: notifier.onPointerUp,
-                    onPointerHover: notifier.onPointerHover,
-                    onPointerCancel: notifier.onPointerCancel,
-                    child: child,
-                  ),
-                ),
-              );
+        // For singleTouchOnly mode, don't use GestureCatcher so multi-touch
+        // events can bubble up to parent widgets (e.g., InteractiveViewer)
+        final isSingleTouchOnly =
+            state.allowedPointersMode == ScribblePointerMode.singleTouchOnly;
+
+        final listenerWidget = MouseRegion(
+          cursor: drawCurrentTool &&
+                  state.supportedPointerKinds.contains(PointerDeviceKind.mouse)
+              ? SystemMouseCursors.none
+              : MouseCursor.defer,
+          onExit: notifier.onPointerExit,
+          child: Listener(
+            onPointerDown: notifier.onPointerDown,
+            onPointerMove: notifier.onPointerUpdate,
+            onPointerUp: notifier.onPointerUp,
+            onPointerHover: notifier.onPointerHover,
+            onPointerCancel: notifier.onPointerCancel,
+            // Use translucent behavior for singleTouchOnly to allow events to
+            // pass through to parent widgets
+            behavior: isSingleTouchOnly
+                ? HitTestBehavior.translucent
+                : HitTestBehavior.opaque,
+            child: child,
+          ),
+        );
+
+        if (!state.active) {
+          return child;
+        }
+
+        // For singleTouchOnly, skip GestureCatcher to allow multi-touch events
+        // to reach parent widgets like InteractiveViewer
+        if (isSingleTouchOnly) {
+          return listenerWidget;
+        }
+
+        return GestureCatcher(
+          pointerKindsToCatch: state.supportedPointerKinds,
+          child: listenerWidget,
+        );
       },
     );
   }

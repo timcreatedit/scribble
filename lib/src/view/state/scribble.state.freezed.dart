@@ -62,6 +62,21 @@ mixin _$ScribbleState {
   /// will mean no simplification.
   /// {@endtemplate}
   double get simplificationTolerance => throw _privateConstructorUsedError;
+
+  /// {@template view.state.scribble_state.view_transform}
+  /// The transformation matrix for the view (pan/zoom).
+  ///
+  /// When set, coordinates are transformed using the inverse of this matrix
+  /// before being stored, and the sketch is rendered using this transform.
+  /// This allows Scribble to work with external pan/zoom controllers like
+  /// InteractiveViewer without hit-testing issues.
+  ///
+  /// Note: This field is not serialized to JSON since Matrix4 has no
+  /// JSON converter. It defaults to null and is a runtime-only value.
+  /// {@endtemplate}
+// ignore: invalid_annotation_target
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  Matrix4? get viewTransform => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -73,7 +88,9 @@ mixin _$ScribbleState {
             int selectedColor,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)
+            double simplificationTolerance,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            Matrix4? viewTransform)
         drawing,
     required TResult Function(
             Sketch sketch,
@@ -82,7 +99,9 @@ mixin _$ScribbleState {
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)
+            double simplificationTolerance,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            Matrix4? viewTransform)
         erasing,
   }) =>
       throw _privateConstructorUsedError;
@@ -97,7 +116,9 @@ mixin _$ScribbleState {
             int selectedColor,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)?
+            double simplificationTolerance,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            Matrix4? viewTransform)?
         drawing,
     TResult? Function(
             Sketch sketch,
@@ -106,7 +127,9 @@ mixin _$ScribbleState {
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)?
+            double simplificationTolerance,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            Matrix4? viewTransform)?
         erasing,
   }) =>
       throw _privateConstructorUsedError;
@@ -121,7 +144,9 @@ mixin _$ScribbleState {
             int selectedColor,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)?
+            double simplificationTolerance,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            Matrix4? viewTransform)?
         drawing,
     TResult Function(
             Sketch sketch,
@@ -130,7 +155,9 @@ mixin _$ScribbleState {
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)?
+            double simplificationTolerance,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            Matrix4? viewTransform)?
         erasing,
     required TResult orElse(),
   }) =>
@@ -178,7 +205,9 @@ abstract class $ScribbleStateCopyWith<$Res> {
       Point? pointerPosition,
       double selectedWidth,
       double scaleFactor,
-      double simplificationTolerance});
+      double simplificationTolerance,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      Matrix4? viewTransform});
 
   $SketchCopyWith<$Res> get sketch;
   $PointCopyWith<$Res>? get pointerPosition;
@@ -206,6 +235,7 @@ class _$ScribbleStateCopyWithImpl<$Res, $Val extends ScribbleState>
     Object? selectedWidth = null,
     Object? scaleFactor = null,
     Object? simplificationTolerance = null,
+    Object? viewTransform = freezed,
   }) {
     return _then(_value.copyWith(
       sketch: null == sketch
@@ -236,6 +266,10 @@ class _$ScribbleStateCopyWithImpl<$Res, $Val extends ScribbleState>
           ? _value.simplificationTolerance
           : simplificationTolerance // ignore: cast_nullable_to_non_nullable
               as double,
+      viewTransform: freezed == viewTransform
+          ? _value.viewTransform
+          : viewTransform // ignore: cast_nullable_to_non_nullable
+              as Matrix4?,
     ) as $Val);
   }
 
@@ -281,7 +315,9 @@ abstract class _$$DrawingImplCopyWith<$Res>
       int selectedColor,
       double selectedWidth,
       double scaleFactor,
-      double simplificationTolerance});
+      double simplificationTolerance,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      Matrix4? viewTransform});
 
   @override
   $SketchCopyWith<$Res> get sketch;
@@ -312,6 +348,7 @@ class __$$DrawingImplCopyWithImpl<$Res>
     Object? selectedWidth = null,
     Object? scaleFactor = null,
     Object? simplificationTolerance = null,
+    Object? viewTransform = freezed,
   }) {
     return _then(_$DrawingImpl(
       sketch: null == sketch
@@ -350,6 +387,10 @@ class __$$DrawingImplCopyWithImpl<$Res>
           ? _value.simplificationTolerance
           : simplificationTolerance // ignore: cast_nullable_to_non_nullable
               as double,
+      viewTransform: freezed == viewTransform
+          ? _value.viewTransform
+          : viewTransform // ignore: cast_nullable_to_non_nullable
+              as Matrix4?,
     ));
   }
 
@@ -381,6 +422,8 @@ class _$DrawingImpl extends Drawing {
       this.selectedWidth = 5,
       this.scaleFactor = 1,
       this.simplificationTolerance = 0,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      this.viewTransform = null,
       final String? $type})
       : _activePointerIds = activePointerIds,
         $type = $type ?? 'drawing',
@@ -452,12 +495,28 @@ class _$DrawingImpl extends Drawing {
   @JsonKey()
   final double simplificationTolerance;
 
+  /// {@template view.state.scribble_state.view_transform}
+  /// The transformation matrix for the view (pan/zoom).
+  ///
+  /// When set, coordinates are transformed using the inverse of this matrix
+  /// before being stored, and the sketch is rendered using this transform.
+  /// This allows Scribble to work with external pan/zoom controllers like
+  /// InteractiveViewer without hit-testing issues.
+  ///
+  /// Note: This field is not serialized to JSON since Matrix4 has no
+  /// JSON converter. It defaults to null and is a runtime-only value.
+  /// {@endtemplate}
+// ignore: invalid_annotation_target
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final Matrix4? viewTransform;
+
   @JsonKey(name: 'runtimeType')
   final String $type;
 
   @override
   String toString() {
-    return 'ScribbleState.drawing(sketch: $sketch, activeLine: $activeLine, allowedPointersMode: $allowedPointersMode, activePointerIds: $activePointerIds, pointerPosition: $pointerPosition, selectedColor: $selectedColor, selectedWidth: $selectedWidth, scaleFactor: $scaleFactor, simplificationTolerance: $simplificationTolerance)';
+    return 'ScribbleState.drawing(sketch: $sketch, activeLine: $activeLine, allowedPointersMode: $allowedPointersMode, activePointerIds: $activePointerIds, pointerPosition: $pointerPosition, selectedColor: $selectedColor, selectedWidth: $selectedWidth, scaleFactor: $scaleFactor, simplificationTolerance: $simplificationTolerance, viewTransform: $viewTransform)';
   }
 
   @override
@@ -482,7 +541,9 @@ class _$DrawingImpl extends Drawing {
                 other.scaleFactor == scaleFactor) &&
             (identical(
                     other.simplificationTolerance, simplificationTolerance) ||
-                other.simplificationTolerance == simplificationTolerance));
+                other.simplificationTolerance == simplificationTolerance) &&
+            (identical(other.viewTransform, viewTransform) ||
+                other.viewTransform == viewTransform));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -497,7 +558,8 @@ class _$DrawingImpl extends Drawing {
       selectedColor,
       selectedWidth,
       scaleFactor,
-      simplificationTolerance);
+      simplificationTolerance,
+      viewTransform);
 
   /// Create a copy of ScribbleState
   /// with the given fields replaced by the non-null parameter values.
@@ -519,7 +581,9 @@ class _$DrawingImpl extends Drawing {
             int selectedColor,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)
+            double simplificationTolerance,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            Matrix4? viewTransform)
         drawing,
     required TResult Function(
             Sketch sketch,
@@ -528,7 +592,9 @@ class _$DrawingImpl extends Drawing {
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)
+            double simplificationTolerance,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            Matrix4? viewTransform)
         erasing,
   }) {
     return drawing(
@@ -540,7 +606,8 @@ class _$DrawingImpl extends Drawing {
         selectedColor,
         selectedWidth,
         scaleFactor,
-        simplificationTolerance);
+        simplificationTolerance,
+        viewTransform);
   }
 
   @override
@@ -555,7 +622,9 @@ class _$DrawingImpl extends Drawing {
             int selectedColor,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)?
+            double simplificationTolerance,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            Matrix4? viewTransform)?
         drawing,
     TResult? Function(
             Sketch sketch,
@@ -564,7 +633,9 @@ class _$DrawingImpl extends Drawing {
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)?
+            double simplificationTolerance,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            Matrix4? viewTransform)?
         erasing,
   }) {
     return drawing?.call(
@@ -576,7 +647,8 @@ class _$DrawingImpl extends Drawing {
         selectedColor,
         selectedWidth,
         scaleFactor,
-        simplificationTolerance);
+        simplificationTolerance,
+        viewTransform);
   }
 
   @override
@@ -591,7 +663,9 @@ class _$DrawingImpl extends Drawing {
             int selectedColor,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)?
+            double simplificationTolerance,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            Matrix4? viewTransform)?
         drawing,
     TResult Function(
             Sketch sketch,
@@ -600,7 +674,9 @@ class _$DrawingImpl extends Drawing {
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)?
+            double simplificationTolerance,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            Matrix4? viewTransform)?
         erasing,
     required TResult orElse(),
   }) {
@@ -614,7 +690,8 @@ class _$DrawingImpl extends Drawing {
           selectedColor,
           selectedWidth,
           scaleFactor,
-          simplificationTolerance);
+          simplificationTolerance,
+          viewTransform);
     }
     return orElse();
   }
@@ -668,7 +745,9 @@ abstract class Drawing extends ScribbleState {
       final int selectedColor,
       final double selectedWidth,
       final double scaleFactor,
-      final double simplificationTolerance}) = _$DrawingImpl;
+      final double simplificationTolerance,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      final Matrix4? viewTransform}) = _$DrawingImpl;
   const Drawing._() : super._();
 
   factory Drawing.fromJson(Map<String, dynamic> json) = _$DrawingImpl.fromJson;
@@ -719,6 +798,22 @@ abstract class Drawing extends ScribbleState {
   @override
   double get simplificationTolerance;
 
+  /// {@template view.state.scribble_state.view_transform}
+  /// The transformation matrix for the view (pan/zoom).
+  ///
+  /// When set, coordinates are transformed using the inverse of this matrix
+  /// before being stored, and the sketch is rendered using this transform.
+  /// This allows Scribble to work with external pan/zoom controllers like
+  /// InteractiveViewer without hit-testing issues.
+  ///
+  /// Note: This field is not serialized to JSON since Matrix4 has no
+  /// JSON converter. It defaults to null and is a runtime-only value.
+  /// {@endtemplate}
+// ignore: invalid_annotation_target
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  Matrix4? get viewTransform;
+
   /// Create a copy of ScribbleState
   /// with the given fields replaced by the non-null parameter values.
   @override
@@ -742,7 +837,9 @@ abstract class _$$ErasingImplCopyWith<$Res>
       Point? pointerPosition,
       double selectedWidth,
       double scaleFactor,
-      double simplificationTolerance});
+      double simplificationTolerance,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      Matrix4? viewTransform});
 
   @override
   $SketchCopyWith<$Res> get sketch;
@@ -770,6 +867,7 @@ class __$$ErasingImplCopyWithImpl<$Res>
     Object? selectedWidth = null,
     Object? scaleFactor = null,
     Object? simplificationTolerance = null,
+    Object? viewTransform = freezed,
   }) {
     return _then(_$ErasingImpl(
       sketch: null == sketch
@@ -800,6 +898,10 @@ class __$$ErasingImplCopyWithImpl<$Res>
           ? _value.simplificationTolerance
           : simplificationTolerance // ignore: cast_nullable_to_non_nullable
               as double,
+      viewTransform: freezed == viewTransform
+          ? _value.viewTransform
+          : viewTransform // ignore: cast_nullable_to_non_nullable
+              as Matrix4?,
     ));
   }
 }
@@ -815,6 +917,8 @@ class _$ErasingImpl extends Erasing {
       this.selectedWidth = 5,
       this.scaleFactor = 1,
       this.simplificationTolerance = 0,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      this.viewTransform = null,
       final String? $type})
       : _activePointerIds = activePointerIds,
         $type = $type ?? 'erasing',
@@ -873,12 +977,18 @@ class _$ErasingImpl extends Erasing {
   @JsonKey()
   final double simplificationTolerance;
 
+  /// {@macro view.state.scribble_state.view_transform}
+// ignore: invalid_annotation_target
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final Matrix4? viewTransform;
+
   @JsonKey(name: 'runtimeType')
   final String $type;
 
   @override
   String toString() {
-    return 'ScribbleState.erasing(sketch: $sketch, allowedPointersMode: $allowedPointersMode, activePointerIds: $activePointerIds, pointerPosition: $pointerPosition, selectedWidth: $selectedWidth, scaleFactor: $scaleFactor, simplificationTolerance: $simplificationTolerance)';
+    return 'ScribbleState.erasing(sketch: $sketch, allowedPointersMode: $allowedPointersMode, activePointerIds: $activePointerIds, pointerPosition: $pointerPosition, selectedWidth: $selectedWidth, scaleFactor: $scaleFactor, simplificationTolerance: $simplificationTolerance, viewTransform: $viewTransform)';
   }
 
   @override
@@ -899,7 +1009,9 @@ class _$ErasingImpl extends Erasing {
                 other.scaleFactor == scaleFactor) &&
             (identical(
                     other.simplificationTolerance, simplificationTolerance) ||
-                other.simplificationTolerance == simplificationTolerance));
+                other.simplificationTolerance == simplificationTolerance) &&
+            (identical(other.viewTransform, viewTransform) ||
+                other.viewTransform == viewTransform));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -912,7 +1024,8 @@ class _$ErasingImpl extends Erasing {
       pointerPosition,
       selectedWidth,
       scaleFactor,
-      simplificationTolerance);
+      simplificationTolerance,
+      viewTransform);
 
   /// Create a copy of ScribbleState
   /// with the given fields replaced by the non-null parameter values.
@@ -934,7 +1047,9 @@ class _$ErasingImpl extends Erasing {
             int selectedColor,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)
+            double simplificationTolerance,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            Matrix4? viewTransform)
         drawing,
     required TResult Function(
             Sketch sketch,
@@ -943,11 +1058,20 @@ class _$ErasingImpl extends Erasing {
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)
+            double simplificationTolerance,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            Matrix4? viewTransform)
         erasing,
   }) {
-    return erasing(sketch, allowedPointersMode, activePointerIds,
-        pointerPosition, selectedWidth, scaleFactor, simplificationTolerance);
+    return erasing(
+        sketch,
+        allowedPointersMode,
+        activePointerIds,
+        pointerPosition,
+        selectedWidth,
+        scaleFactor,
+        simplificationTolerance,
+        viewTransform);
   }
 
   @override
@@ -962,7 +1086,9 @@ class _$ErasingImpl extends Erasing {
             int selectedColor,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)?
+            double simplificationTolerance,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            Matrix4? viewTransform)?
         drawing,
     TResult? Function(
             Sketch sketch,
@@ -971,11 +1097,20 @@ class _$ErasingImpl extends Erasing {
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)?
+            double simplificationTolerance,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            Matrix4? viewTransform)?
         erasing,
   }) {
-    return erasing?.call(sketch, allowedPointersMode, activePointerIds,
-        pointerPosition, selectedWidth, scaleFactor, simplificationTolerance);
+    return erasing?.call(
+        sketch,
+        allowedPointersMode,
+        activePointerIds,
+        pointerPosition,
+        selectedWidth,
+        scaleFactor,
+        simplificationTolerance,
+        viewTransform);
   }
 
   @override
@@ -990,7 +1125,9 @@ class _$ErasingImpl extends Erasing {
             int selectedColor,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)?
+            double simplificationTolerance,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            Matrix4? viewTransform)?
         drawing,
     TResult Function(
             Sketch sketch,
@@ -999,13 +1136,22 @@ class _$ErasingImpl extends Erasing {
             Point? pointerPosition,
             double selectedWidth,
             double scaleFactor,
-            double simplificationTolerance)?
+            double simplificationTolerance,
+            @JsonKey(includeFromJson: false, includeToJson: false)
+            Matrix4? viewTransform)?
         erasing,
     required TResult orElse(),
   }) {
     if (erasing != null) {
-      return erasing(sketch, allowedPointersMode, activePointerIds,
-          pointerPosition, selectedWidth, scaleFactor, simplificationTolerance);
+      return erasing(
+          sketch,
+          allowedPointersMode,
+          activePointerIds,
+          pointerPosition,
+          selectedWidth,
+          scaleFactor,
+          simplificationTolerance,
+          viewTransform);
     }
     return orElse();
   }
@@ -1057,7 +1203,9 @@ abstract class Erasing extends ScribbleState {
       final Point? pointerPosition,
       final double selectedWidth,
       final double scaleFactor,
-      final double simplificationTolerance}) = _$ErasingImpl;
+      final double simplificationTolerance,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      final Matrix4? viewTransform}) = _$ErasingImpl;
   const Erasing._() : super._();
 
   factory Erasing.fromJson(Map<String, dynamic> json) = _$ErasingImpl.fromJson;
@@ -1097,6 +1245,12 @@ abstract class Erasing extends ScribbleState {
   /// will mean no simplification.
   @override
   double get simplificationTolerance;
+
+  /// {@macro view.state.scribble_state.view_transform}
+// ignore: invalid_annotation_target
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  Matrix4? get viewTransform;
 
   /// Create a copy of ScribbleState
   /// with the given fields replaced by the non-null parameter values.

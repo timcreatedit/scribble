@@ -35,6 +35,20 @@ class ScribbleEditingPainter extends CustomPainter with SketchLinePathMixin {
 
   @override
   void paint(Canvas canvas, Size size) {
+    // Apply view transform if set
+    final viewTransform = state.viewTransform;
+    if (viewTransform != null) {
+      canvas.save();
+      canvas.transform(viewTransform.storage);
+    }
+
+    // When viewTransform is applied, lines are stored with their intended
+    // visual width. We pass 1/scaleFactor so that after canvas transform
+    // (which scales by scaleFactor), lines appear at their stored visual width.
+    // This ensures constant line thickness regardless of zoom level.
+    final effectiveScaleFactor =
+        viewTransform != null ? 1.0 / state.scaleFactor : state.scaleFactor;
+
     final paint = Paint()..style = PaintingStyle.fill;
 
     final activeLine = state.map(
@@ -44,7 +58,7 @@ class ScribbleEditingPainter extends CustomPainter with SketchLinePathMixin {
     if (activeLine != null) {
       final path = getPathForLine(
         activeLine,
-        scaleFactor: state.scaleFactor,
+        scaleFactor: effectiveScaleFactor,
       );
       if (path != null) {
         paint.color = Color(activeLine.color);
@@ -66,9 +80,14 @@ class ScribbleEditingPainter extends CustomPainter with SketchLinePathMixin {
         ..strokeWidth = 1;
       canvas.drawCircle(
         state.pointerPosition!.asOffset,
-        state.selectedWidth / state.scaleFactor,
+        state.selectedWidth / effectiveScaleFactor,
         paint,
       );
+    }
+
+    // Restore canvas if we applied a transform
+    if (viewTransform != null) {
+      canvas.restore();
     }
   }
 

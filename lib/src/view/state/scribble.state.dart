@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/widgets.dart' show Matrix4;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:scribble/src/domain/model/sketch/sketch.dart';
 
@@ -25,6 +26,15 @@ enum ScribblePointerMode {
 
   /// Allow drawing with both mouse and pen.
   mouseAndPen,
+
+  /// Allow drawing with a single touch only.
+  ///
+  /// When a second touch is detected, the scribble widget will stop capturing
+  /// events, allowing them to pass through to parent widgets like
+  /// `InteractiveViewer` for pan/zoom gestures.
+  ///
+  /// Mouse and stylus inputs still work for drawing regardless of touch count.
+  singleTouchOnly,
 }
 
 /// Represents the state of the scribble widget.
@@ -70,6 +80,22 @@ sealed class ScribbleState with _$ScribbleState {
     /// will mean no simplification.
     /// {@endtemplate}
     @Default(0) double simplificationTolerance,
+
+    /// {@template view.state.scribble_state.view_transform}
+    /// The transformation matrix for the view (pan/zoom).
+    ///
+    /// When set, coordinates are transformed using the inverse of this matrix
+    /// before being stored, and the sketch is rendered using this transform.
+    /// This allows Scribble to work with external pan/zoom controllers like
+    /// InteractiveViewer without hit-testing issues.
+    ///
+    /// Note: This field is not serialized to JSON since Matrix4 has no
+    /// JSON converter. It defaults to null and is a runtime-only value.
+    /// {@endtemplate}
+    // ignore: invalid_annotation_target
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default(null)
+    Matrix4? viewTransform,
   }) = Drawing;
 
   /// The state of the scribble widget when the user is currently erasing.
@@ -102,6 +128,12 @@ sealed class ScribbleState with _$ScribbleState {
     /// Lines will be simplified when they are finished. A value of 0 (default)
     /// will mean no simplification.
     @Default(0) double simplificationTolerance,
+
+    /// {@macro view.state.scribble_state.view_transform}
+    // ignore: invalid_annotation_target
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default(null)
+    Matrix4? viewTransform,
   }) = Erasing;
 
   /// Constructs a [ScribbleState] from a JSON object.
@@ -141,6 +173,10 @@ sealed class ScribbleState with _$ScribbleState {
           PointerDeviceKind.stylus,
           PointerDeviceKind.invertedStylus,
         };
+      case ScribblePointerMode.singleTouchOnly:
+        // Accept all device types - multi-touch filtering is done in the
+        // notifier and widget
+        return Set.from(PointerDeviceKind.values);
     }
   }
 }
