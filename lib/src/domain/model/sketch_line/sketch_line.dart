@@ -8,7 +8,7 @@ part 'sketch_line.g.dart';
 /// Represents a line in a sketch.
 /// {@endtemplate}
 @freezed
-class SketchLine with _$SketchLine {
+abstract class SketchLine with _$SketchLine {
   /// {@macro sketch_line}
   const factory SketchLine({
     /// The points that make up the line

@@ -8,7 +8,7 @@ part 'point.g.dart';
 /// pressure value.
 /// {@endtemplate}
 @Freezed()
-class Point with _$Point {
+abstract class Point with _$Point {
   /// {@macro point}
   const factory Point(
     double x,
