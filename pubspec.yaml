@@ -23,7 +23,7 @@ dev_dependencies:
     sdk: flutter
   freezed: ^2.4.7
   json_serializable: ^6.9.5
-  lintervention: ^0.3.1
+  lintervention: ">=0.3.1 <0.5.0"
   melos: ^6.3.3
   mocktail: ^1.0.3
 
